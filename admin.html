@@ -2,11 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Leo Flora 后台管理</title>
+    <title>Leo Flora 后台管理 (云加速版)</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/contentful-management/10.0.0/contentful-management.browser.min.js"></script>
     
-    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; background: #f4f4f4; }
@@ -26,7 +26,7 @@
 <body>
 
 <div class="box">
-    <h2>🦁 Leo Flora 产品上传后台 (V5.0)</h2>
+    <h2>🦁 Leo Flora 产品上传后台 (云加速版)</h2>
     
     <div id="status-tip" style="margin-bottom:15px; font-size:12px; color:#666;">
         环境检测：<span id="env-status">⏳ 初始化中...</span>
@@ -53,10 +53,10 @@
     window.onload = function() {
         const tip = document.getElementById('env-status');
         if (typeof contentfulManagement !== 'undefined') {
-            tip.innerHTML = "✅ 系统正常 (已加载 Vercel 托管资源)";
+            tip.innerHTML = "✅ 系统正常 (已连接 Cloudflare CDN)";
             tip.style.color = "green";
         } else {
-            tip.innerHTML = "❌ 依然失败。请确认 sdk.js 已上传到 GitHub 且文件名正确。";
+            tip.innerHTML = "❌ 加载失败。请确保您的 VPN 已开启。";
             tip.style.color = "red";
         }
     };
@@ -70,7 +70,7 @@
         reader.onload = function(e) {
             const data = new Uint8Array(e.target.result);
             if(typeof XLSX === 'undefined') {
-                 alert("Excel 解析库加载失败，请检查网络");
+                 alert("Excel 解析库加载失败");
                  return;
             }
             const workbook = XLSX.read(data, {type: 'array'});
