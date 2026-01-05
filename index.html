@@ -4,50 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leo Flora Catalog</title>
-    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <style>
-        /* --- 1. 全局样式 (V4.0 完美复刻) --- */
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; }
-        
-        /* 顶部导航 */
         header { background: white; padding: 15px 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
         h1 { margin: 0; font-size: 1.2rem; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
         .logo-icon { font-size: 1.5rem; }
-        .user-greeting { font-size: 0.9rem; color: #666; margin-right: 15px; font-weight: 500; }
-        .edit-info-btn { font-size: 12px; color: #999; cursor: pointer; border: 1px solid #eee; padding: 4px 8px; border-radius: 4px; }
-
-        /* 布局与网格 */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .product-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-        
-        /* 卡片样式 */
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-5px); }
-        .product-img { width: 100%; height: 240px; object-fit: cover; background: #eee; }
+        
+        /* 👇 修改点：给图片加了手型鼠标，提示可点击 */
+        .product-img { width: 100%; height: 240px; object-fit: cover; background: #eee; cursor: zoom-in; }
+        
         .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
         .product-sku { font-size: 0.75rem; color: #888; margin-bottom: 6px; background: #f0f2f5; display: inline-block; padding: 3px 8px; border-radius: 4px; width: fit-content; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
         .product-desc { font-size: 0.85rem; color: #666; margin: 0; }
-        
-        /* 收藏按钮 */
         .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; }
         .fav-btn.active { background: white; color: var(--accent-color); transform: scale(1.1); }
-
-        /* 手机适配 */
-        @media (max-width: 768px) {
-            .container { padding: 0 15px; margin: 15px auto; }
-            .product-grid { grid-template-columns: 1fr; gap: 15px; }
-            .product-card { flex-direction: row; align-items: stretch; height: auto; }
-            .product-img { width: 120px; height: auto; min-height: 120px; }
-            .fav-btn { top: 50%; right: 15px; transform: translateY(-50%); background: #f8f9fa; border: 1px solid #eee; }
-        }
-
-        /* 底部栏与弹窗 */
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 200; font-weight: 500; }
         .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; box-sizing: border-box; position: relative; }
+        
+        /* 👇 新增：大图查看器的样式 */
+        #img-viewer { z-index: 999; background: rgba(0,0,0,0.9); cursor: zoom-out; }
+        #big-img { max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
         .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; }
         .login-btn, .export-btn { background: var(--primary-color); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .export-btn { background: #27ae60; margin-top: 20px; }
@@ -55,8 +42,14 @@
         .list-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
         .list-details { flex-grow: 1; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #bbb; }
-        
         .loading { text-align: center; padding: 50px; color: #999; }
+        
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: 1fr; gap: 15px; }
+            .product-card { flex-direction: row; align-items: stretch; height: auto; }
+            .product-img { width: 120px; height: auto; min-height: 120px; }
+            .fav-btn { top: 50%; right: 15px; transform: translateY(-50%); background: #f8f9fa; border: 1px solid #eee; }
+        }
     </style>
 </head>
 <body>
@@ -64,19 +57,23 @@
     <header>
         <h1><span class="logo-icon">🌿</span> Leo Flora</h1>
         <div style="display:flex; align-items:center;">
-            <span id="header-user-name" class="user-greeting"></span>
-            <div class="edit-info-btn" onclick="showLoginModal()">修改</div>
+            <span id="header-user-name" style="font-size:0.9rem;color:#666;margin-right:15px;"></span>
+            <div style="font-size:12px;color:#999;cursor:pointer;border:1px solid #eee;padding:4px 8px;border-radius:4px;" onclick="showLoginModal()">修改</div>
         </div>
     </header>
 
     <div class="container">
-        <div id="loading-tip" class="loading">正在从云端加载产品...</div>
+        <div id="loading-tip" class="loading">正在连接 LeanCloud 数据...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
 
     <div class="floating-bar" onclick="openFavModal()">
         <span>查看我的意向清单</span>
         <span class="count-badge" id="fav-count">0</span>
+    </div>
+
+    <div class="modal-overlay" id="img-viewer" onclick="closeBigImg()">
+        <img id="big-img" src="" alt="大图">
     </div>
 
     <div class="modal-overlay" id="login-modal" style="display:flex;">
@@ -100,9 +97,10 @@
 
     <script>
         // ==========================================
-        // 👇👇👇 这里的两个值，换成你从 Contentful 复制来的 👇👇👇
-        const SPACE_ID = 'dofo1duqkkp3';  // 你的 Space ID
-        const ACCESS_TOKEN = '-Gn6BufB8bQX8jmKJhPsZmaENyRqhG6Lg34elwibowY'; // 你的 Access Token
+        // 👇👇👇 请再次填入 LeanCloud 密钥 (因为是新文件) 👇👇👇
+        const APP_ID = "14iZrTXCibSIZUvrYW1Zx0Nv-MdYXbMMI"; 
+        const APP_KEY = "4ClJ1QFB6kPuL8tPCzXe0F1l";
+        const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
         // ==========================================
 
         let products = [];
@@ -110,58 +108,48 @@
         let userInfo = { name: "", contact: "" };
 
         function init() {
-            // 加载本地用户数据
+            if (APP_ID.includes("请在这里")) {
+                document.getElementById('loading-tip').innerText = "⚠️ 请先在 GitHub 代码中填入您的 App ID 和 Key";
+                return;
+            }
+            AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
+
             try {
-                const savedFavs = localStorage.getItem('leo_favs_v6');
+                const savedFavs = localStorage.getItem('leo_favs_lc');
                 if (savedFavs) favorites = JSON.parse(savedFavs);
-                const savedUser = localStorage.getItem('leo_user_v6');
+                const savedUser = localStorage.getItem('leo_user_lc');
                 if (savedUser) userInfo = JSON.parse(savedUser);
             } catch (e) {}
             checkLogin();
             updateBadge();
 
-            // 连接 Contentful 后台
-            if (SPACE_ID === 'xxxxxxxxxxxx') {
-                document.getElementById('loading-tip').innerHTML = "⚠️ 请在代码中填入 Contentful 的 API Key";
-                return;
-            }
-
-            const client = contentful.createClient({ space: SPACE_ID, accessToken: ACCESS_TOKEN });
-
-            client.getEntries({ content_type: 'product' }) // 获取所有 content_type 为 product 的数据
-                .then((response) => {
-                    console.log("云端数据:", response.items);
-                    products = response.items.map(item => {
-                        // 提取图片链接
-                        let imgUrl = "https://via.placeholder.com/300";
-                        if(item.fields.img && item.fields.img.fields && item.fields.img.fields.file) {
-                            imgUrl = 'https:' + item.fields.img.fields.file.url;
-                        }
-
-                        return {
-                            id: item.sys.id, // 使用 Contentful 的唯一ID
-                            sku: item.fields.sku || "无货号",
-                            name: item.fields.name || "未命名",
-                            desc: item.fields.desc || "",
-                            img: imgUrl
-                        };
-                    });
-                    
-                    document.getElementById('loading-tip').style.display = 'none';
-                    renderProducts();
-                })
-                .catch(console.error);
+            const query = new AV.Query('Product');
+            query.limit(1000); 
+            query.find().then((results) => {
+                products = results.map(item => {
+                    return {
+                        id: item.id,
+                        sku: item.get('sku') || "",
+                        name: item.get('name') || "",
+                        desc: item.get('desc') || "",
+                        img: item.get('img') || ""
+                    };
+                });
+                document.getElementById('loading-tip').style.display = 'none';
+                renderProducts();
+            }, (error) => {
+                document.getElementById('loading-tip').innerText = "数据加载失败: " + error.message;
+            });
         }
 
-        // --- 渲染与交互逻辑 (与之前版本一致) ---
         function renderProducts() {
             const container = document.getElementById('product-grid');
-            if (!container) return;
             container.innerHTML = products.map(p => {
                 const isFav = favorites.find(f => f.id === p.id);
+                // 👇 修改点：点击图片触发 showBigImg 函数
                 return `
                 <div class="product-card">
-                    <img src="${p.img}" class="product-img" loading="lazy">
+                    <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')" title="点击查看大图">
                     <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">
                         ${isFav ? '❤️' : '➕'}
                     </button>
@@ -174,19 +162,28 @@
             }).join('');
         }
 
+        // 👇 新增：显示大图逻辑
+        function showBigImg(url) {
+            document.getElementById('big-img').src = url;
+            document.getElementById('img-viewer').style.display = 'flex';
+        }
+        // 👇 新增：关闭大图逻辑 (不会刷新页面，所以不影响滚动位置)
+        function closeBigImg() {
+            document.getElementById('img-viewer').style.display = 'none';
+        }
+
         function toggleFav(id) {
             const product = products.find(p => p.id === id);
             const index = favorites.findIndex(f => f.id === id);
             if (index === -1) { favorites.push({ ...product, time: Date.now() }); } 
             else { favorites.splice(index, 1); }
-            try { localStorage.setItem('leo_favs_v6', JSON.stringify(favorites)); } catch (e) {}
+            try { localStorage.setItem('leo_favs_lc', JSON.stringify(favorites)); } catch (e) {}
             renderProducts();
             updateBadge();
             if(document.getElementById('fav-modal').style.display === 'flex') renderFavList();
         }
 
         function updateBadge() { document.getElementById('fav-count').innerText = favorites.length; }
-
         function checkLogin() {
             if (userInfo.name) {
                 document.getElementById('login-modal').style.display = 'none';
@@ -198,7 +195,7 @@
             userInfo.name = document.getElementById('input-name').value.trim();
             userInfo.contact = document.getElementById('input-contact').value.trim();
             if(!userInfo.name) return alert("请填写信息");
-            try { localStorage.setItem('leo_user_v6', JSON.stringify(userInfo)); } catch(e) {}
+            try { localStorage.setItem('leo_user_lc', JSON.stringify(userInfo)); } catch(e) {}
             checkLogin();
         }
         function openFavModal() { renderFavList(); document.getElementById('fav-modal').style.display = 'flex'; }
@@ -210,7 +207,7 @@
             container.innerHTML = favorites.map((f,i) => `
                 <div class="list-item">
                     <div style="color:#ccc;">${i+1}</div>
-                    <img src="${f.img}" class="list-thumb">
+                    <img src="${f.img}" class="list-thumb" onclick="showBigImg('${f.img}')" style="cursor:zoom-in">
                     <div class="list-details"><div style="font-size:12px;color:#999;">${f.sku}</div><div style="font-weight:bold;">${f.name}</div></div>
                     <div style="cursor:pointer;padding:10px;" onclick="toggleFav('${f.id}')">🗑️</div>
                 </div>`).join('');
