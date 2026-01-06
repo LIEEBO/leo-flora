@@ -9,15 +9,12 @@
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; }
         
-        /* 布局基础 */
         header { background: white; padding: 15px 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         h1 { margin: 0; font-size: 1.2rem; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
         .logo-icon { font-size: 1.5rem; }
         
-        /* 语言切换器 */
         .lang-select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; background: white; cursor: pointer; }
-
-        /* 搜索框 */
+        
         .search-box { width: 100%; max-width: 400px; position: relative; }
         .search-input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; background: #f0f2f5; outline: none; transition: all 0.2s; box-sizing: border-box; }
         .search-input:focus { background: white; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1); }
@@ -32,12 +29,8 @@
         .product-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
         .product-desc { font-size: 0.85rem; color: #666; margin: 0; }
         
-        /* 收藏按钮 */
         .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; }
-        
-        /* RTL 适配：阿拉伯语时，按钮放左边 */
         html[dir="rtl"] .fav-btn { right: auto; left: 10px; }
-        
         .fav-btn.active { background: white; color: var(--accent-color); transform: scale(1.1); }
         
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
@@ -56,8 +49,6 @@
         .list-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
         .list-details { flex-grow: 1; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #bbb; }
-        
-        /* RTL 适配：关闭按钮 */
         html[dir="rtl"] .close-btn { right: auto; left: 20px; }
 
         .loading { text-align: center; padding: 50px; color: #999; }
@@ -79,7 +70,6 @@
     <header>
         <div style="display:flex; justify-content:space-between; width:100%; align-items:center;" class="header-controls">
             <h1><span class="logo-icon">🌿</span> Leo Flora</h1>
-            
             <div style="display:flex; align-items:center; gap: 10px;">
                 <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
                     <option value="zh">中文</option>
@@ -87,14 +77,12 @@
                     <option value="es">Español</option>
                     <option value="ar">العربية</option>
                 </select>
-                
                 <span id="header-user-name" style="font-size:0.9rem;color:#666; display:none;"></span>
                 <div id="btn-edit-info" style="font-size:12px;color:#999;cursor:pointer;border:1px solid #eee;padding:4px 8px;border-radius:4px;" onclick="showLoginModal()">
                     <span data-i18n="edit_info">修改</span>
                 </div>
             </div>
         </div>
-        
         <div class="search-box">
             <input type="text" id="search-input" class="search-input" placeholder="Search..." oninput="filterProducts()">
         </div>
@@ -144,99 +132,14 @@
         const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
         // ==========================================
 
-        // --- 🌍 国际化字典 (Dictionary) ---
         const translations = {
-            zh: {
-                edit_info: "修改信息",
-                search_placeholder: "🔍 搜索货号 / 品名...",
-                no_result: "没有找到匹配的产品",
-                view_list: "查看我的意向清单",
-                welcome_title: "欢迎光临 Leo Flora",
-                welcome_desc: "请填写联系信息开始选品",
-                placeholder_name: "您的称呼 / 公司名",
-                placeholder_contact: "联系方式 (微信/邮箱)",
-                btn_start: "开始选品",
-                list_title: "📋 意向清单确认",
-                list_empty: "清单为空",
-                btn_export: "📥 导出 Excel 清单",
-                sku_prefix: "货号: ",
-                excel_client: "客户",
-                excel_contact: "联系",
-                excel_date: "时间",
-                excel_img: "图片",
-                excel_sku: "货号",
-                excel_name: "品名",
-                excel_note: "备注"
-            },
-            en: {
-                edit_info: "Edit Info",
-                search_placeholder: "🔍 Search SKU / Name...",
-                no_result: "No products found",
-                view_list: "View My List",
-                welcome_title: "Welcome to Leo Flora",
-                welcome_desc: "Please fill in your info to begin.",
-                placeholder_name: "Your Name / Company",
-                placeholder_contact: "Contact (WhatsApp/Email)",
-                btn_start: "Start Selection",
-                list_title: "📋 Wishlist Confirmation",
-                list_empty: "Your list is empty",
-                btn_export: "📥 Export to Excel",
-                sku_prefix: "SKU: ",
-                excel_client: "Client",
-                excel_contact: "Contact",
-                excel_date: "Date",
-                excel_img: "IMAGE",
-                excel_sku: "SKU",
-                excel_name: "NAME",
-                excel_note: "NOTE"
-            },
-            es: {
-                edit_info: "Editar Info",
-                search_placeholder: "🔍 Buscar SKU / Nombre...",
-                no_result: "No se encontraron productos",
-                view_list: "Ver Mi Lista",
-                welcome_title: "Bienvenido a Leo Flora",
-                welcome_desc: "Por favor complete su información.",
-                placeholder_name: "Su Nombre / Empresa",
-                placeholder_contact: "Contacto (WhatsApp/Email)",
-                btn_start: "Comenzar",
-                list_title: "📋 Confirmar Lista",
-                list_empty: "La lista está vacía",
-                btn_export: "📥 Exportar a Excel",
-                sku_prefix: "REF: ",
-                excel_client: "Cliente",
-                excel_contact: "Contacto",
-                excel_date: "Fecha",
-                excel_img: "IMAGEN",
-                excel_sku: "SKU",
-                excel_name: "NOMBRE",
-                excel_note: "NOTA"
-            },
-            ar: {
-                edit_info: "تعديل",
-                search_placeholder: "🔍 بحث عن SKU / الاسم...",
-                no_result: "لم يتم العثور على منتجات",
-                view_list: "عرض قائمتي",
-                welcome_title: "مرحبا بكم في Leo Flora",
-                welcome_desc: "يرجى ملء معلوماتك للبدء.",
-                placeholder_name: "الاسم / الشركة",
-                placeholder_contact: "معلومات الاتصال",
-                btn_start: "ابدأ",
-                list_title: "📋 تأكيد القائمة",
-                list_empty: "القائمة فارغة",
-                btn_export: "📥 تصدير إلى Excel",
-                sku_prefix: "رمز: ",
-                excel_client: "العميل",
-                excel_contact: "اتصال",
-                excel_date: "التاريخ",
-                excel_img: "صورة",
-                excel_sku: "رمز المنتج",
-                excel_name: "الاسم",
-                excel_note: "ملاحظة"
-            }
+            zh: { edit_info: "修改信息", search_placeholder: "🔍 搜索货号 / 品名...", no_result: "没有找到匹配的产品", view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo Flora", welcome_desc: "请填写联系信息开始选品", placeholder_name: "您的称呼 / 公司名", placeholder_contact: "联系方式 (微信/邮箱)", btn_start: "开始选品", list_title: "📋 意向清单确认", list_empty: "清单为空", btn_export: "📥 导出 Excel 清单", sku_prefix: "货号: ", excel_client: "客户", excel_contact: "联系", excel_date: "时间", excel_img: "图片", excel_sku: "货号", excel_name: "品名", excel_note: "备注" },
+            en: { edit_info: "Edit Info", search_placeholder: "🔍 Search SKU / Name...", no_result: "No products found", view_list: "View My List", welcome_title: "Welcome to Leo Flora", welcome_desc: "Please fill in your info to begin.", placeholder_name: "Your Name / Company", placeholder_contact: "Contact (WhatsApp/Email)", btn_start: "Start Selection", list_title: "📋 Wishlist Confirmation", list_empty: "Your list is empty", btn_export: "📥 Export to Excel", sku_prefix: "SKU: ", excel_client: "Client", excel_contact: "Contact", excel_date: "Date", excel_img: "IMAGE", excel_sku: "SKU", excel_name: "NAME", excel_note: "NOTE" },
+            es: { edit_info: "Editar Info", search_placeholder: "🔍 Buscar SKU / Nombre...", no_result: "No se encontraron productos", view_list: "Ver Mi Lista", welcome_title: "Bienvenido a Leo Flora", welcome_desc: "Por favor complete su información.", placeholder_name: "Su Nombre / Empresa", placeholder_contact: "Contacto (WhatsApp/Email)", btn_start: "Comenzar", list_title: "📋 Confirmar Lista", list_empty: "La lista está vacía", btn_export: "📥 Exportar a Excel", sku_prefix: "REF: ", excel_client: "Cliente", excel_contact: "Contacto", excel_date: "Fecha", excel_img: "IMAGEN", excel_sku: "SKU", excel_name: "NOMBRE", excel_note: "NOTA" },
+            ar: { edit_info: "تعديل", search_placeholder: "🔍 بحث عن SKU / الاسم...", no_result: "لم يتم العثور على منتجات", view_list: "عرض قائمتي", welcome_title: "مرحبا بكم في Leo Flora", welcome_desc: "يرجى ملء معلوماتك للبدء.", placeholder_name: "الاسم / الشركة", placeholder_contact: "معلومات الاتصال", btn_start: "ابدأ", list_title: "📋 تأكيد القائمة", list_empty: "القائمة فارغة", btn_export: "📥 تصدير إلى Excel", sku_prefix: "رمز: ", excel_client: "العميل", excel_contact: "اتصال", excel_date: "التاريخ", excel_img: "صورة", excel_sku: "رمز المنتج", excel_name: "الاسم", excel_note: "ملاحظة" }
         };
 
-        let currentLang = 'zh'; // 默认中文
+        let currentLang = 'zh';
         let products = [];
         let favorites = [];
         let userInfo = { name: "", contact: "" };
@@ -248,14 +151,11 @@
             }
             AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
 
-            // 加载本地存储
             try {
                 const savedFavs = localStorage.getItem('leo_favs_lc');
                 if (savedFavs) favorites = JSON.parse(savedFavs);
                 const savedUser = localStorage.getItem('leo_user_lc');
                 if (savedUser) userInfo = JSON.parse(savedUser);
-                
-                // 加载语言设置
                 const savedLang = localStorage.getItem('leo_lang');
                 if (savedLang && translations[savedLang]) {
                     currentLang = savedLang;
@@ -263,7 +163,7 @@
                 }
             } catch (e) {}
 
-            applyLanguage(currentLang); // 应用语言
+            applyLanguage(currentLang);
             checkLogin();
             updateBadge();
 
@@ -273,9 +173,13 @@
                 products = results.map(item => ({
                     id: item.id,
                     sku: item.get('sku') || "",
-                    name: item.get('name') || "",
-                    desc: item.get('desc') || "",
-                    img: item.get('img') || ""
+                    img: item.get('img') || "",
+                    // 👇 关键修改：一次性把所有语言版本都取出来
+                    name_zh: item.get('name_zh') || item.get('name') || "", // 兼容旧数据
+                    name_en: item.get('name_en') || "",
+                    name_es: item.get('name_es') || "",
+                    name_ar: item.get('name_ar') || "",
+                    desc: item.get('desc') || ""
                 }));
                 document.getElementById('loading-tip').style.display = 'none';
                 renderProducts(products);
@@ -284,12 +188,11 @@
             });
         }
 
-        // --- 🌍 语言切换逻辑 ---
         function changeLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('leo_lang', lang);
             applyLanguage(lang);
-            // 重新渲染以更新JS生成的文本
+            // 切换语言时，重新渲染产品列表（这样产品名才会变）
             const keyword = document.getElementById('search-input').value.toLowerCase().trim();
             if (keyword) filterProducts(); else renderProducts(products);
             if(document.getElementById('fav-modal').style.display === 'flex') renderFavList();
@@ -297,30 +200,29 @@
 
         function applyLanguage(lang) {
             const t = translations[lang];
-            
-            // 1. 设置 RTL (从右向左)
-            if (lang === 'ar') {
-                document.documentElement.setAttribute('dir', 'rtl');
-            } else {
-                document.documentElement.setAttribute('dir', 'ltr');
-            }
-
-            // 2. 更新 data-i18n 元素
+            if (lang === 'ar') document.documentElement.setAttribute('dir', 'rtl');
+            else document.documentElement.setAttribute('dir', 'ltr');
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.innerText = t[key];
             });
-
-            // 3. 更新 Placeholder
             document.getElementById('search-input').placeholder = t.search_placeholder;
             document.getElementById('input-name').placeholder = t.placeholder_name;
             document.getElementById('input-contact').placeholder = t.placeholder_contact;
         }
 
+        function getDisplayName(p) {
+            // 👇 智能获取名字逻辑：根据当前语言选列
+            if (currentLang === 'en' && p.name_en) return p.name_en;
+            if (currentLang === 'es' && p.name_es) return p.name_es;
+            if (currentLang === 'ar' && p.name_ar) return p.name_ar;
+            return p.name_zh || p.name_en; // 默认回退到中文
+        }
+
         function renderProducts(list) {
             const container = document.getElementById('product-grid');
             const noResultTip = document.getElementById('no-result-tip');
-            const t = translations[currentLang]; // 获取当前语言包
+            const t = translations[currentLang];
             
             if (list.length === 0 && products.length > 0) {
                 container.style.display = 'none';
@@ -333,6 +235,9 @@
 
             container.innerHTML = list.map(p => {
                 const isFav = favorites.find(f => f.id === p.id);
+                // 使用 getDisplayName 获取当前语言的名字
+                const displayName = getDisplayName(p);
+                
                 return `
                 <div class="product-card">
                     <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
@@ -341,7 +246,7 @@
                     </button>
                     <div class="product-info">
                         <span class="product-sku">${t.sku_prefix}${p.sku}</span>
-                        <div class="product-title">${p.name}</div>
+                        <div class="product-title">${displayName}</div>
                         <div class="product-desc">${p.desc}</div>
                     </div>
                 </div>`;
@@ -351,7 +256,14 @@
         function filterProducts() {
             const keyword = document.getElementById('search-input').value.toLowerCase().trim();
             if (!keyword) { renderProducts(products); return; }
-            const filtered = products.filter(p => p.sku.toLowerCase().includes(keyword) || p.name.toLowerCase().includes(keyword));
+            // 搜索时同时匹配所有语言的名字，确保客户用什么搜都能搜到
+            const filtered = products.filter(p => 
+                p.sku.toLowerCase().includes(keyword) || 
+                p.name_zh.toLowerCase().includes(keyword) ||
+                p.name_en.toLowerCase().includes(keyword) ||
+                p.name_es.toLowerCase().includes(keyword) ||
+                p.name_ar.toLowerCase().includes(keyword)
+            );
             renderProducts(filtered);
         }
 
@@ -407,17 +319,20 @@
             if (favorites.length === 0) { container.innerHTML = `<div style="text-align:center;color:#ccc;margin-top:50px;">${t.list_empty}</div>`; return; }
             favorites.sort((a,b)=>a.time-b.time);
             
-            container.innerHTML = favorites.map((f,i) => `
+            container.innerHTML = favorites.map((f,i) => {
+                const displayName = getDisplayName(f);
+                return `
                 <div class="list-item">
                     <div style="color:#ccc;">${i+1}</div>
                     <img src="${f.img}" class="list-thumb" onclick="showBigImg('${f.img}')" style="cursor:zoom-in">
-                    <div class="list-details"><div style="font-size:12px;color:#999;">${f.sku}</div><div style="font-weight:bold;">${f.name}</div></div>
+                    <div class="list-details"><div style="font-size:12px;color:#999;">${f.sku}</div><div style="font-weight:bold;">${displayName}</div></div>
                     <div style="cursor:pointer;padding:10px;" onclick="toggleFav('${f.id}')">🗑️</div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
         }
 
         function exportToExcel() {
-            const t = translations[currentLang]; // 使用当前语言导出
+            const t = translations[currentLang];
             if (favorites.length === 0) return alert(t.list_empty);
             
             const date = new Date();
@@ -447,11 +362,12 @@
                 </tr>`;
             
             favorites.forEach(f => {
+                const displayName = getDisplayName(f);
                 excelContent += `
                 <tr>
                     <td height="100" width="100"><img src="${f.img}" width="80" height="80"></td>
                     <td class="sku-cell">${f.sku}</td>
-                    <td>${f.name}<br><span style="color:#666;">${f.desc}</span></td>
+                    <td>${displayName}<br><span style="color:#666;">${f.desc}</span></td>
                     <td></td>
                 </tr>`;
             });
