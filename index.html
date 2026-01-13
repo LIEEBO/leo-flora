@@ -219,8 +219,10 @@
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.innerText = t[key];
             });
-            renderProducts(products);
-        }
+            document.getElementById('search-input').placeholder = (lang === 'zh' ? "🔍 搜索货号 / 品名..." : "🔍 Search SKU / Name...");
+
+    renderProducts(products);
+}
 
         function exportToExcel() {
             if (favorites.length === 0) return;
