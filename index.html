@@ -56,7 +56,7 @@
 
         /* 新增：联系方式按钮样式 */
         ./* 新增：联系方式按钮样式 */
-.contact-link { 
+..contact-link { 
     display: flex; 
     align-items: center; 
     justify-content: center; 
@@ -66,10 +66,12 @@
     color: white; 
     font-weight: 600; 
     margin-bottom: 12px; 
-    border: none; 
+    border: none;             /* 确保没有任何边框 */
     width: 100%; 
     cursor: pointer;
-    box-sizing: border-box; /* 添加这一行，确保宽度包含内边距，使所有长条对齐 */
+    box-sizing: border-box;   /* 确保宽度包含内边距 */
+    outline: none;            /* 移除可能的轮廓线 */
+    appearance: none;         /* 移除浏览器默认样式 */
 }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
