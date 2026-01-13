@@ -137,14 +137,20 @@
     </div>
 
     <div class="modal-overlay" id="contact-guide-modal">
-        <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeContactModal()">&times;</span>
-            <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
-            <h2 style="margin-top:0;">清单导出成功！</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px;">
-    请将下载的文件发送至下方联系方式：<br>
-    <span style="font-size:12px; color:#999;">（我们将给您发送完整报价单）</span>
-</p>
+    <div class="modal-content" style="text-align:center;">
+        <span class="close-btn" onclick="closeContactModal()">&times;</span>
+        <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+        
+        <h2 style="margin-top:0;" data-i18n="export_success">清单导出成功！</h2>
+        
+        <p style="color:#666; font-size:14px; margin-bottom:25px;">
+            <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
+            <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
+        </p>
+        
+        ...
+    </div>
+</div>
             
             <button class="contact-link btn-wechat" onclick="copyText('Leo92-02')">微信 / WeChat: Leo92-02 (点击复制)</button>
             <a href="https://wa.me/8618657926791" target="_blank" class="contact-link btn-whatsapp">WhatsApp: +86 186 5792 6791</a>
