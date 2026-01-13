@@ -19,26 +19,27 @@
 
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .product-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f0f0f0; }
         .product-card:hover { transform: translateY(-5px); }
         .product-img { width: 100%; height: 240px; object-fit: cover; background: #eee; cursor: zoom-in; }
         .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .product-sku { font-size: 0.75rem; color: #888; margin-bottom: 6px; background: #f0f2f5; display: inline-block; padding: 3px 8px; border-radius: 4px; width: fit-content; }
+        .product-sku { font-size: 0.75rem; color: #888; margin-bottom: 6px; background: #f0f2f5; display: inline-block; padding: 3px 8px; border-radius: 4px; width: fit-content; font-weight: bold; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
+        .product-details { font-size: 0.8rem; color: #666; display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; border-top: 1px solid #f9f9f9; padding-top: 10px; }
         
-        .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; }
-        .fav-btn.active { color: var(--accent-color); transform: scale(1.1); }
+        .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; z-index: 10; }
+        .fav-btn.active { color: var(--accent-color); transform: scale(1.1); background: white; }
         
-        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
+        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: none; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
         .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
         
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; box-sizing: border-box; position: relative; }
+        .modal-content { background: white; width: 90%; max-width: 480px; border-radius: 20px; padding: 30px; box-sizing: border-box; position: relative; max-height: 85vh; overflow-y: auto; }
         
-        .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; }
-        .login-btn, .export-btn { background: var(--primary-color); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        
-        /* 联系方式按钮样式 - 保持 V1.0 的完美对齐 */
+        .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .btn-main { background: var(--primary-color); color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-main:hover { background: #34495e; }
+
         .contact-link { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 12px; text-decoration: none; color: white; font-weight: 600; margin-bottom: 12px; border: none; width: 100%; cursor: pointer; box-sizing: border-box; }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
@@ -65,36 +66,40 @@
             </div>
         </div>
         <div class="search-box">
-            <input type="text" id="search-input" class="search-input" placeholder="Search..." oninput="filterProducts()">
+            <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
         </div>
     </header>
 
+    <div class="modal-overlay" id="login-modal" style="display: flex;">
+        <div class="modal-content" style="text-align:center;">
+            <h2 data-i18n="welcome_title">Welcome to Leo Flora</h2>
+            <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
+            <div style="text-align:left;">
+                <label style="font-size:12px; color:#999;" data-i18n="label_name">Name / Company</label>
+                <input type="text" id="input-name" class="login-input" placeholder="Your Name">
+                <label style="font-size:12px; color:#999;" data-i18n="label_contact">Contact Method</label>
+                <input type="text" id="input-contact" class="login-input" placeholder="WhatsApp / WeChat / Email">
+            </div>
+            <button class="btn-main" onclick="saveUserInfo()" data-i18n="btn_start">Start / 开始选品</button>
+        </div>
+    </div>
+
     <div class="container">
-        <div id="loading-tip" style="text-align:center; padding:50px; color:#999;">Loading...</div>
+        <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
 
-    <div class="floating-bar" onclick="openFavModal()">
+    <div class="floating-bar" id="floating-bar" onclick="openFavModal()">
         <span data-i18n="view_list">查看我的意向清单</span>
         <span class="count-badge" id="fav-count">0</span>
-    </div>
-
-    <div class="modal-overlay" id="login-modal" style="display:flex;">
-        <div class="modal-content" style="text-align:center;">
-            <h2 data-i18n="welcome_title">Welcome to Leo Flora</h2>
-            <p data-i18n="welcome_desc">Please fill in your info to begin.</p>
-            <input type="text" id="input-name" class="login-input" placeholder="Name">
-            <input type="text" id="input-contact" class="login-input" placeholder="Contact">
-            <button class="login-btn" onclick="saveUserInfo()" data-i18n="btn_start">Start</button>
-        </div>
     </div>
 
     <div class="modal-overlay" id="fav-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeFavModal()">&times;</span>
-            <h2 data-i18n="list_title">意向清单确认</h2>
-            <div id="fav-items-container" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
-            <button class="export-btn" onclick="exportToExcel()" data-i18n="btn_export">导出 Excel 清单</button>
+            <h2 style="margin-top:0; text-align:center;" data-i18n="list_title">意向清单确认</h2>
+            <div id="fav-items-container" style="max-height:400px; overflow-y:auto; margin: 20px 0;"></div>
+            <button class="btn-main" style="background:#27ae60;" onclick="exportToExcel()" data-i18n="btn_export">导出 Excel 清单</button>
         </div>
     </div>
 
@@ -103,7 +108,7 @@
             <span class="close-btn" onclick="closeContactModal()">&times;</span>
             <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
             <h2 style="margin-top:0;" data-i18n="export_success">清单导出成功！</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px;">
+            <p style="color:#666; font-size:14px; margin-bottom:25px; line-height: 1.6;">
                 <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
                 <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
             </p>
@@ -116,15 +121,16 @@
     </div>
 
     <script>
+        // LeanCloud 密钥
         const APP_ID = "14iZrTXCibSIZUvrYW1Zx0Nv-MdYXbMMI"; 
         const APP_KEY = "4ClJ1QFB6kPuL8tPCzXe0F1l";
         const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
 
         const translations = {
-            zh: { view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo Flora", welcome_desc: "请填写联系信息开始选品", btn_start: "开始选品", list_title: "📋 意向清单确认", btn_export: "📥 导出 Excel 清单", export_success: "清单导出成功！", export_guide: "请将下载的文件发送至下方联系方式：", export_note: "（我们将给您发送完整报价单）" },
-            en: { view_list: "View My List", welcome_title: "Welcome to Leo Flora", welcome_desc: "Please fill in your info to begin.", btn_start: "Start", list_title: "📋 Wishlist Confirmation", btn_export: "📥 Export to Excel", export_success: "Wishlist Exported!", export_guide: "Please send the file via:", export_note: "(We will send you a complete quotation)" },
-            es: { view_list: "Ver Mi Lista", welcome_title: "Bienvenido", welcome_desc: "Complete su información.", btn_start: "Comenzar", list_title: "📋 Confirmar Lista", btn_export: "📥 Exportar Excel", export_success: "¡Exportado con éxito!", export_guide: "Envíenos el archivo por:", export_note: "(Le enviaremos una cotización completa)" },
-            ar: { view_list: "عرض قائمتي", welcome_title: "مرحبا بكم", welcome_desc: "يرجى ملء معلوماتك.", btn_start: "ابدأ", list_title: "📋 تأكيد القائمة", btn_export: "📥 تصدير Excel", export_success: "تم التصدير بنجاح!", export_guide: "يرجى إرسال الملف عبر:", export_note: "(سوف نرسل لك عرض سعر كامل)" }
+            zh: { view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo Flora", welcome_desc: "请填写联系信息开始选品", label_name: "您的称呼 / 公司名", label_contact: "联系方式 (微信/邮箱)", btn_start: "开始选品", list_title: "📋 意向清单确认", btn_export: "📥 导出 Excel 清单", export_success: "清单导出成功！", export_guide: "请将下载的文件发送至下方联系方式：", export_note: "（我们将给您发送完整报价单）" },
+            en: { view_list: "View My Wishlist", welcome_title: "Welcome to Leo Flora", welcome_desc: "Please fill in your info to begin.", label_name: "Name / Company", label_contact: "Contact (WhatsApp/Email)", btn_start: "Start Selection", list_title: "📋 Wishlist Confirmation", btn_export: "📥 Export to Excel", export_success: "Wishlist Exported!", export_guide: "Please send the file via:", export_note: "(We will send you a complete quotation)" },
+            es: { view_list: "Ver Mi Lista", welcome_title: "Bienvenido a Leo Flora", welcome_desc: "Por favor complete su información.", label_name: "Nombre / Empresa", label_contact: "Contacto (WhatsApp/Email)", btn_start: "Comenzar", list_title: "📋 Confirmar Lista", btn_export: "📥 Exportar Excel", export_success: "¡Exportado con éxito!", export_guide: "Envíenos el archivo por:", export_note: "(Le enviaremos una cotización completa)" },
+            ar: { view_list: "عرض قائمتي", welcome_title: "مرحبا بكم في Leo Flora", welcome_desc: "يرجى ملء معلوماتك للبدء.", label_name: "الاسم / الشركة", label_contact: "معلومات الاتصال", btn_start: "ابدأ", list_title: "📋 تأكيد القائمة", btn_export: "📥 تصدير Excel", export_success: "تم التصدير بنجاح!", export_guide: "يرجى إرسال الملف عبر:", export_note: "(سوف نرسل لك عرض سعر كامل)" }
         };
 
         let currentLang = 'zh';
@@ -152,7 +158,9 @@
                     img: p.get('img'),
                     name_zh: p.get('name_zh') || p.get('name'),
                     name_en: p.get('name_en'),
-                    desc: p.get('desc') || ""
+                    size: p.get('size'),
+                    qty: p.get('qty_ctn'),
+                    cbm: p.get('cbm_ctn')
                 }));
                 document.getElementById('loading-tip').style.display = 'none';
                 renderProducts(products);
@@ -163,14 +171,19 @@
             const grid = document.getElementById('product-grid');
             grid.innerHTML = list.map(p => {
                 const isFav = favorites.find(f => f.id === p.id);
-                const displayName = (currentLang === 'en' && p.name_en) ? p.name_en : p.name_zh;
+                const name = (currentLang === 'en' && p.name_en) ? p.name_en : p.name_zh;
                 return `
                 <div class="product-card">
-                    <img src="${p.img}" class="product-img" onclick="toggleFav('${p.id}')">
+                    <img src="${p.img}" class="product-img" loading="lazy" onclick="toggleFav('${p.id}')">
                     <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
                     <div class="product-info">
                         <span class="product-sku">SKU: ${p.sku}</span>
-                        <div class="product-title">${displayName}</div>
+                        <div class="product-title">${name}</div>
+                        <div class="product-details">
+                            <span>S: ${p.size || '-'}</span>
+                            <span>Q: ${p.qty || '-'}</span>
+                            <span>V: ${p.cbm || '-'}</span>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
@@ -179,7 +192,7 @@
         function saveUserInfo() {
             const name = document.getElementById('input-name').value.trim();
             const contact = document.getElementById('input-contact').value.trim();
-            if(!name || !contact) return alert("Please fill in info");
+            if(!name || !contact) return alert("Please fill in your name and contact info.");
             userInfo = { name, contact };
             localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
             document.getElementById('login-modal').style.display = 'none';
@@ -189,8 +202,14 @@
             const p = products.find(x => x.id === id);
             const idx = favorites.findIndex(f => f.id === id);
             if (idx === -1) favorites.push(p); else favorites.splice(idx, 1);
-            document.getElementById('fav-count').innerText = favorites.length;
+            updateBadge();
             renderProducts(products);
+        }
+
+        function updateBadge() {
+            const bar = document.getElementById('floating-bar');
+            document.getElementById('fav-count').innerText = favorites.length;
+            bar.style.display = favorites.length > 0 ? 'flex' : 'none';
         }
 
         function changeLanguage(lang) {
@@ -205,18 +224,27 @@
 
         function exportToExcel() {
             if (favorites.length === 0) return;
-            // 此处保留您 V1.0 的 Excel 导出逻辑 Blob 部分...
             const dateStr = new Date().toLocaleDateString();
-            let excelContent = `<html><head><meta charset="UTF-8"></head><body><table border="1">
-                <tr><td colspan="3">Client: ${userInfo.name} | Contact: ${userInfo.contact}</td></tr>
-                <tr><th>Image</th><th>SKU</th><th>Name</th></tr>`;
+            let excelContent = `<html><head><meta charset="UTF-8"></head><body>
+                <table border="1">
+                    <tr style="background:#f0f0f0;"><td colspan="6"><b>Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}</b></td></tr>
+                    <tr style="background:#2c3e50; color:white;">
+                        <th>Image</th><th>SKU</th><th>Name</th><th>Size</th><th>Qty/CTN</th><th>CBM</th>
+                    </tr>`;
             favorites.forEach(f => {
-                excelContent += `<tr><td><img src="${f.img}" width="50"></td><td>${f.sku}</td><td>${f.name_zh}</td></tr>`;
+                excelContent += `<tr>
+                    <td height="60"><img src="${f.img}" width="50"></td>
+                    <td>${f.sku}</td>
+                    <td>${f.name_zh}</td>
+                    <td>${f.size || ''}</td>
+                    <td>${f.qty || ''}</td>
+                    <td>${f.cbm || ''}</td>
+                </tr>`;
             });
             excelContent += `</table></body></html>`;
             const link = document.createElement('a');
             link.href = URL.createObjectURL(new Blob([excelContent], { type: 'application/vnd.ms-excel' }));
-            link.download = `LeoFlora_${userInfo.name}.xls`;
+            link.download = `LeoFlora_Wishlist_${userInfo.name}.xls`;
             link.click();
 
             closeFavModal();
@@ -226,18 +254,27 @@
         function openFavModal() {
             const container = document.getElementById('fav-items-container');
             container.innerHTML = favorites.map(f => `
-                <div style="display:flex; align-items:center; gap:10px; border-bottom:1px solid #eee; padding:10px 0;">
-                    <img src="${f.img}" style="width:40px; height:40px; object-fit:cover;">
-                    <div style="flex:1; font-size:12px;"><b>${f.sku}</b></div>
-                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer;">✕</span>
+                <div style="display:flex; align-items:center; gap:12px; border-bottom:1px solid #eee; padding:10px 0;">
+                    <img src="${f.img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
+                    <div style="flex:1;">
+                        <div style="font-size:12px; font-weight:bold; color:#2c3e50;">${f.sku}</div>
+                        <div style="font-size:11px; color:#666;">${f.name_zh}</div>
+                    </div>
+                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer; color:#ccc;">✕</span>
                 </div>
-            `).join('');
+            `).join('') || '<p style="text-align:center; color:#ccc;">Empty list</p>';
             document.getElementById('fav-modal').style.display = 'flex';
         }
 
         function closeFavModal() { document.getElementById('fav-modal').style.display = 'none'; }
         function closeContactModal() { document.getElementById('contact-guide-modal').style.display = 'none'; }
         function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Copied: " + t)); }
+
+        function filterProducts() {
+            const key = document.getElementById('search-input').value.toLowerCase().trim();
+            const filtered = products.filter(p => p.sku.toLowerCase().includes(key) || p.name_zh.toLowerCase().includes(key));
+            renderProducts(filtered);
+        }
 
         init();
     </script>
