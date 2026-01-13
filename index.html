@@ -169,13 +169,14 @@
 
         function renderProducts(list) {
     const grid = document.getElementById('product-grid');
+    const t = translations[currentLang];        
     grid.innerHTML = list.map(p => {
         const isFav = favorites.find(f => f.id === p.id);
         const displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
         
         return `
         <div class="product-card">
-            <img src="${p.img}" class="product-img" loading="lazy" onclick="toggleFav('${p.id}')">
+            <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
             <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
             <div class="product-info">
                 <span class="product-sku">ITEM NO: ${p.sku}</span>
@@ -276,7 +277,25 @@
             renderProducts(filtered);
         }
 
+        function showBigImg(url) {
+    const viewer = document.getElementById('img-viewer');
+    const bigImg = document.getElementById('big-img');
+    if (viewer && bigImg) {
+        bigImg.src = url;
+        viewer.style.display = 'flex';
+    }
+}
+
+function closeBigImg() {
+    const viewer = document.getElementById('img-viewer');
+    if (viewer) {
+        viewer.style.display = 'none';
+    }
+}
         init();
     </script>
+    <div class="modal-overlay" id="img-viewer" onclick="closeBigImg()" style="z-index: 999; background: rgba(0,0,0,0.9); cursor: zoom-out;">
+        <img id="big-img" src="" alt="Big Image" style="max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+    </div>
 </body>
 </html>
