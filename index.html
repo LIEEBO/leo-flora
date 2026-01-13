@@ -56,22 +56,20 @@
 
         /* 新增：联系方式按钮样式 */
         ./* 新增：联系方式按钮样式 */
-..contact-link { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+.contact-link { 
+    display: flex;          /* 关键：让它变成一个占满一行的块，不再挤在一起 */
+    align-items: center;    /* 文字垂直居中 */
+    justify-content: center; /* 文字水平居中 */
     padding: 14px; 
     border-radius: 12px; 
     text-decoration: none; 
     color: white; 
     font-weight: 600; 
-    margin-bottom: 12px; 
-    border: none;             /* 确保没有任何边框 */
-    width: 100%; 
+    margin-bottom: 12px;    /* 关键：给每个条之间留出 12 像素的间距 */
+    border: none; 
+    width: 100%;            /* 关键：宽度占满父容器 */
     cursor: pointer;
-    box-sizing: border-box;   /* 确保宽度包含内边距 */
-    outline: none;            /* 移除可能的轮廓线 */
-    appearance: none;         /* 移除浏览器默认样式 */
+    box-sizing: border-box; /* 关键：确保所有条的长度完全一致 */
 }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
