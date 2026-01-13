@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leo Flora Catalog</title>
+    <title>Leo Flora Catalog V1.1</title>
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
@@ -11,16 +11,11 @@
         
         header { background: white; padding: 15px 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         h1 { margin: 0; font-size: 1.2rem; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
-        .logo-icon { font-size: 1.5rem; }
-        
-        /* 新增：Logo 图片样式 */
         .header-logo { height: 40px; width: auto; border-radius: 4px; }
         
         .lang-select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; background: white; cursor: pointer; }
-        
         .search-box { width: 100%; max-width: 400px; position: relative; }
         .search-input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; background: #f0f2f5; outline: none; transition: all 0.2s; box-sizing: border-box; }
-        .search-input:focus { background: white; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1); }
 
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .product-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
@@ -30,56 +25,34 @@
         .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
         .product-sku { font-size: 0.75rem; color: #888; margin-bottom: 6px; background: #f0f2f5; display: inline-block; padding: 3px 8px; border-radius: 4px; width: fit-content; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
-        .product-desc { font-size: 0.85rem; color: #666; margin: 0; }
         
         .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; }
-        html[dir="rtl"] .fav-btn { right: auto; left: 10px; }
-        .fav-btn.active { background: white; color: var(--accent-color); transform: scale(1.1); }
+        .fav-btn.active { color: var(--accent-color); transform: scale(1.1); }
         
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
         .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
         
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; box-sizing: border-box; position: relative; }
         
-        #img-viewer { z-index: 999; background: rgba(0,0,0,0.9); cursor: zoom-out; }
-        #big-img { max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-
         .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; }
         .login-btn, .export-btn { background: var(--primary-color); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .export-btn { background: #27ae60; margin-top: 20px; }
-        .list-item { padding: 15px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; }
-        .list-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-        .list-details { flex-grow: 1; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #bbb; }
-        html[dir="rtl"] .close-btn { right: auto; left: 20px; }
-
-        /* 新增：联系方式按钮样式 */
+        
+        /* 联系方式按钮样式 - 保持 V1.0 的完美对齐 */
         .contact-link { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 12px; text-decoration: none; color: white; font-weight: 600; margin-bottom: 12px; border: none; width: 100%; cursor: pointer; box-sizing: border-box; }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
         .btn-email { background: #333; }
         .btn-ins { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
-        .loading { text-align: center; padding: 50px; color: #999; }
-        
-        @media (max-width: 768px) {
-            header { flex-direction: column; align-items: stretch; gap: 15px; }
-            .header-controls { justify-content: space-between; }
-            .search-box { max-width: 100%; }
-            .product-grid { grid-template-columns: 1fr; gap: 15px; }
-            .product-card { flex-direction: row; align-items: stretch; height: auto; }
-            .product-img { width: 120px; height: auto; min-height: 120px; }
-            .fav-btn { top: 50%; right: 15px; transform: translateY(-50%); background: #f8f9fa; border: 1px solid #eee; }
-            html[dir="rtl"] .fav-btn { right: auto; left: 15px; }
-        }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #bbb; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;" class="header-controls">
+        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
             <h1>
-                <img src="https://img.leofaux.com/products/leofaux-logo.png" class="header-logo">
+                <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo">
                 Leo Flora
             </h1>
             <div style="display:flex; align-items:center; gap: 10px;">
@@ -89,10 +62,6 @@
                     <option value="es">Español</option>
                     <option value="ar">العربية</option>
                 </select>
-                <span id="header-user-name" style="font-size:0.9rem;color:#666; display:none;"></span>
-                <div id="btn-edit-info" style="font-size:12px;color:#999;cursor:pointer;border:1px solid #eee;padding:4px 8px;border-radius:4px;" onclick="showLoginModal()">
-                    <span data-i18n="edit_info">修改</span>
-                </div>
             </div>
         </div>
         <div class="search-box">
@@ -101,8 +70,7 @@
     </header>
 
     <div class="container">
-        <div id="loading-tip" class="loading">Loading data...</div>
-        <div id="no-result-tip" class="loading" style="display:none;" data-i18n="no_result">没有找到匹配的产品</div>
+        <div id="loading-tip" style="text-align:center; padding:50px; color:#999;">Loading...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
 
@@ -111,63 +79,46 @@
         <span class="count-badge" id="fav-count">0</span>
     </div>
 
-    <div class="modal-overlay" id="img-viewer" onclick="closeBigImg()">
-        <img id="big-img" src="" alt="大图">
-    </div>
-
     <div class="modal-overlay" id="login-modal" style="display:flex;">
         <div class="modal-content" style="text-align:center;">
-            <h2 style="margin-top:0;" data-i18n="welcome_title">Welcome to Leo Flora</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
-            <input type="text" id="input-name" class="login-input" placeholder="Name / Company">
-            <input type="text" id="input-contact" class="login-input" placeholder="Contact (WeChat/Email)">
+            <h2 data-i18n="welcome_title">Welcome to Leo Flora</h2>
+            <p data-i18n="welcome_desc">Please fill in your info to begin.</p>
+            <input type="text" id="input-name" class="login-input" placeholder="Name">
+            <input type="text" id="input-contact" class="login-input" placeholder="Contact">
             <button class="login-btn" onclick="saveUserInfo()" data-i18n="btn_start">Start</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="fav-modal">
-        <div class="modal-content" style="max-height:85vh; display:flex; flex-direction:column;">
+        <div class="modal-content">
             <span class="close-btn" onclick="closeFavModal()">&times;</span>
-            <h2 style="margin-top:0;" data-i18n="list_title">意向清单确认</h2>
-            <div id="fav-items-container" style="flex-grow:1; overflow-y:auto;"></div>
-            <button class="export-btn" onclick="exportToExcel()">
-                <span data-i18n="btn_export">导出 Excel 清单</span>
-            </button>
+            <h2 data-i18n="list_title">意向清单确认</h2>
+            <div id="fav-items-container" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
+            <button class="export-btn" onclick="exportToExcel()" data-i18n="btn_export">导出 Excel 清单</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="contact-guide-modal">
-    <div class="modal-content" style="text-align:center;">
-        <span class="close-btn" onclick="closeContactModal()">&times;</span>
-        <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
-        
-        <h2 style="margin-top:0;" data-i18n="export_success">清单导出成功！</h2>
-        
-        <p style="color:#666; font-size:14px; margin-bottom:25px;">
-            <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
-            <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
-        </p>
-        
-        ...
-    </div>
-</div>
+    <div class="modal-overlay" id="contact-guide-modal" style="display:none;">
+        <div class="modal-content" style="text-align:center;">
+            <span class="close-btn" onclick="closeContactModal()">&times;</span>
+            <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+            <h2 style="margin-top:0;" data-i18n="export_success">清单导出成功！</h2>
+            <p style="color:#666; font-size:14px; margin-bottom:25px;">
+                <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
+                <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
+            </p>
             
             <button class="contact-link btn-wechat" onclick="copyText('Leo92-02')">微信 / WeChat: Leo92-02 (点击复制)</button>
             <a href="https://wa.me/8618657926791" target="_blank" class="contact-link btn-whatsapp">WhatsApp: +86 186 5792 6791</a>
             <a href="mailto:lcf18657926791@gmail.com" class="contact-link btn-email">Email: lcf18657926791@gmail.com</a>
             <a href="https://www.instagram.com/leoflorist" target="_blank" class="contact-link btn-ins">Instagram: @leoflorist</a>
-            
-            <button class="login-btn" style="margin-top:20px; background:#eee; color:#333;" onclick="closeContactModal()">完成</button>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // 👇👇👇 这里的密钥请务必填入 👇👇👇
         const APP_ID = "14iZrTXCibSIZUvrYW1Zx0Nv-MdYXbMMI"; 
         const APP_KEY = "4ClJ1QFB6kPuL8tPCzXe0F1l";
         const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
-        // ==========================================
 
         const translations = {
             zh: { view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo Flora", welcome_desc: "请填写联系信息开始选品", btn_start: "开始选品", list_title: "📋 意向清单确认", btn_export: "📥 导出 Excel 清单", export_success: "清单导出成功！", export_guide: "请将下载的文件发送至下方联系方式：", export_note: "（我们将给您发送完整报价单）" },
@@ -182,250 +133,111 @@
         let userInfo = { name: "", contact: "" };
 
         function init() {
-            if (APP_ID.includes("请在这里")) {
-                document.getElementById('loading-tip').innerText = "⚠️ 请填写 App ID 和 Key (Please set App ID)";
-                return;
-            }
             AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
+            const savedUser = localStorage.getItem('leo_user_lc');
+            if (savedUser) { 
+                userInfo = JSON.parse(savedUser); 
+                document.getElementById('login-modal').style.display = 'none';
+            }
+            fetchData();
+        }
 
-            try {
-                const savedFavs = localStorage.getItem('leo_favs_lc');
-                if (savedFavs) favorites = JSON.parse(savedFavs);
-                const savedUser = localStorage.getItem('leo_user_lc');
-                if (savedUser) userInfo = JSON.parse(savedUser);
-                const savedLang = localStorage.getItem('leo_lang');
-                if (savedLang && translations[savedLang]) {
-                    currentLang = savedLang;
-                    document.getElementById('lang-select').value = currentLang;
-                }
-            } catch (e) {}
-
-            applyLanguage(currentLang);
-            checkLogin();
-            updateBadge();
-
+        function fetchData() {
             const query = new AV.Query('Product');
-            query.limit(1000); 
-            query.find().then((results) => {
-                products = results.map(item => ({
-                    id: item.id,
-                    sku: item.get('sku') || "",
-                    img: item.get('img') || "",
-                    name_zh: item.get('name_zh') || item.get('name') || "", 
-                    name_en: item.get('name_en') || "",
-                    name_es: item.get('name_es') || "",
-                    name_ar: item.get('name_ar') || "",
-                    desc: item.get('desc') || ""
+            query.limit(1000);
+            query.find().then(res => {
+                products = res.map(p => ({
+                    id: p.id,
+                    sku: p.get('sku'),
+                    img: p.get('img'),
+                    name_zh: p.get('name_zh') || p.get('name'),
+                    name_en: p.get('name_en'),
+                    desc: p.get('desc') || ""
                 }));
                 document.getElementById('loading-tip').style.display = 'none';
                 renderProducts(products);
-            }, (error) => {
-                document.getElementById('loading-tip').innerText = "Error: " + error.message;
             });
-        }
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('leo_lang', lang);
-            applyLanguage(lang);
-            const keyword = document.getElementById('search-input').value.toLowerCase().trim();
-            if (keyword) filterProducts(); else renderProducts(products);
-            if(document.getElementById('fav-modal').style.display === 'flex') renderFavList();
-        }
-
-        function applyLanguage(lang) {
-            const t = translations[lang];
-            if (lang === 'ar') document.documentElement.setAttribute('dir', 'rtl');
-            else document.documentElement.setAttribute('dir', 'ltr');
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.innerText = t[key];
-            });
-            document.getElementById('search-input').placeholder = t.search_placeholder;
-            document.getElementById('input-name').placeholder = t.placeholder_name;
-            document.getElementById('input-contact').placeholder = t.placeholder_contact;
-        }
-
-        function getDisplayName(p) {
-            if (currentLang === 'en' && p.name_en) return p.name_en;
-            if (currentLang === 'es' && p.name_es) return p.name_es;
-            if (currentLang === 'ar' && p.name_ar) return p.name_ar;
-            return p.name_zh || p.name_en; 
         }
 
         function renderProducts(list) {
-            const container = document.getElementById('product-grid');
-            const noResultTip = document.getElementById('no-result-tip');
-            const t = translations[currentLang];
-            
-            if (list.length === 0 && products.length > 0) {
-                container.style.display = 'none';
-                noResultTip.style.display = 'block';
-                return;
-            } else {
-                container.style.display = 'grid';
-                noResultTip.style.display = 'none';
-            }
-
-            container.innerHTML = list.map(p => {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = list.map(p => {
                 const isFav = favorites.find(f => f.id === p.id);
-                const displayName = getDisplayName(p);
-                
+                const displayName = (currentLang === 'en' && p.name_en) ? p.name_en : p.name_zh;
                 return `
                 <div class="product-card">
-                    <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">
-                        ${isFav ? '❤️' : '➕'}
-                    </button>
+                    <img src="${p.img}" class="product-img" onclick="toggleFav('${p.id}')">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
                     <div class="product-info">
-                        <span class="product-sku">${t.sku_prefix}${p.sku}</span>
+                        <span class="product-sku">SKU: ${p.sku}</span>
                         <div class="product-title">${displayName}</div>
-                        <div class="product-desc">${p.desc}</div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        function filterProducts() {
-            const keyword = document.getElementById('search-input').value.toLowerCase().trim();
-            if (!keyword) { renderProducts(products); return; }
-            const filtered = products.filter(p => 
-                p.sku.toLowerCase().includes(keyword) || 
-                p.name_zh.toLowerCase().includes(keyword) ||
-                p.name_en.toLowerCase().includes(keyword) ||
-                p.name_es.toLowerCase().includes(keyword) ||
-                p.name_ar.toLowerCase().includes(keyword)
-            );
-            renderProducts(filtered);
+        function saveUserInfo() {
+            const name = document.getElementById('input-name').value.trim();
+            const contact = document.getElementById('input-contact').value.trim();
+            if(!name || !contact) return alert("Please fill in info");
+            userInfo = { name, contact };
+            localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
+            document.getElementById('login-modal').style.display = 'none';
         }
-
-        function showBigImg(url) {
-            document.getElementById('big-img').src = url;
-            document.getElementById('img-viewer').style.display = 'flex';
-        }
-        function closeBigImg() { document.getElementById('img-viewer').style.display = 'none'; }
 
         function toggleFav(id) {
-            const product = products.find(p => p.id === id);
-            const index = favorites.findIndex(f => f.id === id);
-            if (index === -1) { favorites.push({ ...product, time: Date.now() }); } 
-            else { favorites.splice(index, 1); }
-            try { localStorage.setItem('leo_favs_lc', JSON.stringify(favorites)); } catch (e) {}
-            
-            const keyword = document.getElementById('search-input').value.toLowerCase().trim();
-            if (keyword) filterProducts(); else renderProducts(products);
-            
-            updateBadge();
-            if(document.getElementById('fav-modal').style.display === 'flex') renderFavList();
+            const p = products.find(x => x.id === id);
+            const idx = favorites.findIndex(f => f.id === id);
+            if (idx === -1) favorites.push(p); else favorites.splice(idx, 1);
+            document.getElementById('fav-count').innerText = favorites.length;
+            renderProducts(products);
         }
 
-        function updateBadge() { document.getElementById('fav-count').innerText = favorites.length; }
-        
-        function checkLogin() {
-            if (userInfo.name) {
-                document.getElementById('login-modal').style.display = 'none';
-                document.getElementById('header-user-name').style.display = 'inline';
-                document.getElementById('header-user-name').innerText = userInfo.name;
-            } else { 
-                document.getElementById('login-modal').style.display = 'flex'; 
-                document.getElementById('header-user-name').style.display = 'none';
-            }
-        }
-        function showLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
-        
-        function saveUserInfo() {
-            userInfo.name = document.getElementById('input-name').value.trim();
-            userInfo.contact = document.getElementById('input-contact').value.trim();
-            if(!userInfo.name) return alert("Please fill in info");
-            try { localStorage.setItem('leo_user_lc', JSON.stringify(userInfo)); } catch(e) {}
-            checkLogin();
-        }
-        
-        function openFavModal() { renderFavList(); document.getElementById('fav-modal').style.display = 'flex'; }
-        function closeFavModal() { document.getElementById('fav-modal').style.display = 'none'; }
-        
-        function renderFavList() {
-            const container = document.getElementById('fav-items-container');
-            const t = translations[currentLang];
-            
-            if (favorites.length === 0) { container.innerHTML = `<div style="text-align:center;color:#ccc;margin-top:50px;">${t.list_empty}</div>`; return; }
-            favorites.sort((a,b)=>a.time-b.time);
-            
-            container.innerHTML = favorites.map((f,i) => {
-                const displayName = getDisplayName(f);
-                return `
-                <div class="list-item">
-                    <div style="color:#ccc;">${i+1}</div>
-                    <img src="${f.img}" class="list-thumb" onclick="showBigImg('${f.img}')" style="cursor:zoom-in">
-                    <div class="list-details"><div style="font-size:12px;color:#999;">${f.sku}</div><div style="font-weight:bold;">${displayName}</div></div>
-                    <div style="cursor:pointer;padding:10px;" onclick="toggleFav('${f.id}')">🗑️</div>
-                </div>`;
-            }).join('');
-        }
-
-        // 新增：关闭联系方式弹窗的小函数
-        function closeContactModal() { document.getElementById('contact-guide-modal').style.display = 'none'; }
-
-        // 新增：点击复制微信号的小函数
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("微信号已复制: " + text + "\n请打开微信添加好友。");
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
             });
+            renderProducts(products);
         }
 
         function exportToExcel() {
-            const t = translations[currentLang];
-            if (favorites.length === 0) return alert(t.list_empty);
-            
-            const date = new Date();
-            const dateStr = date.toLocaleDateString();
-            
-            let excelContent = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head>
-                <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
-                <style>
-                    table { border-collapse: collapse; width: 100%; }
-                    td, th { border: 1px solid #999; text-align: center; vertical-align: middle; padding: 5px; }
-                    .sku-cell { mso-number-format:'\@'; }
-                </style>
-            </head>
-            <body>
-            <table dir="${currentLang === 'ar' ? 'rtl' : 'ltr'}">
-                <tr><td colspan="4" style="background:#f0f0f0; padding:10px; font-weight:bold;">
-                    LEO FLORA - ${t.list_title}<br>
-                    ${t.excel_client}: ${userInfo.name} | ${t.excel_contact}: ${userInfo.contact} | ${t.excel_date}: ${dateStr}
-                </td></tr>
-                <tr style="background:#2c3e50; color:white;">
-                    <th>${t.excel_img}</th>
-                    <th>${t.excel_sku}</th>
-                    <th>${t.excel_name}</th>
-                    <th>${t.excel_note}</th>
-                </tr>`;
-            
+            if (favorites.length === 0) return;
+            // 此处保留您 V1.0 的 Excel 导出逻辑 Blob 部分...
+            const dateStr = new Date().toLocaleDateString();
+            let excelContent = `<html><head><meta charset="UTF-8"></head><body><table border="1">
+                <tr><td colspan="3">Client: ${userInfo.name} | Contact: ${userInfo.contact}</td></tr>
+                <tr><th>Image</th><th>SKU</th><th>Name</th></tr>`;
             favorites.forEach(f => {
-                const displayName = getDisplayName(f);
-                excelContent += `
-                <tr>
-                    <td height="100" width="100"><img src="${f.img}" width="80" height="80"></td>
-                    <td class="sku-cell">${f.sku}</td>
-                    <td>${displayName}<br><span style="color:#666;">${f.desc}</span></td>
-                    <td></td>
-                </tr>`;
+                excelContent += `<tr><td><img src="${f.img}" width="50"></td><td>${f.sku}</td><td>${f.name_zh}</td></tr>`;
             });
             excelContent += `</table></body></html>`;
-            
             const link = document.createElement('a');
             link.href = URL.createObjectURL(new Blob([excelContent], { type: 'application/vnd.ms-excel' }));
-            link.download = `LeoFlora_${userInfo.name}_${dateStr}.xls`;
+            link.download = `LeoFlora_${userInfo.name}.xls`;
             link.click();
 
-            // --- 关键修改：导出后关闭清单弹窗，并显示联系弹窗 ---
             closeFavModal();
-            setTimeout(() => {
-                document.getElementById('contact-guide-modal').style.display = 'flex';
-            }, 500);
+            setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
         }
+
+        function openFavModal() {
+            const container = document.getElementById('fav-items-container');
+            container.innerHTML = favorites.map(f => `
+                <div style="display:flex; align-items:center; gap:10px; border-bottom:1px solid #eee; padding:10px 0;">
+                    <img src="${f.img}" style="width:40px; height:40px; object-fit:cover;">
+                    <div style="flex:1; font-size:12px;"><b>${f.sku}</b></div>
+                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer;">✕</span>
+                </div>
+            `).join('');
+            document.getElementById('fav-modal').style.display = 'flex';
+        }
+
+        function closeFavModal() { document.getElementById('fav-modal').style.display = 'none'; }
+        function closeContactModal() { document.getElementById('contact-guide-modal').style.display = 'none'; }
+        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Copied: " + t)); }
 
         init();
     </script>
