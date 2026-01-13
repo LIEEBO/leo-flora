@@ -55,9 +55,8 @@
         html[dir="rtl"] .close-btn { right: auto; left: 20px; }
 
         /* 新增：联系方式按钮样式 */
-        ./* 新增：联系方式按钮样式 */
-.contact-link { 
-    display: flex;          /* 关键：让它变成一个占满一行的块，不再挤在一起 */
+        .contact-link { 
+    display: flex;          /* 必须有这一行，按钮才不会挤在一起 */
     align-items: center;    /* 文字垂直居中 */
     justify-content: center; /* 文字水平居中 */
     padding: 14px; 
@@ -65,16 +64,12 @@
     text-decoration: none; 
     color: white; 
     font-weight: 600; 
-    margin-bottom: 12px;    /* 关键：给每个条之间留出 12 像素的间距 */
+    margin-bottom: 12px;    /* 按钮之间的间距 */
     border: none; 
-    width: 100%;            /* 关键：宽度占满父容器 */
+    width: 100%;            /* 占满宽度 */
     cursor: pointer;
-    box-sizing: border-box; /* 关键：确保所有条的长度完全一致 */
+    box-sizing: border-box; /* 核心：解决长短不一的问题 */
 }
-        .btn-wechat { background: #07C160; }
-        .btn-whatsapp { background: #25D366; }
-        .btn-email { background: #333; }
-        .btn-ins { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
 
         .loading { text-align: center; padding: 50px; color: #999; }
         
