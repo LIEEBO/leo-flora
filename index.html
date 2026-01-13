@@ -158,9 +158,9 @@
                     img: p.get('img'),
                     name_zh: p.get('name_zh') || p.get('name'),
                     name_en: p.get('name_en'),
-                    size: p.get('size'),
-                    qty: p.get('qty_ctn'),
-                    cbm: p.get('cbm_ctn')
+                    name_es: p.get('name_es'),
+                    name_ar: p.get('name_ar'),
+                    size: p.get('desc')
                 }));
                 document.getElementById('loading-tip').style.display = 'none';
                 renderProducts(products);
@@ -168,26 +168,26 @@
         }
 
         function renderProducts(list) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = list.map(p => {
-                const isFav = favorites.find(f => f.id === p.id);
-                const name = (currentLang === 'en' && p.name_en) ? p.name_en : p.name_zh;
-                return `
-                <div class="product-card">
-                    <img src="${p.img}" class="product-img" loading="lazy" onclick="toggleFav('${p.id}')">
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
-                    <div class="product-info">
-                        <span class="product-sku">SKU: ${p.sku}</span>
-                        <div class="product-title">${name}</div>
-                        <div class="product-details">
-                            <span>S: ${p.size || '-'}</span>
-                            <span>Q: ${p.qty || '-'}</span>
-                            <span>V: ${p.cbm || '-'}</span>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = list.map(p => {
+        const isFav = favorites.find(f => f.id === p.id);
+        const name = (currentLang === 'en' && p.name_en) ? p.name_en : p.name_zh;
+        return `
+        <div class="product-card">
+            <img src="${p.img}" class="product-img" loading="lazy" onclick="toggleFav('${p.id}')">
+            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
+            <div class="product-info">
+                <span class="product-sku">SKU: ${p.sku}</span>
+                <div class="product-title">${name}</div>
+                <div class="product-details">
+                    <span>S: ${p.size || '-'}</span>
+                    <span>Q: ${p.qty || '-'}</span>
+                    <span>V: ${p.cbm || '-'}</span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
 
         function saveUserInfo() {
             const name = document.getElementById('input-name').value.trim();
@@ -236,9 +236,10 @@
                     <td height="60"><img src="${f.img}" width="50"></td>
                     <td>${f.sku}</td>
                     <td>${f.name_zh}</td>
+                    <td>${f.name_en}</td>
+                    <td>${f.name_es}</td>
+                    <td>${f.name_ar}</td>
                     <td>${f.size || ''}</td>
-                    <td>${f.qty || ''}</td>
-                    <td>${f.cbm || ''}</td>
                 </tr>`;
             });
             excelContent += `</table></body></html>`;
