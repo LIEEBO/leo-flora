@@ -216,11 +216,16 @@
             currentLang = lang;
             const t = translations[lang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.innerText = t[key];
-            });
-            document.getElementById('search-input').placeholder = (lang === 'zh' ? "🔍 搜索货号 / 品名..." : "🔍 Search SKU / Name..." : "🔍 Buscar SKU / Nombre..." : "🔍 ابحث عن رمز المنتج / الاسم...");
-
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.innerText = t[key];
+    });
+            const searchPlaceholders = {
+        zh: "🔍 搜索货号 / 品名...",
+        en: "🔍 Search SKU / Name...",
+        es: "🔍 Buscar SKU / Nombre...",
+        ar: "🔍 البحث عن SKU / الاسم..."
+    };
+    document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
     renderProducts(products);
 }
 
