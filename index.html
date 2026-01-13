@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leo Flora Catalog V1.1</title>
+    <title>Leo Flora Catalog </title>
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
@@ -171,7 +171,7 @@
     const grid = document.getElementById('product-grid');
     grid.innerHTML = list.map(p => {
         const isFav = favorites.find(f => f.id === p.id);
-        const displayName = p['name_' + currentLang] || p.name_zh || 'Flower Item';
+        const displayName = p['name_' + currentLang] || p.name_en || p.name_zh || 'Flower Item';
         return `
         <div class="product-card">
             <img src="${p.img}" class="product-img" loading="lazy" onclick="toggleFav('${p.id}')">
@@ -234,6 +234,9 @@
                     <td height="60"><img src="${f.img}" width="50"></td>
                     <td>${f.sku}</td>
                     <td>${f.name_zh}</td>
+                    <td>${f.name_en}</td>
+                    <td>${f.name_es}</td>
+                    <td>${f.name_ar}</td>
                     <td>${f.size || ''}</td>
                 </tr>`;
             });
