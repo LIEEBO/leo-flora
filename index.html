@@ -29,6 +29,14 @@
         
         .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; z-index: 10; }
         .fav-btn.active { color: var(--accent-color); transform: scale(1.1); background: white; }
+        .fav-btn:active { transform: scale(0.9); }
+        .user-display { font-size: 13px; color: var(--primary-color); font-weight: 500; background: #eee; padding: 6px 12px; border-radius: 20px; display: none; }
+        .highlight { background-color: #ffeb3b; padding: 0 2px; border-radius: 2px; }
+        .back-to-top { position: fixed; bottom: 100px; right: 20px; width: 45px; height: 45px; background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 150; font-size: 20px; border: 1px solid #eee; transition: 0.3s; }
+        .back-to-top:hover { transform: translateY(-5px); }
+        .qty-control { display: flex; align-items: center; gap: 5px; background: #f0f2f5; border-radius: 6px; padding: 2px; }
+        .qty-btn { width: 24px; height: 24px; border: none; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .qty-input { width: 40px; border: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; outline: none; }
         
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: none; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
         .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
@@ -57,6 +65,7 @@
                 Leo Flora
             </h1>
             <div style="display:flex; align-items:center; gap: 10px;">
+                <div id="user-display" class="user-display"></div>
                 <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
                     <option value="zh">中文</option>
                     <option value="en">English</option>
@@ -88,6 +97,7 @@
         <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
+    <div id="back-to-top" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
 
     <div class="floating-bar" id="floating-bar" onclick="openFavModal()">
         <span data-i18n="view_list">查看我的意向清单</span>
@@ -135,8 +145,9 @@
 
         let currentLang = 'zh';
         let products = [];
-        let favorites = [];
+        let favorites = JSON.parse(localStorage.getItem('leo_fav_lc') || '[]');
         let userInfo = { name: "", contact: "" };
+        let searchTimer = null;
 
         function init() {
             AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
@@ -144,8 +155,18 @@
             if (savedUser) { 
                 userInfo = JSON.parse(savedUser); 
                 document.getElementById('login-modal').style.display = 'none';
+                updateUserDisplay();
             }
+            updateBadge();
             fetchData();
+        }
+
+        function updateUserDisplay() {
+            const el = document.getElementById('user-display');
+            if (userInfo.name) {
+                el.innerText = `👤 ${userInfo.name}`;
+                el.style.display = 'block';
+            }
         }
 
         function fetchData() {
@@ -168,26 +189,37 @@
         }
 
         function renderProducts(list) {
-    const grid = document.getElementById('product-grid');
-    const t = translations[currentLang];        
-    grid.innerHTML = list.map(p => {
-        const isFav = favorites.find(f => f.id === p.id);
-        const displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
-        
-        return `
-        <div class="product-card">
-            <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
-            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
-            <div class="product-info">
-                <span class="product-sku">ITEM NO: ${p.sku}</span>
-                <div class="product-title">${displayName}</div>
-                <div class="product-details">
-                    <span>Size: ${p.size || '-'}</span>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-}
+            const grid = document.getElementById('product-grid');
+            const key = document.getElementById('search-input').value.toLowerCase().trim();
+            const keywords = key ? key.split(/\s+/) : [];
+            
+            grid.innerHTML = list.map(p => {
+                const isFav = favorites.find(f => f.id === p.id);
+                let displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
+                let displaySku = p.sku;
+
+                if (keywords.length > 0) {
+                    keywords.forEach(kw => {
+                        const regex = new RegExp(`(${kw})`, 'gi');
+                        displayName = displayName.replace(regex, '<span class="highlight">$1</span>');
+                        displaySku = displaySku.replace(regex, '<span class="highlight">$1</span>');
+                    });
+                }
+                
+                return `
+                <div class="product-card">
+                    <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
+                    <div class="product-info">
+                        <span class="product-sku">ITEM NO: ${displaySku}</span>
+                        <div class="product-title">${displayName}</div>
+                        <div class="product-details">
+                            <span>Size: ${p.size || '-'}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
 
         function saveUserInfo() {
             const name = document.getElementById('input-name').value.trim();
@@ -196,14 +228,29 @@
             userInfo = { name, contact };
             localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
             document.getElementById('login-modal').style.display = 'none';
+            updateUserDisplay();
         }
 
         function toggleFav(id) {
             const p = products.find(x => x.id === id);
             const idx = favorites.findIndex(f => f.id === id);
-            if (idx === -1) favorites.push(p); else favorites.splice(idx, 1);
+            if (idx === -1) {
+                favorites.push({ ...p, qty: 1 });
+            } else {
+                favorites.splice(idx, 1);
+            }
+            localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
             updateBadge();
-            renderProducts(products);
+            filterProducts();
+        }
+
+        function updateQty(id, delta) {
+            const idx = favorites.findIndex(f => f.id === id);
+            if (idx !== -1) {
+                favorites[idx].qty = Math.max(1, (favorites[idx].qty || 1) + delta);
+                localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
+                openFavModal();
+            }
         }
 
         function updateBadge() {
@@ -226,29 +273,34 @@
         ar: "🔍 البحث عن SKU / الاسم..."
     };
     document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
-    renderProducts(products);
+    // 优化：切换语言时也保持当前的搜索过滤状态
+    filterProducts();
 }
 
         function exportToExcel() {
             if (favorites.length === 0) return;
             const dateStr = new Date().toLocaleDateString();
+            let totalQty = 0;
             let excelContent = `<html><head><meta charset="UTF-8"></head><body>
                 <table border="1">
-                    <tr style="background:#f0f0f0;"><td colspan="6"><b>Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}</b></td></tr>
+                    <tr style="background:#f0f0f0;"><td colspan="7"><b>Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}</b></td></tr>
                     <tr style="background:#2c3e50; color:white;">
-                        <th>Image</th><th>SKU</th><th>Name</th><th>Size</th><th>Qty/CTN</th><th>CBM</th>
+                        <th>Image</th><th>SKU</th><th>Name (ZH)</th><th>Name (EN)</th><th>Size</th><th>Order Qty</th><th>Note</th>
                     </tr>`;
             favorites.forEach(f => {
+                const q = f.qty || 1;
+                totalQty += q;
                 excelContent += `<tr>
                     <td height="60"><img src="${f.img}" width="50"></td>
                     <td>${f.sku}</td>
                     <td>${f.name_zh}</td>
                     <td>${f.name_en}</td>
-                    <td>${f.name_es}</td>
-                    <td>${f.name_ar}</td>
                     <td>${f.size || ''}</td>
+                    <td style="text-align:center; font-weight:bold;">${q}</td>
+                    <td></td>
                 </tr>`;
             });
+            excelContent += `<tr style="background:#f9f9f9;"><td colspan="5" style="text-align:right;"><b>Total Items: ${favorites.length} | Total Qty:</b></td><td style="text-align:center; color:red;"><b>${totalQty}</b></td><td></td></tr>`;
             excelContent += `</table></body></html>`;
             const link = document.createElement('a');
             link.href = URL.createObjectURL(new Blob([excelContent], { type: 'application/vnd.ms-excel' }));
@@ -268,7 +320,12 @@
                         <div style="font-size:12px; font-weight:bold; color:#2c3e50;">${f.sku}</div>
                         <div style="font-size:11px; color:#666;">${f.name_zh}</div>
                     </div>
-                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer; color:#ccc;">✕</span>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="updateQty('${f.id}', -1)">-</button>
+                        <input type="text" class="qty-input" value="${f.qty || 1}" readonly>
+                        <button class="qty-btn" onclick="updateQty('${f.id}', 1)">+</button>
+                    </div>
+                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer; color:#ccc; margin-left:10px;">✕</span>
                 </div>
             `).join('') || '<p style="text-align:center; color:#ccc;">Empty list</p>';
             document.getElementById('fav-modal').style.display = 'flex';
@@ -279,9 +336,23 @@
         function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Copied: " + t)); }
 
         function filterProducts() {
-            const key = document.getElementById('search-input').value.toLowerCase().trim();
-            const filtered = products.filter(p => p.sku.toLowerCase().includes(key) || p.name_zh.toLowerCase().includes(key));
-            renderProducts(filtered);
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                const key = document.getElementById('search-input').value.toLowerCase().trim();
+                if (!key) return renderProducts(products);
+                
+                const keywords = key.split(/\s+/);
+                const filtered = products.filter(p => {
+                    return keywords.every(kw => 
+                        p.sku.toLowerCase().includes(kw) || 
+                        (p.name_zh && p.name_zh.toLowerCase().includes(kw)) ||
+                        (p.name_en && p.name_en.toLowerCase().includes(kw)) ||
+                        (p.name_es && p.name_es.toLowerCase().includes(kw)) ||
+                        (p.name_ar && p.name_ar.toLowerCase().includes(kw))
+                    );
+                });
+                renderProducts(filtered);
+            }, 300);
         }
 
         function showBigImg(url) {
@@ -299,6 +370,15 @@ function closeBigImg() {
         viewer.style.display = 'none';
     }
 }
+        window.onscroll = function() {
+            const btn = document.getElementById('back-to-top');
+            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                btn.style.display = "flex";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
         init();
     </script>
     <div class="modal-overlay" id="img-viewer" onclick="closeBigImg()" style="z-index: 999; background: rgba(0,0,0,0.9); cursor: zoom-out;">
