@@ -66,7 +66,8 @@
         
         .qty-control { display: flex; align-items: center; gap: 5px; background: #f0f2f5; border-radius: 6px; padding: 2px; }
         .qty-btn { width: 24px; height: 24px; border: none; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-        .qty-input { width: 40px; border: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; outline: none; }
+        .qty-input { width: 50px; border: 1px solid #ddd; background: white; text-align: center; font-size: 13px; font-weight: bold; outline: none; border-radius: 4px; padding: 2px 0; }
+        .qty-input:focus { border-color: var(--primary-color); }
         
         .btn-main { background: var(--primary-color); color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .contact-link { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 12px; text-decoration: none; color: white; font-weight: 600; margin-bottom: 12px; border: none; width: 100%; cursor: pointer; box-sizing: border-box; }
@@ -329,9 +330,19 @@
         function updateQty(id, delta) {
             const idx = favorites.findIndex(f => f.id === id);
             if (idx !== -1) {
-                favorites[idx].qty = Math.max(1, (favorites[idx].qty || 1) + delta);
+                favorites[idx].qty = Math.max(1, (parseInt(favorites[idx].qty) || 1) + delta);
                 localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
                 openFavModal();
+            }
+        }
+
+        function handleQtyInput(id, val) {
+            const idx = favorites.findIndex(f => f.id === id);
+            if (idx !== -1) {
+                let num = parseInt(val.replace(/[^\d]/g, '')) || 1;
+                favorites[idx].qty = Math.max(1, num);
+                localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
+                // 不调用 openFavModal 以免失去焦点，仅在失去焦点时刷新
             }
         }
 
@@ -397,7 +408,7 @@
                     </div>
                     <div class="qty-control">
                         <button class="qty-btn" onclick="updateQty('${f.id}', -1)">-</button>
-                        <input type="text" class="qty-input" value="${f.qty || 1}" readonly>
+                        <input type="number" class="qty-input" value="${f.qty || 1}" oninput="handleQtyInput('${f.id}', this.value)" onblur="openFavModal()">
                         <button class="qty-btn" onclick="updateQty('${f.id}', 1)">+</button>
                     </div>
                     <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer; color:#ccc; margin-left:10px;">✕</span>
