@@ -7,47 +7,68 @@
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; overflow-x: hidden; }
         
-        header { background: white; padding: 15px 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        h1 { margin: 0; font-size: 1.2rem; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
-        .header-logo { height: 40px; width: auto; border-radius: 4px; }
+        header { background: white; padding: 10px 20px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 10px; }
+        h1 { margin: 0; font-size: 1.1rem; color: var(--primary-color); display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
+        .header-logo { height: 32px; width: auto; border-radius: 4px; }
         
-        .lang-select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; background: white; cursor: pointer; }
-        .search-box { width: 100%; max-width: 400px; position: relative; }
-        .search-input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; background: #f0f2f5; outline: none; transition: all 0.2s; box-sizing: border-box; }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: flex-end; min-width: 0; }
+        .user-display { font-size: 11px; color: #666; background: #f0f2f5; padding: 4px 8px; border-radius: 4px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+        .lang-select { padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; outline: none; background: white; cursor: pointer; width: auto; min-width: 60px; }
+        
+        .search-box { width: 100%; max-width: 1200px; margin: 10px auto; padding: 0 20px; box-sizing: border-box; }
+        .search-input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; background: white; outline: none; transition: all 0.2s; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-        .product-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        .container { max-width: 1200px; margin: 10px auto; padding: 0 20px; }
+        .product-grid { display: grid; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); } }
+        
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f0f0f0; }
         .product-card:hover { transform: translateY(-5px); }
-        .product-img { width: 100%; height: 240px; object-fit: cover; background: #eee; cursor: zoom-in; }
-        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .product-sku { font-size: 0.75rem; color: #888; margin-bottom: 6px; background: #f0f2f5; display: inline-block; padding: 3px 8px; border-radius: 4px; width: fit-content; font-weight: bold; }
-        .product-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
-        .product-details { font-size: 0.8rem; color: #666; display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; border-top: 1px solid #f9f9f9; padding-top: 10px; }
+        .product-img { width: 100%; height: 180px; object-fit: cover; background: #eee; cursor: zoom-in; }
+        @media (min-width: 768px) { .product-img { height: 240px; } }
         
-        .fav-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 20px; color: #ccc; transition: all 0.2s; z-index: 10; }
+        .product-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-sku { font-size: 0.7rem; color: #888; margin-bottom: 4px; background: #f0f2f5; display: inline-block; padding: 2px 6px; border-radius: 4px; width: fit-content; font-weight: bold; }
+        .product-title { font-size: 0.95rem; font-weight: bold; margin: 0 0 6px 0; line-height: 1.3; }
+        .product-details { font-size: 0.75rem; color: #666; margin-top: auto; border-top: 1px solid #f9f9f9; padding-top: 8px; }
+        
+        .fav-btn { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 18px; color: #ccc; transition: all 0.2s; z-index: 10; }
         .fav-btn.active { color: var(--accent-color); transform: scale(1.1); background: white; }
         .fav-btn:active { transform: scale(0.9); }
-        .user-display { font-size: 13px; color: var(--primary-color); font-weight: 500; background: #eee; padding: 6px 12px; border-radius: 20px; display: none; }
+        
         .highlight { background-color: #ffeb3b; padding: 0 2px; border-radius: 2px; }
         .back-to-top { position: fixed; bottom: 100px; right: 20px; width: 45px; height: 45px; background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 150; font-size: 20px; border: 1px solid #eee; transition: 0.3s; }
-        .back-to-top:hover { transform: translateY(-5px); }
+        
+        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: none; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; transition: all 0.3s; }
+        .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        
+        /* 飞入动画样式 */
+        .fly-item { position: fixed; z-index: 9999; pointer-events: none; transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1); border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+        /* 预览系统样式 */
+        .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; touch-action: none; }
+        .viewer-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .viewer-img { max-width: 95%; max-height: 80vh; object-fit: contain; transition: transform 0.3s ease; user-select: none; }
+        .viewer-info { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: white; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); }
+        .viewer-sku { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
+        .viewer-title { font-size: 0.9rem; opacity: 0.8; }
+        .viewer-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer; z-index: 1010; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+        .viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; cursor: pointer; padding: 20px; z-index: 1010; opacity: 0.5; transition: 0.3s; }
+        .viewer-nav:hover { opacity: 1; }
+        .viewer-prev { left: 10px; }
+        .viewer-next { right: 10px; }
+        .viewer-counter { position: absolute; top: 20px; left: 20px; color: white; font-size: 14px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-content { background: white; width: 90%; max-width: 480px; border-radius: 20px; padding: 30px; box-sizing: border-box; position: relative; max-height: 85vh; overflow-y: auto; }
+        
         .qty-control { display: flex; align-items: center; gap: 5px; background: #f0f2f5; border-radius: 6px; padding: 2px; }
         .qty-btn { width: 24px; height: 24px; border: none; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .qty-input { width: 40px; border: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; outline: none; }
         
-        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: none; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; }
-        .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
-        
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: white; width: 90%; max-width: 480px; border-radius: 20px; padding: 30px; box-sizing: border-box; position: relative; max-height: 85vh; overflow-y: auto; }
-        
-        .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: var(--primary-color); color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-main:hover { background: #34495e; }
-
         .contact-link { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 12px; text-decoration: none; color: white; font-weight: 600; margin-bottom: 12px; border: none; width: 100%; cursor: pointer; box-sizing: border-box; }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
@@ -59,25 +80,24 @@
 <body>
 
     <header>
-        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-            <h1>
-                <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo">
-                Leo Flora
-            </h1>
-            <div style="display:flex; align-items:center; gap: 10px;">
-                <div id="user-display" class="user-display"></div>
-                <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
-                    <option value="zh">中文</option>
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="ar">العربية</option>
-                </select>
-            </div>
-        </div>
-        <div class="search-box">
-            <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
+        <h1>
+            <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo">
+            Leo Flora
+        </h1>
+        <div class="header-right">
+            <div id="user-display" class="user-display"></div>
+            <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
+                <option value="zh">中文</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="ar">AR</option>
+            </select>
         </div>
     </header>
+
+    <div class="search-box">
+        <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
+    </div>
 
     <div class="modal-overlay" id="login-modal" style="display: flex;">
         <div class="modal-content" style="text-align:center;">
@@ -97,6 +117,7 @@
         <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
+    
     <div id="back-to-top" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
 
     <div class="floating-bar" id="floating-bar" onclick="openFavModal()">
@@ -104,6 +125,7 @@
         <span class="count-badge" id="fav-count">0</span>
     </div>
 
+    <!-- 意向清单弹窗 -->
     <div class="modal-overlay" id="fav-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeFavModal()">&times;</span>
@@ -113,6 +135,7 @@
         </div>
     </div>
 
+    <!-- 导出成功引导 -->
     <div class="modal-overlay" id="contact-guide-modal" style="display:none;">
         <div class="modal-content" style="text-align:center;">
             <span class="close-btn" onclick="closeContactModal()">&times;</span>
@@ -122,7 +145,6 @@
                 <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
                 <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
             </p>
-            
             <button class="contact-link btn-wechat" onclick="copyText('Leo92-02')">微信 / WeChat: Leo92-02 (点击复制)</button>
             <a href="https://wa.me/8618657926791" target="_blank" class="contact-link btn-whatsapp">WhatsApp: +86 186 5792 6791</a>
             <a href="mailto:lcf18657926791@gmail.com" class="contact-link btn-email">Email: lcf18657926791@gmail.com</a>
@@ -130,8 +152,22 @@
         </div>
     </div>
 
+    <!-- 滑动预览系统 -->
+    <div class="viewer-overlay" id="viewer-overlay">
+        <div class="viewer-counter" id="viewer-counter">1 / 1</div>
+        <span class="viewer-close" onclick="closeViewer()">&times;</span>
+        <div class="viewer-nav viewer-prev" onclick="prevImg()">&#10094;</div>
+        <div class="viewer-nav viewer-next" onclick="nextImg()">&#10095;</div>
+        <div class="viewer-content" id="viewer-content">
+            <img src="" class="viewer-img" id="viewer-img">
+        </div>
+        <div class="viewer-info">
+            <div class="viewer-sku" id="viewer-sku">SKU</div>
+            <div class="viewer-title" id="viewer-title">Title</div>
+        </div>
+    </div>
+
     <script>
-        // LeanCloud 密钥
         const APP_ID = "14iZrTXCibSIZUvrYW1Zx0Nv-MdYXbMMI"; 
         const APP_KEY = "4ClJ1QFB6kPuL8tPCzXe0F1l";
         const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
@@ -145,9 +181,14 @@
 
         let currentLang = 'zh';
         let products = [];
+        let filteredProducts = [];
         let favorites = JSON.parse(localStorage.getItem('leo_fav_lc') || '[]');
         let userInfo = { name: "", contact: "" };
         let searchTimer = null;
+        
+        // 预览系统变量
+        let currentViewerIdx = 0;
+        let startX = 0;
 
         function init() {
             AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
@@ -159,12 +200,13 @@
             }
             updateBadge();
             fetchData();
+            initViewerEvents();
         }
 
         function updateUserDisplay() {
             const el = document.getElementById('user-display');
             if (userInfo.name) {
-                el.innerText = `👤 ${userInfo.name}`;
+                el.innerText = userInfo.name;
                 el.style.display = 'block';
             }
         }
@@ -183,8 +225,9 @@
                     name_ar: p.get('name_ar'),
                     size: p.get('desc')
                 }));
+                filteredProducts = [...products];
                 document.getElementById('loading-tip').style.display = 'none';
-                renderProducts(products);
+                renderProducts(filteredProducts);
             });
         }
 
@@ -193,7 +236,7 @@
             const key = document.getElementById('search-input').value.toLowerCase().trim();
             const keywords = key ? key.split(/\s+/) : [];
             
-            grid.innerHTML = list.map(p => {
+            grid.innerHTML = list.map((p, index) => {
                 const isFav = favorites.find(f => f.id === p.id);
                 let displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
                 let displaySku = p.sku;
@@ -207,9 +250,9 @@
                 }
                 
                 return `
-                <div class="product-card">
-                    <img src="${p.img}" class="product-img" loading="lazy" onclick="showBigImg('${p.img}')">
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}')">${isFav ? '❤️' : '➕'}</button>
+                <div class="product-card" id="prod-${p.id}">
+                    <img src="${p.img}" class="product-img" loading="lazy" onclick="openViewer(${index})">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', event)">${isFav ? '❤️' : '➕'}</button>
                     <div class="product-info">
                         <span class="product-sku">ITEM NO: ${displaySku}</span>
                         <div class="product-title">${displayName}</div>
@@ -231,17 +274,56 @@
             updateUserDisplay();
         }
 
-        function toggleFav(id) {
+        function toggleFav(id, event) {
             const p = products.find(x => x.id === id);
             const idx = favorites.findIndex(f => f.id === id);
-            if (idx === -1) {
+            const isAdding = idx === -1;
+            
+            if (isAdding) {
                 favorites.push({ ...p, qty: 1 });
+                if (event) flyToCart(event.currentTarget, p.img);
             } else {
                 favorites.splice(idx, 1);
             }
+            
             localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
             updateBadge();
-            filterProducts();
+            
+            // 更新按钮状态而不重新渲染整个列表
+            const btn = document.querySelector(`#prod-${id} .fav-btn`);
+            if (btn) {
+                btn.classList.toggle('active', isAdding);
+                btn.innerHTML = isAdding ? '❤️' : '➕';
+            }
+        }
+
+        function flyToCart(btn, imgUrl) {
+            const rect = btn.getBoundingClientRect();
+            const cart = document.getElementById('floating-bar');
+            const cartRect = cart.getBoundingClientRect();
+            
+            const flyItem = document.createElement('img');
+            flyItem.src = imgUrl;
+            flyItem.className = 'fly-item';
+            flyItem.style.left = rect.left + 'px';
+            flyItem.style.top = rect.top + 'px';
+            flyItem.style.width = '40px';
+            flyItem.style.height = '40px';
+            document.body.appendChild(flyItem);
+            
+            // 强制重绘
+            flyItem.offsetWidth;
+            
+            flyItem.style.left = (cartRect.left + cartRect.width / 2 - 20) + 'px';
+            flyItem.style.top = (cartRect.top - 20) + 'px';
+            flyItem.style.transform = 'scale(0.1) rotate(360deg)';
+            flyItem.style.opacity = '0';
+            
+            setTimeout(() => {
+                flyItem.remove();
+                cart.style.transform = 'translateX(-50%) scale(1.1)';
+                setTimeout(() => cart.style.transform = 'translateX(-50%) scale(1)', 200);
+            }, 800);
         }
 
         function updateQty(id, delta) {
@@ -263,19 +345,13 @@
             currentLang = lang;
             const t = translations[lang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key]) el.innerText = t[key];
-    });
-            const searchPlaceholders = {
-        zh: "🔍 搜索货号 / 品名...",
-        en: "🔍 Search SKU / Name...",
-        es: "🔍 Buscar SKU / Nombre...",
-        ar: "🔍 البحث عن SKU / الاسم..."
-    };
-    document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
-    // 优化：切换语言时也保持当前的搜索过滤状态
-    filterProducts();
-}
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
+            });
+            const searchPlaceholders = { zh: "🔍 搜索货号 / 品名...", en: "🔍 Search SKU / Name...", es: "🔍 Buscar SKU / Nombre...", ar: "🔍 البحث عن SKU / الاسم..." };
+            document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
+            filterProducts();
+        }
 
         function exportToExcel() {
             if (favorites.length === 0) return;
@@ -306,7 +382,6 @@
             link.href = URL.createObjectURL(new Blob([excelContent], { type: 'application/vnd.ms-excel' }));
             link.download = `LeoFlora_Wishlist_${userInfo.name}.xls`;
             link.click();
-
             closeFavModal();
             setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
         }
@@ -339,37 +414,86 @@
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => {
                 const key = document.getElementById('search-input').value.toLowerCase().trim();
-                if (!key) return renderProducts(products);
-                
-                const keywords = key.split(/\s+/);
-                const filtered = products.filter(p => {
-                    return keywords.every(kw => 
-                        p.sku.toLowerCase().includes(kw) || 
-                        (p.name_zh && p.name_zh.toLowerCase().includes(kw)) ||
-                        (p.name_en && p.name_en.toLowerCase().includes(kw)) ||
-                        (p.name_es && p.name_es.toLowerCase().includes(kw)) ||
-                        (p.name_ar && p.name_ar.toLowerCase().includes(kw))
-                    );
-                });
-                renderProducts(filtered);
+                if (!key) {
+                    filteredProducts = [...products];
+                } else {
+                    const keywords = key.split(/\s+/);
+                    filteredProducts = products.filter(p => {
+                        return keywords.every(kw => 
+                            p.sku.toLowerCase().includes(kw) || 
+                            (p.name_zh && p.name_zh.toLowerCase().includes(kw)) ||
+                            (p.name_en && p.name_en.toLowerCase().includes(kw)) ||
+                            (p.name_es && p.name_es.toLowerCase().includes(kw)) ||
+                            (p.name_ar && p.name_ar.toLowerCase().includes(kw))
+                        );
+                    });
+                }
+                renderProducts(filteredProducts);
             }, 300);
         }
 
-        function showBigImg(url) {
-    const viewer = document.getElementById('img-viewer');
-    const bigImg = document.getElementById('big-img');
-    if (viewer && bigImg) {
-        bigImg.src = url;
-        viewer.style.display = 'flex';
-    }
-}
+        // 预览系统逻辑
+        function openViewer(index) {
+            currentViewerIdx = index;
+            updateViewer();
+            document.getElementById('viewer-overlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
 
-function closeBigImg() {
-    const viewer = document.getElementById('img-viewer');
-    if (viewer) {
-        viewer.style.display = 'none';
-    }
-}
+        function updateViewer() {
+            const p = filteredProducts[currentViewerIdx];
+            const img = document.getElementById('viewer-img');
+            img.src = p.img;
+            document.getElementById('viewer-sku').innerText = p.sku;
+            document.getElementById('viewer-title').innerText = p['name_' + currentLang] || p.name_en || p.name_zh;
+            document.getElementById('viewer-counter').innerText = `${currentViewerIdx + 1} / ${filteredProducts.length}`;
+        }
+
+        function closeViewer() {
+            document.getElementById('viewer-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            // 位置同步：滚动到当前预览的产品
+            const p = filteredProducts[currentViewerIdx];
+            const el = document.getElementById(`prod-${p.id}`);
+            if (el) {
+                const headerOffset = 120;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+
+        function nextImg() {
+            if (currentViewerIdx < filteredProducts.length - 1) {
+                currentViewerIdx++;
+                updateViewer();
+            }
+        }
+
+        function prevImg() {
+            if (currentViewerIdx > 0) {
+                currentViewerIdx--;
+                updateViewer();
+            }
+        }
+
+        function initViewerEvents() {
+            const overlay = document.getElementById('viewer-overlay');
+            overlay.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+            overlay.addEventListener('touchend', e => {
+                const endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextImg();
+                if (endX - startX > 50) prevImg();
+            });
+            document.addEventListener('keydown', e => {
+                if (overlay.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') nextImg();
+                    if (e.key === 'ArrowLeft') prevImg();
+                    if (e.key === 'Escape') closeViewer();
+                }
+            });
+        }
+
         window.onscroll = function() {
             const btn = document.getElementById('back-to-top');
             if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
@@ -381,8 +505,5 @@ function closeBigImg() {
 
         init();
     </script>
-    <div class="modal-overlay" id="img-viewer" onclick="closeBigImg()" style="z-index: 999; background: rgba(0,0,0,0.9); cursor: zoom-out;">
-        <img id="big-img" src="" alt="Big Image" style="max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
-    </div>
 </body>
 </html>
