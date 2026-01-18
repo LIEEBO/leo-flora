@@ -1,0 +1,35 @@
+name: Auto Update Sitemap
+
+on:
+  push:
+    branches:
+      - main  # 如果你的主分支叫 master，请改为 master
+    paths:
+      - 'en/**' # 只有当 en 文件夹下的 HTML 变化时才触发，避免无限循环
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/presets/node@v3
+        with:
+          node-version: '18'
+
+      - name: Generate Sitemap
+        run: |
+          npm run build-sitemap
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add sitemap.xml
+          # 只有在文件有变化时才提交，防止报错
+          git diff --quiet && git diff --staged --quiet || (git commit -m "auto: update sitemap.xml" && git push)
