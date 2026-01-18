@@ -1,0 +1,7 @@
+{
+  "name": "leofaux-website",
+  "version": "1.0.0",
+  "scripts": {
+    "build-sitemap": "node generate-sitemap.js"
+  }
+}
