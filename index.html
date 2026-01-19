@@ -397,29 +397,30 @@
 
         // 加载图片并转换为base64
         async function loadImageAsBase64(url) {
-    try {
-        // 使用 fetch 获取图片数据
-        const response = await fetch(url, {
-            mode: 'cors', // 请求跨域
-            cache: 'no-cache'
-        });
-        
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const blob = await response.blob();
-        
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result); // 返回 data:image/jpeg;base64,...
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    } catch (error) {
-        console.warn('Image fetch failed for:', url, error);
-        return null;
-    }
-}
-
+            try {
+                // 添加时间戳防止缓存，并请求跨域模式
+                const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+                
+                const response = await fetch(fetchUrl, {
+                    mode: 'cors',      // 关键：请求跨域
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const blob = await response.blob();
+                
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result); // 结果包含 data:image/png;base64,...
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                console.warn('Image load failed (CORS or Network):', url);
+                return null;
+            }
+        }
         async function exportToExcel() {
             if (favorites.length === 0) return;
             if (typeof ExcelJS === 'undefined') {
@@ -435,13 +436,12 @@
                 const dateStr = new Date().toLocaleDateString();
                 let totalQty = 0;
                 
-                // 创建工作簿
                 const workbook = new ExcelJS.Workbook();
                 const worksheet = workbook.addWorksheet('Wishlist');
                 
                 // 设置列宽
                 worksheet.columns = [
-                    { header: 'Image', key: 'image', width: 20 },
+                    { header: 'Image', key: 'image', width: 18 }, // 图片列
                     { header: 'SKU', key: 'sku', width: 15 },
                     { header: 'Name (ZH)', key: 'name_zh', width: 25 },
                     { header: 'Name (EN)', key: 'name_en', width: 25 },
@@ -450,31 +450,30 @@
                     { header: 'Note', key: 'note', width: 20 }
                 ];
                 
-                // 表头信息行
+                // 表头样式
                 const headerRow = worksheet.addRow([`Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}`]);
                 headerRow.font = { bold: true, size: 12 };
-                headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
                 worksheet.mergeCells(1, 1, 1, 7);
-                worksheet.addRow([]); // 空行
+                worksheet.addRow([]); 
                 
-                // 列标题行
+                // 标题行样式
                 const titleRow = worksheet.getRow(3);
                 titleRow.values = ['Image', 'SKU', 'Name (ZH)', 'Name (EN)', 'Size', 'Order Qty', 'Note'];
-                titleRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+                titleRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
                 titleRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2C3E50' } };
                 titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
                 titleRow.height = 25;
                 
-                // 数据行
+                // 遍历数据
                 let currentRow = 4;
                 for (let i = 0; i < favorites.length; i++) {
                     const f = favorites[i];
                     const q = f.qty || 1;
                     totalQty += q;
                     
-                    // 创建行，第一列先设置为空（图片将插入到这里）
+                    // 创建行
                     const row = worksheet.addRow([
-                        '', // 图片将插入到这里
+                        '', // 留空给图片
                         f.sku,
                         f.name_zh || '',
                         f.name_en || '',
@@ -483,65 +482,69 @@
                         ''
                     ]);
                     
-                    // 设置第一列为超链接（作为备选，如果图片加载失败）
-                    const imageCell = row.getCell(1);
-                    imageCell.value = { text: 'View Image', hyperlink: f.img };
-                    imageCell.font = { color: { argb: 'FF0000FF' }, underline: true };
+                    row.height = 90; // 增加行高以容纳图片
+                    row.alignment = { vertical: 'middle', horizontal: 'center' };
                     
-                    // 设置行高以适应图片
-                    row.height = 100;
-                    
-                    // 设置对齐
-                    row.getCell(2).alignment = { horizontal: 'center', vertical: 'middle' }; // SKU居中
-                    row.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' }; // 数量居中
-                    row.getCell(6).font = { bold: true }; // 数量加粗
-                    row.alignment = { vertical: 'middle' };
-                    
-                    // 异步加载并插入图片
+                    // 处理图片
                     try {
-                        const imageBase64 = await loadImageAsBase64(f.img);
-                        if (imageBase64) {
-                            // 从base64中提取实际的图片数据
-                            const base64Data = imageBase64.split(',')[1] || imageBase64;
+                        const base64Full = await loadImageAsBase64(f.img);
+                        
+                        if (base64Full) {
+                            // 1. 提取纯 Base64 (去掉 data:image... 前缀)
+                            const base64Data = base64Full.split(',')[1];
                             
-                            // 判断图片格式
-                            let imageExtension = 'png';
-                            if (imageBase64.startsWith('data:image/jpeg') || imageBase64.startsWith('data:image/jpg')) {
-                                imageExtension = 'jpeg';
-                            } else if (imageBase64.startsWith('data:image/png')) {
-                                imageExtension = 'png';
-                            } else if (imageBase64.startsWith('data:image/gif')) {
-                                imageExtension = 'gif';
-                            }
+                            // 2. 识别扩展名
+                            let ext = 'png';
+                            if (base64Full.startsWith('data:image/jpeg')) ext = 'jpeg';
                             
-                            // 添加图片到工作簿
+                            // 3. 添加到工作簿
                             const imageId = workbook.addImage({
                                 base64: base64Data,
-                                extension: imageExtension
+                                extension: ext
                             });
                             
-                            // 插入图片到第一列，精确定位到单元格
-                            // ExcelJS的行索引从0开始，currentRow是Excel行号（从1开始），所以需要减1
+                            // 4. 嵌入单元格 (使用 editAs: 'oneCell' 确保随单元格变动)
                             worksheet.addImage(imageId, {
-                                tl: { col: 0, row: currentRow - 1 },
-                                ext: { width: 120, height: 90 },
-                                editAs: 'oneCell' // 图片随单元格移动和调整大小
+                                tl: { col: 0.1, row: currentRow - 1 + 0.1 }, // 稍微留点边距
+                                ext: { width: 100, height: 80 }, // 限制图片显示尺寸
+                                editAs: 'oneCell'
                             });
-                            
-                            // 图片插入成功后，清空单元格文本（图片会覆盖）
-                            imageCell.value = '';
-                            // 设置单元格垂直对齐，使图片居中
-                            imageCell.alignment = { vertical: 'middle', horizontal: 'center' };
+                        } else {
+                            // 图片加载失败，回退到文字链接
+                            row.getCell(1).value = { text: 'View Image', hyperlink: f.img };
+                            row.getCell(1).font = { color: { argb: 'FF0000FF' }, underline: true };
                         }
-                    } catch (error) {
-                        console.error('Failed to add image for', f.sku, error);
-                        // 图片加载失败，保留超链接
-                        imageCell.value = { text: 'View Image', hyperlink: f.img };
-                        imageCell.font = { color: { argb: 'FF0000FF' }, underline: true };
+                    } catch (imgErr) {
+                        console.error('Image Error:', imgErr);
                     }
                     
                     currentRow++;
                 }
+                
+                // 汇总行
+                worksheet.addRow([]);
+                const summaryRow = worksheet.addRow([`Total Items: ${favorites.length}`, '', '', '', '', totalQty, '']);
+                summaryRow.getCell(1).font = { bold: true };
+                summaryRow.getCell(6).font = { bold: true, color: { argb: 'FFFF0000' } };
+
+                // 导出文件
+                const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '');
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `LeoFlora_Order_${safeName}.xlsx`;
+                link.click();
+                
+                document.getElementById('export-loading').style.display = 'none';
+                setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Export failed: ' + error.message);
+                document.getElementById('export-loading').style.display = 'none';
+            }
+        }
                 
                 // 空行
                 worksheet.addRow([]);
