@@ -545,50 +545,6 @@
                 document.getElementById('export-loading').style.display = 'none';
             }
         }
-                
-                // 空行
-                worksheet.addRow([]);
-                
-                // 汇总行
-                const summaryRow = worksheet.addRow([
-                    `Total Items: ${favorites.length} | Total Qty:`,
-                    '',
-                    '',
-                    '',
-                    '',
-                    totalQty,
-                    ''
-                ]);
-                summaryRow.getCell(1).font = { bold: true };
-                summaryRow.getCell(1).alignment = { horizontal: 'right', vertical: 'middle' };
-                summaryRow.getCell(6).font = { bold: true, color: { argb: 'FFFF0000' } };
-                summaryRow.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' };
-                summaryRow.alignment = { vertical: 'middle' };
-                
-                // 生成文件并下载
-                const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
-                const safeDate = dateStr.replace(/\//g, '-');
-                const fileName = `LeoFlora_Wishlist_${safeName}_${safeDate}.xlsx`;
-                
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = fileName;
-                link.click();
-                window.URL.revokeObjectURL(url);
-                
-                // 隐藏加载提示
-                document.getElementById('export-loading').style.display = 'none';
-                
-                setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
-            } catch (error) {
-                console.error('Export error:', error);
-                alert('导出失败，请重试。错误：' + error.message);
-                document.getElementById('export-loading').style.display = 'none';
-            }
-        }
 
         function openFavModal() {
             const container = document.getElementById('fav-items-container');
