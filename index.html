@@ -397,38 +397,28 @@
 
         // 加载图片并转换为base64
         async function loadImageAsBase64(url) {
-            return new Promise((resolve) => {
-                try {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous'; // 处理CORS
-                    
-                    img.onload = function() {
-                        try {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = img.width;
-                            canvas.height = img.height;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0);
-                            const dataURL = canvas.toDataURL('image/png');
-                            resolve(dataURL);
-                        } catch (error) {
-                            console.error('Canvas error:', error);
-                            resolve(null);
-                        }
-                    };
-                    
-                    img.onerror = function() {
-                        console.error('Image load error:', url);
-                        resolve(null);
-                    };
-                    
-                    img.src = url;
-                } catch (error) {
-                    console.error('Failed to load image:', url, error);
-                    resolve(null);
-                }
-            });
-        }
+    try {
+        // 使用 fetch 获取图片数据
+        const response = await fetch(url, {
+            mode: 'cors', // 请求跨域
+            cache: 'no-cache'
+        });
+        
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const blob = await response.blob();
+        
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result); // 返回 data:image/jpeg;base64,...
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    } catch (error) {
+        console.warn('Image fetch failed for:', url, error);
+        return null;
+    }
+}
 
         async function exportToExcel() {
             if (favorites.length === 0) return;
