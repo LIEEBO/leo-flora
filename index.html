@@ -10,7 +10,7 @@
     <meta name="description" content="Leo Faux, also known as Leo Flowers, Leo Flower, Leo Flora or Leo Flor, is a professional artificial flowers manufacturer and wholesale supplier.">
 
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; overflow-x: hidden; }
@@ -97,6 +97,7 @@
 .seo-links a:hover {
   text-decoration: underline;
 }
+        .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
     </style>
 </head>
 <body>
@@ -186,6 +187,15 @@
         <div class="viewer-info">
             <div class="viewer-sku" id="viewer-sku">SKU</div>
             <div class="viewer-title" id="viewer-title">Title</div>
+        </div>
+    </div>
+
+    <!-- 导出加载提示 -->
+    <div class="export-loading" id="export-loading">
+        <div style="text-align:center;">
+            <div style="font-size:24px; margin-bottom:10px;">⏳</div>
+            <div>正在生成Excel文件，请稍候...</div>
+            <div style="font-size:12px; color:#999; margin-top:5px;">正在加载图片，这可能需要一些时间</div>
         </div>
     </div>
 
@@ -385,143 +395,158 @@
             filterProducts();
         }
 
-        function exportToExcel() {
+        // 加载图片并转换为base64
+        async function loadImageAsBase64(url) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                console.error('Failed to load image:', url, error);
+                return null;
+            }
+        }
+
+        async function exportToExcel() {
             if (favorites.length === 0) return;
-            if (typeof XLSX === 'undefined') {
-                alert('SheetJS library is loading, please try again in a moment.');
+            if (typeof ExcelJS === 'undefined') {
+                alert('ExcelJS library is loading, please try again in a moment.');
                 return;
             }
             
-            const dateStr = new Date().toLocaleDateString();
-            let totalQty = 0;
-            
-            // 创建工作簿
-            const wb = XLSX.utils.book_new();
-            
-            // 准备数据
-            const wsData = [];
-            
-            // 表头信息行
-            wsData.push([`Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}`]);
-            wsData.push([]); // 空行
-            
-            // 列标题
-            wsData.push(['Image Link', 'SKU', 'Name (ZH)', 'Name (EN)', 'Size', 'Order Qty', 'Note']);
-            
-            // 数据行
-            favorites.forEach(f => {
-                const q = f.qty || 1;
-                totalQty += q;
-                wsData.push([
-                    f.img,           // 图片链接
-                    f.sku,           // SKU
-                    f.name_zh || '', // 中文名
-                    f.name_en || '', // 英文名
-                    f.size || '',    // 尺寸
-                    q,               // 数量
-                    ''               // 备注
-                ]);
-            });
-            
-            // 汇总行
-            wsData.push([]); // 空行
-            wsData.push([
-                `Total Items: ${favorites.length} | Total Qty:`,
-                '',
-                '',
-                '',
-                '',
-                totalQty,
-                ''
-            ]);
-            
-            // 创建工作表
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            
-            // 设置列宽
-            ws['!cols'] = [
-                { wch: 50 },  // Image Link
-                { wch: 15 },  // SKU
-                { wch: 25 },  // Name (ZH)
-                { wch: 25 },  // Name (EN)
-                { wch: 15 },  // Size
-                { wch: 12 },  // Order Qty
-                { wch: 20 }   // Note
-            ];
-            
-            // 为图片链接列添加超链接（标准版 SheetJS 支持）
-            for (let R = 3; R < wsData.length - 1; ++R) {
-                const cellAddress = XLSX.utils.encode_cell({ r: R, c: 0 });
-                if (ws[cellAddress] && favorites[R - 3]) {
-                    const imgUrl = favorites[R - 3].img;
-                    ws[cellAddress].l = { Target: imgUrl, Tooltip: 'Click to view image' };
-                }
-            }
-            
-            // 设置单元格对齐和样式（需要 SheetJS Pro 版本支持完整样式，标准版至少支持列宽）
-            const range = XLSX.utils.decode_range(ws['!ref']);
-            for (let R = range.s.r; R <= range.e.r; ++R) {
-                for (let C = range.s.c; C <= range.e.c; ++C) {
-                    const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-                    if (!ws[cellAddress]) continue;
-                    
-                    // 初始化样式对象
-                    if (!ws[cellAddress].s) ws[cellAddress].s = {};
-                    if (!ws[cellAddress].s.alignment) ws[cellAddress].s.alignment = {};
-                    
-                    // 第0行：表头信息，加粗居中
-                    if (R === 0) {
-                        ws[cellAddress].s.font = { bold: true };
-                        ws[cellAddress].s.alignment = { horizontal: 'center', vertical: 'center' };
-                    }
-                    // 第2行：列标题，加粗居中，深色背景
-                    else if (R === 2) {
-                        ws[cellAddress].s.font = { bold: true, color: { rgb: 'FFFFFF' } };
-                        ws[cellAddress].s.fill = { fgColor: { rgb: '2C3E50' } };
-                        ws[cellAddress].s.alignment = { horizontal: 'center', vertical: 'center' };
-                    }
-                    // 数据行
-                    else if (R > 2 && R < wsData.length - 1) {
-                        // 第1列（SKU）：居中
-                        if (C === 1) {
-                            ws[cellAddress].s.alignment = { horizontal: 'center', vertical: 'center' };
-                        }
-                        // 第5列（数量）：居中加粗
-                        else if (C === 5) {
-                            ws[cellAddress].s.font = { bold: true };
-                            ws[cellAddress].s.alignment = { horizontal: 'center', vertical: 'center' };
-                        }
-                        // 其他列：垂直居中
-                        else {
-                            ws[cellAddress].s.alignment = { vertical: 'center' };
-                        }
-                    }
-                    // 汇总行：数量列居中加粗红色
-                    else if (R === wsData.length - 1) {
-                        if (C === 0) {
-                            ws[cellAddress].s.font = { bold: true };
-                            ws[cellAddress].s.alignment = { horizontal: 'right', vertical: 'center' };
-                        } else if (C === 5) {
-                            ws[cellAddress].s.font = { bold: true, color: { rgb: 'FF0000' } };
-                            ws[cellAddress].s.alignment = { horizontal: 'center', vertical: 'center' };
-                        } else {
-                            ws[cellAddress].s.alignment = { vertical: 'center' };
-                        }
-                    }
-                }
-            }
-            
-            // 添加工作表到工作簿
-            XLSX.utils.book_append_sheet(wb, ws, 'Wishlist');
-            
-            // 生成文件并下载
-            const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
-            const safeDate = dateStr.replace(/\//g, '-');
-            const fileName = `LeoFlora_Wishlist_${safeName}_${safeDate}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-            
+            // 显示加载提示
+            document.getElementById('export-loading').style.display = 'block';
             closeFavModal();
-            setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
+            
+            try {
+                const dateStr = new Date().toLocaleDateString();
+                let totalQty = 0;
+                
+                // 创建工作簿
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Wishlist');
+                
+                // 设置列宽
+                worksheet.columns = [
+                    { header: 'Image', key: 'image', width: 20 },
+                    { header: 'SKU', key: 'sku', width: 15 },
+                    { header: 'Name (ZH)', key: 'name_zh', width: 25 },
+                    { header: 'Name (EN)', key: 'name_en', width: 25 },
+                    { header: 'Size', key: 'size', width: 15 },
+                    { header: 'Order Qty', key: 'qty', width: 12 },
+                    { header: 'Note', key: 'note', width: 20 }
+                ];
+                
+                // 表头信息行
+                const headerRow = worksheet.addRow([`Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}`]);
+                headerRow.font = { bold: true, size: 12 };
+                headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                worksheet.mergeCells(1, 1, 1, 7);
+                worksheet.addRow([]); // 空行
+                
+                // 列标题行
+                const titleRow = worksheet.getRow(3);
+                titleRow.values = ['Image', 'SKU', 'Name (ZH)', 'Name (EN)', 'Size', 'Order Qty', 'Note'];
+                titleRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+                titleRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2C3E50' } };
+                titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+                titleRow.height = 25;
+                
+                // 数据行
+                let currentRow = 4;
+                for (let i = 0; i < favorites.length; i++) {
+                    const f = favorites[i];
+                    const q = f.qty || 1;
+                    totalQty += q;
+                    
+                    const row = worksheet.addRow([
+                        '', // 图片位置
+                        f.sku,
+                        f.name_zh || '',
+                        f.name_en || '',
+                        f.size || '',
+                        q,
+                        ''
+                    ]);
+                    
+                    // 设置行高以适应图片
+                    row.height = 80;
+                    
+                    // 设置对齐
+                    row.getCell(2).alignment = { horizontal: 'center', vertical: 'middle' }; // SKU居中
+                    row.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' }; // 数量居中
+                    row.getCell(6).font = { bold: true }; // 数量加粗
+                    row.alignment = { vertical: 'middle' };
+                    
+                    // 加载并插入图片
+                    try {
+                        const imageBase64 = await loadImageAsBase64(f.img);
+                        if (imageBase64) {
+                            const imageId = workbook.addImage({
+                                base64: imageBase64,
+                                extension: 'png'
+                            });
+                            
+                            // 插入图片到第一列，设置图片大小
+                            worksheet.addImage(imageId, {
+                                tl: { col: 0, row: currentRow - 1 },
+                                ext: { width: 100, height: 75 }
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Failed to add image for', f.sku, error);
+                    }
+                    
+                    currentRow++;
+                }
+                
+                // 空行
+                worksheet.addRow([]);
+                
+                // 汇总行
+                const summaryRow = worksheet.addRow([
+                    `Total Items: ${favorites.length} | Total Qty:`,
+                    '',
+                    '',
+                    '',
+                    '',
+                    totalQty,
+                    ''
+                ]);
+                summaryRow.getCell(1).font = { bold: true };
+                summaryRow.getCell(1).alignment = { horizontal: 'right', vertical: 'middle' };
+                summaryRow.getCell(6).font = { bold: true, color: { argb: 'FFFF0000' } };
+                summaryRow.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' };
+                summaryRow.alignment = { vertical: 'middle' };
+                
+                // 生成文件并下载
+                const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
+                const safeDate = dateStr.replace(/\//g, '-');
+                const fileName = `LeoFlora_Wishlist_${safeName}_${safeDate}.xlsx`;
+                
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                link.click();
+                window.URL.revokeObjectURL(url);
+                
+                // 隐藏加载提示
+                document.getElementById('export-loading').style.display = 'none';
+                
+                setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('导出失败，请重试。错误：' + error.message);
+                document.getElementById('export-loading').style.display = 'none';
+            }
         }
 
         function openFavModal() {
