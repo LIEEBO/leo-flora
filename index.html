@@ -517,7 +517,7 @@
             // 生成文件并下载
             const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
             const safeDate = dateStr.replace(/\//g, '-');
-            const fileName = `LeoFlora_Wishlist_V2.7_${safeName}_${safeDate}.xlsx`;
+            const fileName = `LeoFlora_Wishlist_${safeName}_${safeDate}.xlsx`;
             XLSX.writeFile(wb, fileName);
             
             closeFavModal();
