@@ -11,6 +11,7 @@
 
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; overflow-x: hidden; }
@@ -482,9 +483,9 @@
                     const q = f.qty || 1;
                     totalQty += q;
                     
-                    // 创建行，第一列先设置为链接文本
+                    // 创建行，第一列直接存储图片URL（供VBA使用）
                     const row = worksheet.addRow([
-                        'View Image', // 默认显示链接文本
+                        f.img, // 直接存储图片URL，VBA会读取这个值
                         f.sku,
                         f.name_zh || '',
                         f.name_en || '',
@@ -493,61 +494,20 @@
                         ''
                     ]);
                     
-                    // 设置第一列为超链接（始终保留链接）
+                    // 设置第一列格式：显示提示文本，但值存储URL
                     const imageCell = row.getCell(1);
-                    imageCell.value = { text: 'View Image', hyperlink: f.img };
-                    imageCell.font = { color: { argb: 'FF0000FF' }, underline: true };
+                    imageCell.value = f.img; // 存储完整URL供VBA使用
+                    imageCell.font = { color: { argb: 'FF0066CC' }, size: 10 };
+                    imageCell.note = '双击此单元格可查看图片'; // 添加注释提示
                     
-                    // 设置行高以适应图片
-                    row.height = 80;
+                    // 设置行高
+                    row.height = 60;
                     
                     // 设置对齐
                     row.getCell(2).alignment = { horizontal: 'center', vertical: 'middle' }; // SKU居中
                     row.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' }; // 数量居中
                     row.getCell(6).font = { bold: true }; // 数量加粗
                     row.alignment = { vertical: 'middle' };
-                    
-                    // 尝试加载并插入图片
-                    let imageInserted = false;
-                    try {
-                        const imageBase64 = await loadImageAsBase64(f.img);
-                        if (imageBase64) {
-                            // 从base64中提取实际的图片数据
-                            const base64Data = imageBase64.split(',')[1] || imageBase64;
-                            // 判断图片格式
-                            let imageExtension = 'png';
-                            if (imageBase64.startsWith('data:image/jpeg') || imageBase64.startsWith('data:image/jpg')) {
-                                imageExtension = 'jpeg';
-                            } else if (imageBase64.startsWith('data:image/png')) {
-                                imageExtension = 'png';
-                            }
-                            
-                            const imageId = workbook.addImage({
-                                base64: base64Data,
-                                extension: imageExtension
-                            });
-                            
-                            // 插入图片到第一列，设置图片大小和位置
-                            // 注意：ExcelJS的行索引从0开始，currentRow是Excel行号（从1开始）
-                            worksheet.addImage(imageId, {
-                                tl: { col: 0, row: currentRow - 1 },
-                                ext: { width: 100, height: 75 }
-                            });
-                            
-                            imageInserted = true;
-                            // 图片插入成功后，将链接文本改为小字提示（可选）
-                            // imageCell.value = { text: '📷', hyperlink: f.img };
-                        }
-                    } catch (error) {
-                        console.error('Failed to add image for', f.sku, error);
-                        // 图片加载失败，保留链接文本
-                    }
-                    
-                    // 如果图片插入失败，确保至少显示链接
-                    if (!imageInserted) {
-                        imageCell.value = { text: 'View Image', hyperlink: f.img };
-                        imageCell.font = { color: { argb: 'FF0000FF' }, underline: true };
-                    }
                     
                     currentRow++;
                 }
@@ -570,6 +530,80 @@
                 summaryRow.getCell(6).font = { bold: true, color: { argb: 'FFFF0000' } };
                 summaryRow.getCell(6).alignment = { horizontal: 'center', vertical: 'middle' };
                 summaryRow.alignment = { vertical: 'middle' };
+                
+                // 添加VBA使用说明工作表
+                const instructionSheet = workbook.addWorksheet('VBA使用说明');
+                instructionSheet.columns = [{ width: 80 }];
+                
+                const vbaCode = `Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+    Dim pic As Object
+    Dim url As String
+    
+    ' 忽略错误（防止空链接报错）
+    On Error Resume Next
+    
+    ' 只处理第一列（图片列）
+    If Target.Column = 1 And Target.Row > 3 Then
+        ' 获取单元格的值作为URL
+        url = Target.Value
+        
+        ' 简单检查是否为图片链接（包含http）
+        If InStr(1, url, "http", vbTextCompare) > 0 Then
+            
+            ' 插入图片
+            Set pic = Me.Pictures.Insert(url)
+            
+            ' 设置图片位置和大小
+            If Err.Number = 0 Then
+                With pic
+                    .Top = Target.Top  ' 图片顶部对齐单元格
+                    .Left = Target.Left + Target.Width + 5 ' 图片显示在单元格右侧
+                    .Height = 150 ' 设置图片高度为150像素，宽度按比例自动缩放
+                End With
+                
+                ' 取消双击进入编辑模式的默认行为
+                Cancel = True
+            Else
+                MsgBox "无法加载图片，请检查链接是否有效。", vbExclamation, "图片加载失败"
+            End If
+        End If
+    End If
+    
+    On Error GoTo 0
+End Sub`;
+                
+                instructionSheet.addRow(['VBA代码使用说明']);
+                instructionSheet.getRow(1).font = { bold: true, size: 14 };
+                instructionSheet.addRow([]);
+                instructionSheet.addRow(['步骤1：按 Alt+F11 打开VBA编辑器']);
+                instructionSheet.addRow(['步骤2：在左侧项目窗口中找到"Wishlist"工作表']);
+                instructionSheet.addRow(['步骤3：双击"Wishlist"工作表']);
+                instructionSheet.addRow(['步骤4：将以下代码粘贴到代码窗口中：']);
+                instructionSheet.addRow([]);
+                
+                // 将VBA代码分行添加
+                const codeLines = vbaCode.split('\n');
+                codeLines.forEach(line => {
+                    const codeRow = instructionSheet.addRow([line]);
+                    codeRow.getCell(1).font = { name: 'Courier New', size: 9 };
+                    codeRow.getCell(1).alignment = { wrapText: true };
+                });
+                
+                instructionSheet.addRow([]);
+                instructionSheet.addRow(['步骤5：保存并关闭VBA编辑器（Ctrl+S）']);
+                instructionSheet.addRow(['步骤6：返回Excel，双击第一列（Image列）的任意单元格即可查看图片']);
+                instructionSheet.addRow([]);
+                instructionSheet.addRow(['注意：首次使用可能需要启用宏。']);
+                instructionSheet.addRow(['   文件 -> 选项 -> 信任中心 -> 信任中心设置 -> 宏设置 -> 启用所有宏']);
+                
+                // 设置列宽和行高
+                instructionSheet.getColumn(1).width = 80;
+                for (let i = 1; i <= instructionSheet.rowCount; i++) {
+                    const row = instructionSheet.getRow(i);
+                    if (row) {
+                        row.height = 20;
+                    }
+                }
                 
                 // 生成文件并下载
                 const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
