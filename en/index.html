@@ -17,28 +17,42 @@
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
   <style>
-  /* --- 品牌简介板块美化 (SEO专用) --- */
+   /* --- 让 Logo 图片和文字强制垂直居中 --- */
+        .site-brand {
+    display: flex;           /* 开启 Flex 布局模式 */
+    align-items: center;     /* 核心指令：让所有子元素垂直居中对齐 */
+    gap: 0;                  /* 确保没有意外的间距 */
+}
+        /* --- Logo 名字美化 --- */
+        .brand-name {
+    font-size: 18px;      /* 字号加大 */
+    font-weight: 700;     /* 加粗 */
+    color: #333;          /* 深黑色，显得专业 */
+    text-decoration: none;/* 去掉链接下划线 */
+    margin-left: 10px;    /* 跟左边的 Logo 图标拉开点距离 */
+    font-family: sans-serif; /* 使用无衬线字体，更现代 */
+}
+    /* --- 品牌简介板块 (优化版：更精致、更聚焦) --- */
 .brand-intro {
-  max-width: 1200px;
-  margin: 12px auto 8px; /* 上边距12，左右自动居中，下边距8 */
-  padding: 0 16px;       /* 防止在手机屏上贴边 */
-  text-align: center;    /* 让文字居中，看起来更像简介 */
+  max-width: 700px;      /* 【关键改动】从1200改到700，把文字聚拢在中间，更好读 */
+  margin: 30px auto 20px;/* 增加上下间距，让它和Logo、搜索框拉开距离，有呼吸感 */
+  padding: 0 20px;
+  text-align: center;
 }
 
-/* 这里的 h2 对应下面的 HTML 标签 */
 .brand-intro h1 {
-  font-size: 20px;       /* 字体调小，不抢 Logo 风头 */
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #333;           /* 深灰色，看起来专业 */
-  line-height: 1.4;
+  font-size: 22px;       /* 稍微加大一点标题 */
+  font-weight: 600;      /* 加粗一点，更有质感 */
+  color: #2c3e50;        /* 用一种偏蓝的深灰色，比纯黑更高级 */
+  margin-bottom: 12px;   /* 标题和正文拉开点距离 */
+  letter-spacing: -0.5px;/* 稍微收紧一点字间距，显得紧凑 */
 }
 
 .brand-intro p {
-  font-size: 13px;       /* 副文本字号小一点 */
-  color: #777;           /* 浅灰色，降低视觉干扰 */
-  line-height: 1.5;
-  margin: 0;
+  font-size: 15px;       /* 【关键改动】从13px加大到15px，清晰度大增 */
+  color: #555;           /* 颜色加深一点，更易读 */
+  line-height: 1.6;      /* 增加行高，让阅读更舒服 */
+  margin: 0 auto;        /* 居中 */
 }
     </style>
 </head>
