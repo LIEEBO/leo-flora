@@ -16,6 +16,31 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+  /* --- 品牌简介板块美化 (SEO专用) --- */
+.brand-intro {
+  max-width: 1200px;
+  margin: 12px auto 8px; /* 上边距12，左右自动居中，下边距8 */
+  padding: 0 16px;       /* 防止在手机屏上贴边 */
+  text-align: center;    /* 让文字居中，看起来更像简介 */
+}
+
+/* 这里的 h2 对应下面的 HTML 标签 */
+.brand-intro h1 {
+  font-size: 20px;       /* 字体调小，不抢 Logo 风头 */
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;           /* 深灰色，看起来专业 */
+  line-height: 1.4;
+}
+
+.brand-intro p {
+  font-size: 13px;       /* 副文本字号小一点 */
+  color: #777;           /* 浅灰色，降低视觉干扰 */
+  line-height: 1.5;
+  margin: 0;
+}
+    </style>
 </head>
 
 <body>
