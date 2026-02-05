@@ -101,6 +101,13 @@
   text-decoration: underline;
 }
         .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
+        
+        /* --- 让 Logo 图片和文字强制垂直居中 --- */
+        .site-brand {
+    display: flex;           /* 开启 Flex 布局模式 */
+    align-items: center;     /* 核心指令：让所有子元素垂直居中对齐 */
+    gap: 0;                  /* 确保没有意外的间距 */
+}
         /* --- Logo 名字美化 --- */
         .brand-name {
     font-size: 18px;      /* 字号加大 */
@@ -108,7 +115,6 @@
     color: #333;          /* 深黑色，显得专业 */
     text-decoration: none;/* 去掉链接下划线 */
     margin-left: 10px;    /* 跟左边的 Logo 图标拉开点距离 */
-    vertical-align: middle; /* 让文字跟图标垂直居中对齐 */
     font-family: sans-serif; /* 使用无衬线字体，更现代 */
 }
     /* --- 品牌简介板块 (优化版：更精致、更聚焦) --- */
@@ -119,7 +125,7 @@
   text-align: center;
 }
 
-.brand-intro h2 {
+.brand-intro h1 {
   font-size: 22px;       /* 稍微加大一点标题 */
   font-weight: 600;      /* 加粗一点，更有质感 */
   color: #2c3e50;        /* 用一种偏蓝的深灰色，比纯黑更高级 */
