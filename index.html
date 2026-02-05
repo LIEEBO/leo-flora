@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-    Leo Faux Artificial Flowers Manufacturer (Leo Flowers / Leo Flora)
-    </title>
+    Leo Faux Artificial Flowers Manufacturer
 
-    <meta name="description" content="Leo Faux, also known as Leo Flowers, Leo Flower, Leo Flora or Leo Flor, is a professional artificial flowers manufacturer and wholesale supplier.">
+    <meta name="description" content="Leo Faux™, also known as Leo Flowers, Leo Flower, Leo Flora or Leo Flor, is a professional artificial flowers manufacturer and wholesale supplier.">
 
     <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -102,6 +101,38 @@
   text-decoration: underline;
 }
         .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
+        /* --- Logo 名字美化 --- */
+        .brand-name {
+    font-size: 24px;      /* 字号加大 */
+    font-weight: 700;     /* 加粗 */
+    color: #333;          /* 深黑色，显得专业 */
+    text-decoration: none;/* 去掉链接下划线 */
+    margin-left: 10px;    /* 跟左边的 Logo 图标拉开点距离 */
+    vertical-align: middle; /* 让文字跟图标垂直居中对齐 */
+    font-family: sans-serif; /* 使用无衬线字体，更现代 */
+}
+    /* --- 品牌简介板块美化 (SEO专用) --- */
+.brand-intro {
+  max-width: 1200px;
+  margin: 12px auto 8px; 
+  padding: 0 16px;       
+  text-align: center;    
+}
+
+.brand-intro h1 {
+  font-size: 20px;       
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;           
+  line-height: 1.4;
+}
+
+.brand-intro p {
+  font-size: 13px;       
+  color: #777;           
+  line-height: 1.5;
+  margin: 0;
+}
     </style>
 </head>
 <body>
@@ -109,7 +140,7 @@
     <header>
         <div class="site-brand">
             <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo" alt="Leo Faux artificial flowers manufacturer logo">
-            <span class="brand-name">Leo Faux</span>
+            <a href="/" class="brand-name">Leo Faux</a>
         </div>
         <div class="header-right">
             <div id="user-display" class="user-display"></div>
