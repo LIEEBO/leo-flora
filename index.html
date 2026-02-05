@@ -131,7 +131,12 @@
   color: #2c3e50;        /* 用一种偏蓝的深灰色，比纯黑更高级 */
   margin-bottom: 12px;   /* 标题和正文拉开点距离 */
   letter-spacing: -0.5px;/* 稍微收紧一点字间距，显得紧凑 */
-  text-align: center;
+  line-height: 1.4;
+  
+  /* 👇 重点来了：加上 !important 强制生效，并且占满宽度 */
+  width: 100%;             
+  text-align: center !important; 
+  display: block !important;
 }
 
 .brand-intro p {
