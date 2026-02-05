@@ -103,7 +103,7 @@
         .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
         /* --- Logo 名字美化 --- */
         .brand-name {
-    font-size: 24px;      /* 字号加大 */
+    font-size: 18px;      /* 字号加大 */
     font-weight: 700;     /* 加粗 */
     color: #333;          /* 深黑色，显得专业 */
     text-decoration: none;/* 去掉链接下划线 */
@@ -111,27 +111,27 @@
     vertical-align: middle; /* 让文字跟图标垂直居中对齐 */
     font-family: sans-serif; /* 使用无衬线字体，更现代 */
 }
-    /* --- 品牌简介板块美化 (SEO专用) --- */
+    /* --- 品牌简介板块 (优化版：更精致、更聚焦) --- */
 .brand-intro {
-  max-width: 1200px;
-  margin: 12px auto 8px; 
-  padding: 0 16px;       
-  text-align: center;    
+  max-width: 700px;      /* 【关键改动】从1200改到700，把文字聚拢在中间，更好读 */
+  margin: 30px auto 20px;/* 增加上下间距，让它和Logo、搜索框拉开距离，有呼吸感 */
+  padding: 0 20px;
+  text-align: center;
 }
 
-.brand-intro h1 {
-  font-size: 20px;       
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #333;           
-  line-height: 1.4;
+.brand-intro h2 {
+  font-size: 22px;       /* 稍微加大一点标题 */
+  font-weight: 600;      /* 加粗一点，更有质感 */
+  color: #2c3e50;        /* 用一种偏蓝的深灰色，比纯黑更高级 */
+  margin-bottom: 12px;   /* 标题和正文拉开点距离 */
+  letter-spacing: -0.5px;/* 稍微收紧一点字间距，显得紧凑 */
 }
 
 .brand-intro p {
-  font-size: 13px;       
-  color: #777;           
-  line-height: 1.5;
-  margin: 0;
+  font-size: 15px;       /* 【关键改动】从13px加大到15px，清晰度大增 */
+  color: #555;           /* 颜色加深一点，更易读 */
+  line-height: 1.6;      /* 增加行高，让阅读更舒服 */
+  margin: 0 auto;        /* 居中 */
 }
     </style>
 </head>
