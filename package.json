@@ -2,6 +2,7 @@
   "name": "leofaux-website",
   "version": "1.0.0",
   "scripts": {
+    "dev": "npx --yes serve . -l 3000",
     "build-sitemap": "node generate-sitemap.js"
   }
 }
