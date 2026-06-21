@@ -8,7 +8,7 @@
 
     <meta name="description" content="Leo Faux™, also known as Leo Flowers, Leo Flower, Leo Flora or Leo Flor, is a professional artificial flowers manufacturer and wholesale supplier.">
 
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -256,9 +256,10 @@
     </div>
 
     <script>
-        const APP_ID = "14iZrTXCibSIZUvrYW1Zx0Nv-MdYXbMMI"; 
-        const APP_KEY = "4ClJ1QFB6kPuL8tPCzXe0F1l";
-        const SERVER_URL = "https://14izrtxc.api.lncldglobal.com"; 
+        // Supabase 配置
+        const SUPABASE_URL = "https://pdenhgnxrgngwvqtrmhk.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZW5oZ254cmduZ3d2cXRybWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNDUwODUsImV4cCI6MjA5NzYyMTA4NX0.RUPqVRCE-sLsFJT64SuiWhtLvC_bho3Po4dTDlnKrgI";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const translations = {
             zh: { view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo faux", welcome_desc: "请填写联系信息开始选品", label_name: "您的称呼 / 公司名", label_contact: "联系方式 (微信/邮箱)", btn_start: "开始选品", list_title: "📋 意向清单确认", btn_export: "📥 导出 Excel 清单", export_success: "清单导出成功！", export_guide: "请将下载的文件发送至下方联系方式：", export_note: "（我们将给您发送完整报价单）" },
@@ -279,7 +280,6 @@
         let startX = 0;
 
         function init() {
-            AV.init({ appId: APP_ID, appKey: APP_KEY, serverURLs: SERVER_URL });
             const savedUser = localStorage.getItem('leo_user_lc');
             if (savedUser) { 
                 userInfo = JSON.parse(savedUser); 
@@ -299,24 +299,33 @@
             }
         }
 
-        function fetchData() {
-            const query = new AV.Query('Product');
-            query.limit(1000);
-            query.find().then(res => {
-                products = res.map(p => ({
+        async function fetchData() {
+            const loadingTip = document.getElementById('loading-tip');
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('id, sku, img, name_zh, name_en, name_es, name_ar, desc')
+                    .limit(1000);
+
+                if (error) throw error;
+
+                products = (data || []).map(p => ({
                     id: p.id,
-                    sku: p.get('sku'),
-                    img: p.get('img'),
-                    name_zh: p.get('name_zh') || p.get('name'),
-                    name_en: p.get('name_en'),
-                    name_es: p.get('name_es'),
-                    name_ar: p.get('name_ar'),
-                    size: p.get('desc')
+                    sku: p.sku,
+                    img: p.img,
+                    name_zh: p.name_zh,
+                    name_en: p.name_en,
+                    name_es: p.name_es,
+                    name_ar: p.name_ar,
+                    size: p.desc
                 }));
                 filteredProducts = [...products];
-                document.getElementById('loading-tip').style.display = 'none';
+                loadingTip.style.display = 'none';
                 renderProducts(filteredProducts);
-            });
+            } catch (err) {
+                console.error('加载产品失败:', err);
+                loadingTip.innerText = '加载失败，请刷新页面重试 / Failed to load products.';
+            }
         }
 
         function renderProducts(list) {
