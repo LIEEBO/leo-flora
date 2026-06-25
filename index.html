@@ -102,6 +102,19 @@
 }
         .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
         
+        /* --- Factory Showcase --- */
+        .factory-section { max-width: 1200px; margin: 30px auto 10px; padding: 0 20px; }
+        .factory-section h2 { font-size: 20px; color: #2c3e50; text-align: center; margin-bottom: 20px; font-weight: 600; }
+        .factory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .factory-card { border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .factory-card:hover { transform: translateY(-3px); }
+        .factory-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+        .factory-card .factory-label { padding: 10px 14px; font-size: 13px; font-weight: 600; color: #2c3e50; background: #fff; }
+        .factory-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .factory-stat { text-align: center; padding: 16px 8px; background: #f0f2f5; border-radius: 8px; }
+        .factory-stat .num { font-size: 26px; font-weight: 800; color: #e74c3c; }
+        .factory-stat .label { font-size: 12px; color: #666; margin-top: 2px; }
+        
         /* --- 让 Logo 图片和文字强制垂直居中 --- */
         .site-brand {
     display: flex;           /* 开启 Flex 布局模式 */
@@ -173,6 +186,31 @@
         events, home decor, and commercial projects.
     </p>
 </section>
+
+<!-- Factory Showcase -->
+<div class="factory-section">
+  <h2>🏭 工厂实力展示 / Factory Showcase</h2>
+  <div class="factory-stats">
+    <div class="factory-stat"><div class="num">10+</div><div class="label">年经验 Years</div></div>
+    <div class="factory-stat"><div class="num">2000+</div><div class="label">产品 Products</div></div>
+    <div class="factory-stat"><div class="num">50+</div><div class="label">出口国 Countries</div></div>
+    <div class="factory-stat"><div class="num">OEM</div><div class="label">定制 Custom</div></div>
+  </div>
+  <div class="factory-grid">
+    <div class="factory-card">
+      <img src="/images/flower-workshop.jpg" alt="生产车间" loading="lazy">
+      <div class="factory-label">🌷 生产车间 Production Workshop</div>
+    </div>
+    <div class="factory-card">
+      <img src="/images/florist-work.jpg" alt="手工制作" loading="lazy">
+      <div class="factory-label">👩‍🎨 手工制作 Skilled Craftsmen</div>
+    </div>
+    <div class="factory-card">
+      <img src="/images/flowers-arrangement.jpg" alt="产品展示" loading="lazy">
+      <div class="factory-label">💐 成品展示 Product Display</div>
+    </div>
+  </div>
+</div>
 
     <div class="search-box">
         <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
