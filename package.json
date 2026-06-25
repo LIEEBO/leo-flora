@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx --yes serve . -l 3000",
-    "build-sitemap": "node generate-sitemap.js"
+    "build-sitemap": "node generate-sitemap.js",
+    "build-blog": "node convert-blog.js",
+    "build": "node convert-blog.js && node generate-sitemap.js"
   }
 }
