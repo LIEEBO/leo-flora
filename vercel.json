@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "buildCommand": "node convert-blog.js && node generate-sitemap.js",
+  "outputDirectory": "."
+}
