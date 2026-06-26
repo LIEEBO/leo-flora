@@ -1,813 +1,425 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-    Leo Faux Artificial Flowers Manufacturer</title>
+  <meta charset="UTF-8">
+  <title>Leo Faux 人造花工厂 — 专业仿真花生产制造商 | 工厂直供</title>
+  <meta name="description" content="Leo Faux™ 专业人造花、仿真花生产制造商，10年以上出口经验。工厂直供婚礼用花、家居装饰花、商业用花。支持OEM/ODM定制，全球发货。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Leo Faux — 专业人造花仿真花工厂">
+  <meta property="og:description" content="10年+人造花生产经验，2000+产品，出口50+国家。工厂直供，支持定制。">
+  <meta property="og:image" content="https://www.leofaux.com/images/hero-bouquet.jpg">
+  <meta property="og:url" content="https://www.leofaux.com/">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #333; line-height: 1.6; }
 
-    <meta name="description" content="Leo Faux™, also known as Leo Flowers, Leo Flower, Leo Flora or Leo Flor, is a professional artificial flowers manufacturer and wholesale supplier.">
-    <!-- Open Graph -->
-    <meta property="og:title" content="Leo Faux — Artificial Flowers Manufacturer">
-    <meta property="og:description" content="Professional artificial flowers manufacturer and wholesale supplier. Factory-direct silk flowers for weddings, events & decor.">
-    <meta property="og:image" content="https://www.leofaux.com/images/hero-bouquet.jpg">
-    <meta property="og:url" content="https://www.leofaux.com/">
-    <meta property="og:type" content="website">
+    /* === Top Bar === */
+    .top-bar { background: #1a1a2e; color: #aaa; padding: 6px 24px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .top-bar a { color: #aaa; text-decoration: none; margin-left: 14px; }
+    .top-bar a:hover { color: #fff; }
+    .top-bar .lang-select { padding: 2px 6px; border: 1px solid #444; border-radius: 4px; font-size: 11px; background: #1a1a2e; color: #aaa; cursor: pointer; outline: none; }
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <style>
-        :root { --primary-color: #2c3e50; --accent-color: #e74c3c; --bg-color: #f8f9fa; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #333; padding-bottom: 100px; overflow-x: hidden; }
-        
-        header { background: white; padding: 10px 20px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 10px; }
-        h1 { margin: 0; font-size: 1.1rem; color: var(--primary-color); display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
-        .header-logo { height: 32px; width: auto; border-radius: 4px; }
-        
-        .header-right { display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: flex-end; min-width: 0; }
-        .user-display { font-size: 11px; color: #666; background: #f0f2f5; padding: 4px 8px; border-radius: 4px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
-        .lang-select { padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; outline: none; background: white; cursor: pointer; width: auto; min-width: 60px; }
-        
-        .search-box { width: 100%; max-width: 1200px; margin: 10px auto; padding: 0 20px; box-sizing: border-box; }
-        .search-input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; background: white; outline: none; transition: all 0.2s; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    /* === Navigation === */
+    nav.site-nav { background: #fff; padding: 12px 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    nav.site-nav .logo { font-size: 20px; font-weight: 700; color: #2c3e50; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    nav.site-nav .logo img { height: 32px; border-radius: 4px; }
+    nav.site-nav .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    nav.site-nav .nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    nav.site-nav .nav-links a:hover { color: #e74c3c; }
 
-        .container { max-width: 1200px; margin: 10px auto; padding: 0 20px; }
-        .product-grid { display: grid; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); } }
-        
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f0f0f0; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-img { width: 100%; height: 180px; object-fit: cover; background: #eee; cursor: zoom-in; }
-        @media (min-width: 768px) { .product-img { height: 240px; } }
-        
-        .product-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
-        .product-sku { font-size: 0.7rem; color: #888; margin-bottom: 4px; background: #f0f2f5; display: inline-block; padding: 2px 6px; border-radius: 4px; width: fit-content; font-weight: bold; }
-        .product-title { font-size: 0.95rem; font-weight: bold; margin: 0 0 6px 0; line-height: 1.3; }
-        .product-details { font-size: 0.75rem; color: #666; margin-top: auto; border-top: 1px solid #f9f9f9; padding-top: 8px; }
-        
-        .fav-btn { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 18px; color: #ccc; transition: all 0.2s; z-index: 10; }
-        .fav-btn.active { color: var(--accent-color); transform: scale(1.1); background: white; }
-        .fav-btn:active { transform: scale(0.9); }
-        
-        .highlight { background-color: #ffeb3b; padding: 0 2px; border-radius: 2px; }
-        .back-to-top { position: fixed; bottom: 100px; right: 20px; width: 45px; height: 45px; background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 150; font-size: 20px; border: 1px solid #eee; transition: 0.3s; }
-        
-        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 12px 25px; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); cursor: pointer; display: none; align-items: center; gap: 10px; z-index: 200; font-weight: 500; white-space: nowrap; transition: all 0.3s; }
-        .count-badge { background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
-        
-        /* 飞入动画样式 */
-        .fly-item { position: fixed; z-index: 9999; pointer-events: none; transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1); border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    /* === Hero === */
+    .hero { position: relative; min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden; background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%); }
+    .hero-bg { position: absolute; inset: 0; background: url('/images/hero-bouquet.jpg') center/cover no-repeat; opacity: 0.15; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,42,58,0.2) 0%, rgba(26,42,58,0.7) 100%); z-index: 1; }
+    .hero-content { position: relative; z-index: 2; max-width: 850px; padding: 0 24px; }
+    .hero-content .hero-badge { display: inline-block; background: rgba(231,76,60,0.9); color: #fff; padding: 8px 22px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 24px; letter-spacing: 1px; }
+    .hero-content h1 { font-size: clamp(36px, 5.5vw, 56px); font-weight: 700; margin-bottom: 18px; letter-spacing: -0.5px; }
+    .hero-content p { font-size: clamp(16px, 2vw, 20px); opacity: 0.9; margin-bottom: 36px; line-height: 1.8; max-width: 650px; margin-left: auto; margin-right: auto; }
+    .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { display: inline-block; padding: 16px 42px; background: #e74c3c; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; transition: all 0.3s; }
+    .btn-primary:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(231,76,60,0.3); }
+    .btn-secondary { display: inline-block; padding: 16px 42px; background: transparent; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; border: 2px solid rgba(255,255,255,0.4); transition: all 0.3s; }
+    .btn-secondary:hover { border-color: #fff; transform: translateY(-2px); }
+    .btn-success { display: inline-block; padding: 14px 32px; background: #27ae60; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; transition: all 0.3s; }
+    .btn-success:hover { background: #219a52; transform: translateY(-2px); }
 
-        /* 预览系统样式 */
-        .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; touch-action: none; }
-        .viewer-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .viewer-img { max-width: 95%; max-height: 80vh; object-fit: contain; transition: transform 0.3s ease; user-select: none; }
-        .viewer-info { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: white; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); }
-        .viewer-sku { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
-        .viewer-title { font-size: 0.9rem; opacity: 0.8; }
-        .viewer-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer; z-index: 1010; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
-        .viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; cursor: pointer; padding: 20px; z-index: 1010; opacity: 0.5; transition: 0.3s; }
-        .viewer-nav:hover { opacity: 1; }
-        .viewer-prev { left: 10px; }
-        .viewer-next { right: 10px; }
-        .viewer-counter { position: absolute; top: 20px; left: 20px; color: white; font-size: 14px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; }
+    /* === Sections Common === */
+    .section { padding: 75px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: 30px; font-weight: 700; color: #2c3e50; text-align: center; margin-bottom: 10px; }
+    .section-subtitle { text-align: center; color: #888; font-size: 15px; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .bg-light { background: #f8f9fa; }
 
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: white; width: 90%; max-width: 480px; border-radius: 20px; padding: 30px; box-sizing: border-box; position: relative; max-height: 85vh; overflow-y: auto; }
-        
-        .qty-control { display: flex; align-items: center; gap: 5px; background: #f0f2f5; border-radius: 6px; padding: 2px; }
-        .qty-btn { width: 24px; height: 24px; border: none; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-        .qty-input { width: 50px; border: 1px solid #ddd; background: white; text-align: center; font-size: 13px; font-weight: bold; outline: none; border-radius: 4px; padding: 2px 0; }
-        .qty-input:focus { border-color: var(--primary-color); }
-        
-        .login-input { width: 100%; padding: 14px; margin: 8px 0 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: white; }
-        .btn-main { background: var(--primary-color); color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .contact-link { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 12px; text-decoration: none; color: white; font-weight: 600; margin-bottom: 12px; border: none; width: 100%; cursor: pointer; box-sizing: border-box; }
-        .btn-wechat { background: #07C160; }
-        .btn-whatsapp { background: #25D366; }
-        .btn-email { background: #333; }
-        .btn-ins { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #bbb; }
-        .seo-links {
-  margin-top: 40px;
-  padding: 10px 0;
-  font-size: 12px;
-  color: #777;
-  text-align: center;
-}
-.seo-links a {
-  color: #777;
-  text-decoration: none;
-}
-.seo-links a:hover {
-  text-decoration: underline;
-}
-        .export-loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; }
-        
-        /* --- Factory Showcase --- */
-        .factory-section { max-width: 1200px; margin: 20px auto 10px; padding: 0 20px; }
-        .factory-section h2 { font-size: 20px; color: #2c3e50; text-align: center; margin-bottom: 16px; font-weight: 600; }
-        .factory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 16px; }
-        .factory-card { border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .factory-card:hover { transform: translateY(-3px); }
-        .factory-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
-        .factory-card .factory-label { padding: 10px 14px; font-size: 13px; font-weight: 600; color: #2c3e50; background: #fff; }
-        .factory-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 16px; }
-        .factory-stat { text-align: center; padding: 14px 8px; background: #f0f2f5; border-radius: 8px; }
-        .factory-stat .num { font-size: 24px; font-weight: 800; color: #e74c3c; }
-        .factory-stat .label { font-size: 12px; color: #666; margin-top: 2px; }
-        
-        /* --- WhatsApp Float --- */
-        .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; box-shadow: 0 4px 16px rgba(37,211,102,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; text-decoration: none; }
-        .wa-float:hover { transform: scale(1.1); }
-        .wa-float svg { width: 28px; height: 28px; fill: white; }
-        .wa-tooltip { position: fixed; bottom: 88px; right: 24px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 998; animation: waPulse 2s infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
-        @keyframes waPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        
-        /* --- 让 Logo 图片和文字强制垂直居中 --- */
-        .site-brand {
-    display: flex;           /* 开启 Flex 布局模式 */
-    align-items: center;     /* 核心指令：让所有子元素垂直居中对齐 */
-    gap: 0;                  /* 确保没有意外的间距 */
-}
-        /* --- Logo 名字美化 --- */
-        .brand-name {
-    font-size: 18px;      /* 字号加大 */
-    font-weight: 700;     /* 加粗 */
-    color: #333;          /* 深黑色，显得专业 */
-    text-decoration: none;/* 去掉链接下划线 */
-    margin-left: 10px;    /* 跟左边的 Logo 图标拉开点距离 */
-    font-family: sans-serif; /* 使用无衬线字体，更现代 */
-}
-    /* --- 品牌简介板块 (优化版：更精致、更聚焦) --- */
-.brand-intro {
-  max-width: 700px;      /* 【关键改动】从1200改到700，把文字聚拢在中间，更好读 */
-  margin: 30px auto 20px;/* 增加上下间距，让它和Logo、搜索框拉开距离，有呼吸感 */
-  padding: 0 20px;
-  text-align: center;
-}
+    /* === Stats === */
+    .stats-bar { background: #fff; padding: 50px 24px; border-bottom: 1px solid #f0f0f0; }
+    .stats-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; text-align: center; }
+    .stat-item { padding: 10px; }
+    .stat-item .stat-num { font-size: 36px; font-weight: 800; color: #e74c3c; }
+    .stat-item .stat-label { font-size: 14px; color: #777; margin-top: 4px; letter-spacing: 0.5px; }
 
-.brand-intro h1 {
-  font-size: 22px;       /* 稍微加大一点标题 */
-  font-weight: 600;      /* 加粗一点，更有质感 */
-  color: #2c3e50;        /* 用一种偏蓝的深灰色，比纯黑更高级 */
-  margin-bottom: 12px;   /* 标题和正文拉开点距离 */
-  letter-spacing: -0.5px;/* 稍微收紧一点字间距，显得紧凑 */
-  line-height: 1.4;
-  
-  /* 👇 重点来了：加上 !important 强制生效，并且占满宽度 */
-  width: 100%;             
-  text-align: center !important; 
-  display: block !important;
-}
+    /* === Process === */
+    .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
+    .process-step { text-align: center; padding: 32px 18px; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: transform 0.2s; border: 1px solid #f5f5f5; }
+    .process-step:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .process-step .step-icon { width: 68px; height: 68px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 30px; }
+    .process-step .step-num { font-size: 12px; color: #e74c3c; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .process-step h3 { font-size: 17px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+    .process-step p { font-size: 13px; color: #888; line-height: 1.6; }
 
-.brand-intro p {
-  font-size: 15px;       /* 【关键改动】从13px加大到15px，清晰度大增 */
-  color: #555;           /* 颜色加深一点，更易读 */
-  line-height: 1.6;      /* 增加行高，让阅读更舒服 */
-  margin: 0 auto;        /* 居中 */
-}
-    </style>
+    /* === Factory Photos === */
+    .factory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .factory-card { border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .factory-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .factory-card img { width: 100%; height: 240px; object-fit: cover; display: block; }
+    .factory-card .factory-label { padding: 14px 16px; font-size: 14px; font-weight: 600; color: #2c3e50; text-align: center; }
+
+    /* === Category Cards === */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .cat-card { display: block; padding: 48px 24px; border-radius: 14px; text-align: center; color: #fff; text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; }
+    .cat-card::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.1); transition: background 0.3s; }
+    .cat-card:hover::before { background: rgba(0,0,0,0.2); }
+    .cat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+    .cat-card * { position: relative; z-index: 1; }
+    .cat-card .cat-icon { font-size: 52px; margin-bottom: 14px; }
+    .cat-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .cat-card p { font-size: 14px; opacity: 0.85; }
+
+    /* === Why Us === */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .why-card { padding: 30px 22px; background: #fff; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; transition: box-shadow 0.2s; }
+    .why-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+    .why-card .why-icon { font-size: 38px; margin-bottom: 12px; }
+    .why-card h3 { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+    .why-card p { font-size: 13px; color: #888; line-height: 1.5; }
+
+    /* === Testimonials === */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+    .testimonial-card { background: #fff; padding: 28px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
+    .testimonial-card .stars { color: #f39c12; font-size: 16px; margin-bottom: 10px; }
+    .testimonial-card .quote { font-size: 14px; color: #666; line-height: 1.7; font-style: italic; margin-bottom: 14px; }
+    .testimonial-card .author { font-size: 13px; font-weight: 600; color: #2c3e50; }
+    .testimonial-card .author span { font-weight: 400; color: #999; font-size: 12px; }
+
+    /* === Blog === */
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 24px; }
+    .blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
+    .blog-card:hover { transform: translateY(-4px); }
+    .blog-card .blog-img { width: 100%; height: 180px; background: linear-gradient(135deg, #2c3e50, #e74c3c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; }
+    .blog-card .blog-body { padding: 18px; }
+    .blog-card .blog-date { font-size: 11px; color: #999; }
+    .blog-card h3 { font-size: 15px; font-weight: 600; color: #2c3e50; margin: 6px 0; line-height: 1.4; }
+    .blog-card h3 a { color: inherit; text-decoration: none; }
+    .blog-card h3 a:hover { color: #e74c3c; }
+    .blog-card p { font-size: 13px; color: #888; line-height: 1.5; }
+    .text-center { text-align: center; margin-top: 32px; }
+
+    /* === CTA Banner === */
+    .cta-banner { background: linear-gradient(135deg, #2c3e50, #1a2a3a); color: #fff; text-align: center; padding: 64px 24px; }
+    .cta-banner h2 { font-size: 30px; margin-bottom: 12px; }
+    .cta-banner p { opacity: 0.8; margin-bottom: 28px; font-size: 15px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* === Footer === */
+    footer { background: #1a1a2e; color: #aaa; padding: 44px 24px 24px; font-size: 13px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
+    footer h4 { color: #fff; font-size: 14px; margin-bottom: 14px; }
+    footer a { color: #aaa; text-decoration: none; display: block; margin-bottom: 8px; }
+    footer a:hover { color: #fff; }
+    .footer-bottom { max-width: 1100px; margin: 24px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 12px; }
+
+    /* === WhatsApp === */
+    .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; box-shadow: 0 4px 16px rgba(37,211,102,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; text-decoration: none; }
+    .wa-float:hover { transform: scale(1.1); }
+    .wa-float svg { width: 28px; height: 28px; fill: white; }
+    .wa-tooltip { position: fixed; bottom: 88px; right: 24px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 998; animation: waPulse 2s infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+    @keyframes waPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 75vh; }
+      .stats-bar { padding: 28px 16px; }
+      .section { padding: 44px 16px; }
+      .process-grid, .factory-grid { grid-template-columns: 1fr; }
+      nav.site-nav .nav-links { gap: 10px; }
+      .top-bar { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="site-brand">
-            <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo" alt="Leo Faux artificial flowers manufacturer logo">
-            <a href="/" class="brand-name">Leo Faux</a>
-        </div>
-        <div class="header-right">
-            <div id="user-display" class="user-display"></div>
-            <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
-                <option value="zh">中文</option>
-                <option value="en">EN</option>
-                <option value="es">ES</option>
-                <option value="ar">AR</option>
-            </select>
-        </div>
-    </header>
-    <section class="brand-intro">
-    <h1>Leo Faux Artificial Flowers Manufacturer & Wholesale Supplier</h1>
-    <p>
-        <strong>Leo Faux</strong>, also known as <strong>Leo Flora</strong> or
-        <strong>Leo Flowers</strong>, is a professional artificial flowers manufacturer
-        and wholesale supplier, specializing in realistic silk flowers for weddings,
-        events, home decor, and commercial projects.
-    </p>
-</section>
-
-<!-- Factory Showcase -->
-<div class="factory-section">
-  <h2>🏭 工厂实力展示 / Factory Showcase</h2>
-  <div class="factory-stats">
-    <div class="factory-stat"><div class="num">10+</div><div class="label">年经验 Years</div></div>
-    <div class="factory-stat"><div class="num">2000+</div><div class="label">产品 Products</div></div>
-    <div class="factory-stat"><div class="num">50+</div><div class="label">出口国 Countries</div></div>
-    <div class="factory-stat"><div class="num">OEM</div><div class="label">定制 Custom</div></div>
+<!-- Top Bar -->
+<div class="top-bar">
+  <div>
+    📞 <a href="https://wa.me/8618657926791" target="_blank">WhatsApp: +86 186 5792 6791</a>
+    ✉️ <a href="mailto:lcf18657926791@gmail.com">lcf18657926791@gmail.com</a>
   </div>
-  <div class="factory-grid">
-    <div class="factory-card">
-      <img src="/images/flower-workshop.jpg" alt="生产车间" loading="lazy">
-      <div class="factory-label">🌷 生产车间 Production Workshop</div>
-    </div>
-    <div class="factory-card">
-      <img src="/images/florist-work.jpg" alt="手工制作" loading="lazy">
-      <div class="factory-label">👩‍🎨 手工制作 Skilled Craftsmen</div>
-    </div>
-    <div class="factory-card">
-      <img src="/images/flowers-arrangement.jpg" alt="产品展示" loading="lazy">
-      <div class="factory-label">💐 成品展示 Product Display</div>
-    </div>
+  <div>
+    <select class="lang-select" onchange="window.location.href=this.value">
+      <option value="/" selected>中文</option>
+      <option value="/en/">EN</option>
+    </select>
   </div>
 </div>
 
-    <div class="search-box">
-        <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
-    </div>
-
-    <div class="modal-overlay" id="login-modal" style="display: none;">
-        <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
-            <h2 data-i18n="welcome_title">Welcome to Leo faux</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
-            <div style="text-align:left;">
-                <label style="font-size:12px; color:#999;" data-i18n="label_name">Name / Company</label>
-                <input type="text" id="input-name" class="login-input" placeholder="Your Name">
-                <label style="font-size:12px; color:#999;" data-i18n="label_contact">Contact Method</label>
-                <input type="text" id="input-contact" class="login-input" placeholder="WhatsApp / WeChat / Email">
-            </div>
-            <button class="btn-main" onclick="saveUserInfo()" data-i18n="btn_start">Start / 开始选品</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
-        <div id="product-grid" class="product-grid"></div>
-    </div>
-    
-    <div id="back-to-top" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
-
-    <div class="floating-bar" id="floating-bar" onclick="openFavModal()">
-        <span data-i18n="view_list">查看我的意向清单</span>
-        <span class="count-badge" id="fav-count">0</span>
-    </div>
-
-    <!-- 意向清单弹窗 -->
-    <div class="modal-overlay" id="fav-modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeFavModal()">&times;</span>
-            <h2 style="margin-top:0; text-align:center;" data-i18n="list_title">意向清单确认</h2>
-            <div id="fav-items-container" style="max-height:400px; overflow-y:auto; margin: 20px 0;"></div>
-            <button class="btn-main" style="background:#27ae60;" onclick="exportToExcel()" data-i18n="btn_export">导出 Excel 清单</button>
-        </div>
-    </div>
-
-    <!-- 导出成功引导 -->
-    <div class="modal-overlay" id="contact-guide-modal" style="display:none;">
-        <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeContactModal()">&times;</span>
-            <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
-            <h2 style="margin-top:0;" data-i18n="export_success">清单导出成功！</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px; line-height: 1.6;">
-                <span data-i18n="export_guide">请将下载的文件发送至下方联系方式：</span><br>
-                <span style="font-size:12px; color:#999;" data-i18n="export_note">（我们将给您发送完整报价单）</span>
-            </p>
-            <button class="contact-link btn-wechat" onclick="copyText('Leo92-02')">微信 / WeChat: Leo92-02 (点击复制)</button>
-            <a href="https://wa.me/8618657926791" target="_blank" class="contact-link btn-whatsapp">WhatsApp: +86 186 5792 6791</a>
-            <a href="mailto:lcf18657926791@gmail.com" class="contact-link btn-email">Email: lcf18657926791@gmail.com</a>
-            <a href="https://www.instagram.com/leoflorist" target="_blank" class="contact-link btn-ins">Instagram: @leoflorist</a>
-        </div>
-    </div>
-
-    <!-- 滑动预览系统 -->
-    <div class="viewer-overlay" id="viewer-overlay">
-        <div class="viewer-counter" id="viewer-counter">1 / 1</div>
-        <span class="viewer-close" onclick="closeViewer()">&times;</span>
-        <div class="viewer-nav viewer-prev" onclick="prevImg()">&#10094;</div>
-        <div class="viewer-nav viewer-next" onclick="nextImg()">&#10095;</div>
-        <div class="viewer-content" id="viewer-content">
-            <img src="" class="viewer-img" id="viewer-img">
-        </div>
-        <div class="viewer-info">
-            <div class="viewer-sku" id="viewer-sku">SKU</div>
-            <div class="viewer-title" id="viewer-title">Title</div>
-        </div>
-    </div>
-
-    <!-- 导出加载提示 -->
-    <div class="export-loading" id="export-loading">
-        <div style="text-align:center;">
-            <div style="font-size:24px; margin-bottom:10px;">⏳</div>
-            <div>正在生成Excel文件，请稍候...</div>
-            <div style="font-size:12px; color:#999; margin-top:5px;">正在加载图片，这可能需要一些时间</div>
-        </div>
-    </div>
-
-    <script>
-        // Supabase 配置
-        // ✅ 替换为这段：统一变量名，并将客户端实例命名为 dbClient
-const SUPABASE_URL = "https://pdenhgnxrgngwvqtrmhk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZW5oZ254cmduZ3d2cXRybWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNDUwODUsImV4cCI6MjA5NzYyMTA4NX0.RUPqVRCE-sLsFJT64SuiWhtLvC_bho3Po4dTDlnKrgI";
-
-// 使用刚刚定义的变量，并将实例绑定给全局变量 supabase（因为下方第 290 行 fetchData 还在直接使用 supabase）
-supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const translations = {
-            zh: { view_list: "查看我的意向清单", welcome_title: "欢迎光临 Leo faux", welcome_desc: "请填写联系信息开始选品", label_name: "您的称呼 / 公司名", label_contact: "联系方式 (微信/邮箱)", btn_start: "开始选品", list_title: "📋 意向清单确认", btn_export: "📥 导出 Excel 清单", export_success: "清单导出成功！", export_guide: "请将下载的文件发送至下方联系方式：", export_note: "（我们将给您发送完整报价单）" },
-            en: { view_list: "View My Wishlist", welcome_title: "Welcome to Leo faux", welcome_desc: "Please fill in your info to begin.", label_name: "Name / Company", label_contact: "Contact (WhatsApp/Email)", btn_start: "Start Selection", list_title: "📋 Wishlist Confirmation", btn_export: "📥 Export to Excel", export_success: "Wishlist Exported!", export_guide: "Please send the file via:", export_note: "(We will send you a complete quotation)" },
-            es: { view_list: "Ver Mi Lista", welcome_title: "Bienvenido a Leo faux", welcome_desc: "Por favor complete su información.", label_name: "Nombre / Empresa", label_contact: "Contacto (WhatsApp/Email)", btn_start: "Comenzar", list_title: "📋 Confirmar Lista", btn_export: "📥 Exportar Excel", export_success: "¡Exportado con éxito!", export_guide: "Envíenos el archivo por:", export_note: "(Le enviaremos una cotización completa)" },
-            ar: { view_list: "عرض قائمتي", welcome_title: "مرحبا بكم في Leo faux", welcome_desc: "يرجى ملء معلوماتك للبدء.", label_name: "الاسم / الشركة", label_contact: "معلومات الاتصال", btn_start: "ابدأ", list_title: "📋 تأكيد القائمة", btn_export: "📥 تصدير Excel", export_success: "تم التصدير بنجاح!", export_guide: "يرجى إرسال الملف عبر:", export_note: "(سوف نرسل لك عرض سعر كامل)" }
-        };
-
-        let currentLang = 'zh';
-        let products = [];
-        let filteredProducts = [];
-        let favorites = JSON.parse(localStorage.getItem('leo_fav_lc') || '[]');
-        let userInfo = { name: "", contact: "" };
-        let searchTimer = null;
-        
-        // 预览系统变量
-        let currentViewerIdx = 0;
-        let startX = 0;
-
-        function init() {
-            // Show login modal after 3 seconds if not logged in
-            setTimeout(() => {
-                const savedUser = localStorage.getItem('leo_user_lc');
-                if (!savedUser) {
-                    document.getElementById('login-modal').style.display = 'flex';
-                }
-            }, 3000);
-            const savedUser = localStorage.getItem('leo_user_lc');
-            if (savedUser) { 
-                userInfo = JSON.parse(savedUser); 
-                document.getElementById('login-modal').style.display = 'none';
-                updateUserDisplay();
-            }
-            updateBadge();
-            fetchData();
-            initViewerEvents();
-        }
-
-        function updateUserDisplay() {
-            const el = document.getElementById('user-display');
-            if (userInfo.name) {
-                el.innerText = userInfo.name;
-                el.style.display = 'block';
-            }
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
-        }
-
-        async function fetchData() {
-            const loadingTip = document.getElementById('loading-tip');
-            try {
-                const { data, error } = await supabase
-                    .from('products')
-                    .select('id, sku, img, name_zh, name_en, name_es, name_ar, desc')
-                    .limit(1000);
-
-                if (error) throw error;
-
-                products = (data || []).map(p => ({
-                    id: p.id,
-                    sku: p.sku,
-                    img: p.img,
-                    name_zh: p.name_zh,
-                    name_en: p.name_en,
-                    name_es: p.name_es,
-                    name_ar: p.name_ar,
-                    size: p.desc
-                }));
-                filteredProducts = [...products];
-                loadingTip.style.display = 'none';
-                renderProducts(filteredProducts);
-            } catch (err) {
-                console.error('加载产品失败:', err);
-                loadingTip.innerText = '加载失败，请刷新页面重试 / Failed to load products.';
-            }
-        }
-
-        function renderProducts(list) {
-            const grid = document.getElementById('product-grid');
-            const key = document.getElementById('search-input').value.toLowerCase().trim();
-            const keywords = key ? key.split(/\s+/) : [];
-            
-            grid.innerHTML = list.map((p, index) => {
-                const isFav = favorites.find(f => f.id === p.id);
-                let displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
-                let displaySku = p.sku;
-
-                if (keywords.length > 0) {
-                    keywords.forEach(kw => {
-                        const regex = new RegExp(`(${kw})`, 'gi');
-                        displayName = displayName.replace(regex, '<span class="highlight">$1</span>');
-                        displaySku = displaySku.replace(regex, '<span class="highlight">$1</span>');
-                    });
-                }
-                
-                return `
-                <div class="product-card" id="prod-${p.id}">
-                    <img src="${p.img}" class="product-img" loading="lazy" onclick="openViewer(${index})">
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', event)">${isFav ? '❤️' : '➕'}</button>
-                    <div class="product-info">
-                        <span class="product-sku">ITEM NO: ${displaySku}</span>
-                        <div class="product-title">${displayName}</div>
-                        <div class="product-details">
-                            <span>Size: ${p.size || '-'}</span>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function saveUserInfo() {
-            const name = document.getElementById('input-name').value.trim();
-            const contact = document.getElementById('input-contact').value.trim();
-            if(!name || !contact) return alert("Please fill in your name and contact info.");
-            userInfo = { name, contact };
-            localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
-            document.getElementById('login-modal').style.display = 'none';
-            updateUserDisplay();
-        }
-
-        function toggleFav(id, event) {
-            const p = products.find(x => x.id === id);
-            const idx = favorites.findIndex(f => f.id === id);
-            const isAdding = idx === -1;
-            
-            if (isAdding) {
-                favorites.push({ ...p, qty: 1 });
-                if (event) flyToCart(event.currentTarget, p.img);
-            } else {
-                favorites.splice(idx, 1);
-            }
-            
-            localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
-            updateBadge();
-            
-            // 更新按钮状态而不重新渲染整个列表
-            const btn = document.querySelector(`#prod-${id} .fav-btn`);
-            if (btn) {
-                btn.classList.toggle('active', isAdding);
-                btn.innerHTML = isAdding ? '❤️' : '➕';
-            }
-        }
-
-        function flyToCart(btn, imgUrl) {
-            const rect = btn.getBoundingClientRect();
-            const cart = document.getElementById('floating-bar');
-            const cartRect = cart.getBoundingClientRect();
-            
-            const flyItem = document.createElement('img');
-            flyItem.src = imgUrl;
-            flyItem.className = 'fly-item';
-            flyItem.style.left = rect.left + 'px';
-            flyItem.style.top = rect.top + 'px';
-            flyItem.style.width = '40px';
-            flyItem.style.height = '40px';
-            document.body.appendChild(flyItem);
-            
-            // 强制重绘
-            flyItem.offsetWidth;
-            
-            flyItem.style.left = (cartRect.left + cartRect.width / 2 - 20) + 'px';
-            flyItem.style.top = (cartRect.top - 20) + 'px';
-            flyItem.style.transform = 'scale(0.1) rotate(360deg)';
-            flyItem.style.opacity = '0';
-            
-            setTimeout(() => {
-                flyItem.remove();
-                cart.style.transform = 'translateX(-50%) scale(1.1)';
-                setTimeout(() => cart.style.transform = 'translateX(-50%) scale(1)', 200);
-            }, 800);
-        }
-
-        function updateQty(id, delta) {
-            const idx = favorites.findIndex(f => f.id === id);
-            if (idx !== -1) {
-                favorites[idx].qty = Math.max(1, (parseInt(favorites[idx].qty) || 1) + delta);
-                localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
-                openFavModal();
-            }
-        }
-
-        function handleQtyInput(id, val) {
-            const idx = favorites.findIndex(f => f.id === id);
-            if (idx !== -1) {
-                let num = parseInt(val.replace(/[^\d]/g, '')) || 1;
-                favorites[idx].qty = Math.max(1, num);
-                localStorage.setItem('leo_fav_lc', JSON.stringify(favorites));
-                // 不调用 openFavModal 以免失去焦点，仅在失去焦点时刷新
-            }
-        }
-
-        function updateBadge() {
-            const bar = document.getElementById('floating-bar');
-            document.getElementById('fav-count').innerText = favorites.length;
-            bar.style.display = favorites.length > 0 ? 'flex' : 'none';
-        }
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.innerText = t[key];
-            });
-            const searchPlaceholders = { zh: "🔍 搜索货号 / 品名...", en: "🔍 Search SKU / Name...", es: "🔍 Buscar SKU / Nombre...", ar: "🔍 البحث عن SKU / الاسم..." };
-            document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
-            filterProducts();
-        }
-
-        // 加载图片并转换为base64
-        async function loadImageAsBase64(url) {
-            try {
-                // 添加时间戳防止缓存，并请求跨域模式
-                const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
-                
-                const response = await fetch(fetchUrl, {
-                    mode: 'cors',      // 关键：请求跨域
-                    cache: 'no-cache'
-                });
-                
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const blob = await response.blob();
-                
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result); // 结果包含 data:image/png;base64,...
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-            } catch (error) {
-                console.warn('Image load failed (CORS or Network):', url);
-                return null;
-            }
-        }
-        async function exportToExcel() {
-            if (favorites.length === 0) return;
-            if (typeof ExcelJS === 'undefined') {
-                alert('ExcelJS library is loading, please try again in a moment.');
-                return;
-            }
-            
-            // 显示加载提示
-            document.getElementById('export-loading').style.display = 'block';
-            closeFavModal();
-            
-            try {
-                const dateStr = new Date().toLocaleDateString();
-                let totalQty = 0;
-                
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Wishlist');
-                
-                // 设置列宽
-                worksheet.columns = [
-                    { header: 'Image', key: 'image', width: 18 }, // 图片列
-                    { header: 'SKU', key: 'sku', width: 15 },
-                    { header: 'Name (ZH)', key: 'name_zh', width: 25 },
-                    { header: 'Name (EN)', key: 'name_en', width: 25 },
-                    { header: 'Size', key: 'size', width: 15 },
-                    { header: 'Order Qty', key: 'qty', width: 12 },
-                    { header: 'Note', key: 'note', width: 20 }
-                ];
-                
-                // 表头样式
-                const headerRow = worksheet.addRow([`Client: ${userInfo.name} | Contact: ${userInfo.contact} | Date: ${dateStr}`]);
-                headerRow.font = { bold: true, size: 12 };
-                worksheet.mergeCells(1, 1, 1, 7);
-                worksheet.addRow([]); 
-                
-                // 标题行样式
-                const titleRow = worksheet.getRow(3);
-                titleRow.values = ['Image', 'SKU', 'Name (ZH)', 'Name (EN)', 'Size', 'Order Qty', 'Note'];
-                titleRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-                titleRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2C3E50' } };
-                titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
-                titleRow.height = 25;
-                
-                // 遍历数据
-                let currentRow = 4;
-                for (let i = 0; i < favorites.length; i++) {
-                    const f = favorites[i];
-                    const q = f.qty || 1;
-                    totalQty += q;
-                    
-                    // 创建行
-                    const row = worksheet.addRow([
-                        '', // 留空给图片
-                        f.sku,
-                        f.name_zh || '',
-                        f.name_en || '',
-                        f.size || '',
-                        q,
-                        ''
-                    ]);
-                    
-                    row.height = 90; // 增加行高以容纳图片
-                    row.alignment = { vertical: 'middle', horizontal: 'center' };
-                    
-                    // 处理图片
-                    try {
-                        const base64Full = await loadImageAsBase64(f.img);
-                        
-                        if (base64Full) {
-                            // 1. 提取纯 Base64 (去掉 data:image... 前缀)
-                            const base64Data = base64Full.split(',')[1];
-                            
-                            // 2. 识别扩展名
-                            let ext = 'png';
-                            if (base64Full.startsWith('data:image/jpeg')) ext = 'jpeg';
-                            
-                            // 3. 添加到工作簿
-                            const imageId = workbook.addImage({
-                                base64: base64Data,
-                                extension: ext
-                            });
-                            
-                            // 4. 嵌入单元格 (使用 editAs: 'oneCell' 确保随单元格变动)
-                            worksheet.addImage(imageId, {
-                                tl: { col: 0.1, row: currentRow - 1 + 0.1 }, // 稍微留点边距
-                                ext: { width: 100, height: 80 }, // 限制图片显示尺寸
-                                editAs: 'oneCell'
-                            });
-                        } else {
-                            // 图片加载失败，回退到文字链接
-                            row.getCell(1).value = { text: 'View Image', hyperlink: f.img };
-                            row.getCell(1).font = { color: { argb: 'FF0000FF' }, underline: true };
-                        }
-                    } catch (imgErr) {
-                        console.error('Image Error:', imgErr);
-                    }
-                    
-                    currentRow++;
-                }
-                
-                // 汇总行
-                worksheet.addRow([]);
-                const summaryRow = worksheet.addRow([`Total Items: ${favorites.length}`, '', '', '', '', totalQty, '']);
-                summaryRow.getCell(1).font = { bold: true };
-                summaryRow.getCell(6).font = { bold: true, color: { argb: 'FFFF0000' } };
-
-                // 导出文件
-                const safeName = (userInfo.name || 'Client').replace(/[^\w\s-]/g, '');
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `LeoFlora_Order_${safeName}.xlsx`;
-                link.click();
-                
-                document.getElementById('export-loading').style.display = 'none';
-                setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
-                
-            } catch (error) {
-                console.error('Export error:', error);
-                alert('Export failed: ' + error.message);
-                document.getElementById('export-loading').style.display = 'none';
-            }
-        }
-
-        function openFavModal() {
-            const container = document.getElementById('fav-items-container');
-            container.innerHTML = favorites.map(f => `
-                <div style="display:flex; align-items:center; gap:12px; border-bottom:1px solid #eee; padding:10px 0;">
-                    <img src="${f.img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
-                    <div style="flex:1;">
-                        <div style="font-size:12px; font-weight:bold; color:#2c3e50;">${f.sku}</div>
-                        <div style="font-size:11px; color:#666;">${f.name_zh}</div>
-                    </div>
-                    <div class="qty-control">
-                        <button class="qty-btn" onclick="updateQty('${f.id}', -1)">-</button>
-                        <input type="number" class="qty-input" value="${f.qty || 1}" oninput="handleQtyInput('${f.id}', this.value)" onblur="openFavModal()">
-                        <button class="qty-btn" onclick="updateQty('${f.id}', 1)">+</button>
-                    </div>
-                    <span onclick="toggleFav('${f.id}'); openFavModal();" style="cursor:pointer; color:#ccc; margin-left:10px;">✕</span>
-                </div>
-            `).join('') || '<p style="text-align:center; color:#ccc;">Empty list</p>';
-            document.getElementById('fav-modal').style.display = 'flex';
-        }
-
-        function closeFavModal() { document.getElementById('fav-modal').style.display = 'none'; }
-        function closeContactModal() { document.getElementById('contact-guide-modal').style.display = 'none'; }
-        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Copied: " + t)); }
-
-        function filterProducts() {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(() => {
-                const key = document.getElementById('search-input').value.toLowerCase().trim();
-                if (!key) {
-                    filteredProducts = [...products];
-                } else {
-                    const keywords = key.split(/\s+/);
-                    filteredProducts = products.filter(p => {
-                        return keywords.every(kw => 
-                            p.sku.toLowerCase().includes(kw) || 
-                            (p.name_zh && p.name_zh.toLowerCase().includes(kw)) ||
-                            (p.name_en && p.name_en.toLowerCase().includes(kw)) ||
-                            (p.name_es && p.name_es.toLowerCase().includes(kw)) ||
-                            (p.name_ar && p.name_ar.toLowerCase().includes(kw))
-                        );
-                    });
-                }
-                renderProducts(filteredProducts);
-            }, 300);
-        }
-
-        // 预览系统逻辑
-        function openViewer(index) {
-            currentViewerIdx = index;
-            updateViewer();
-            document.getElementById('viewer-overlay').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function updateViewer() {
-            const p = filteredProducts[currentViewerIdx];
-            const img = document.getElementById('viewer-img');
-            img.src = p.img;
-            document.getElementById('viewer-sku').innerText = p.sku;
-            document.getElementById('viewer-title').innerText = p['name_' + currentLang] || p.name_en || p.name_zh;
-            document.getElementById('viewer-counter').innerText = `${currentViewerIdx + 1} / ${filteredProducts.length}`;
-        }
-
-        function closeViewer() {
-            document.getElementById('viewer-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            // 位置同步：滚动到当前预览的产品
-            const p = filteredProducts[currentViewerIdx];
-            const el = document.getElementById(`prod-${p.id}`);
-            if (el) {
-                const headerOffset = 120;
-                const elementPosition = el.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-            }
-        }
-
-        function nextImg() {
-            if (currentViewerIdx < filteredProducts.length - 1) {
-                currentViewerIdx++;
-                updateViewer();
-            }
-        }
-
-        function prevImg() {
-            if (currentViewerIdx > 0) {
-                currentViewerIdx--;
-                updateViewer();
-            }
-        }
-
-        function initViewerEvents() {
-            const overlay = document.getElementById('viewer-overlay');
-            overlay.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-            overlay.addEventListener('touchend', e => {
-                const endX = e.changedTouches[0].clientX;
-                if (startX - endX > 50) nextImg();
-                if (endX - startX > 50) prevImg();
-            });
-            document.addEventListener('keydown', e => {
-                if (overlay.style.display === 'flex') {
-                    if (e.key === 'ArrowRight') nextImg();
-                    if (e.key === 'ArrowLeft') prevImg();
-                    if (e.key === 'Escape') closeViewer();
-                }
-            });
-        }
-
-        window.onscroll = function() {
-            const btn = document.getElementById('back-to-top');
-            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
-                btn.style.display = "flex";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-
-        init();
-    </script>
-  <div class="seo-links">
-    <p>Explore our products:</p>
-    <a href="/en/">English Artificial Flowers Website</a> |
-    <a href="/en/artificial-flowers.html">Artificial Flowers</a> |
-    <a href="/en/silk-flowers.html">Silk Flowers</a>
+<!-- Navigation -->
+<nav class="site-nav">
+  <a href="/" class="logo">
+    <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" alt="Leo Faux logo">
+    Leo Faux
+  </a>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/shop.html">产品中心</a>
+    <a href="/en/blog/">博客</a>
+    <a href="/en/about-us.html">关于我们</a>
+    <a href="/en/faq.html">FAQ</a>
   </div>
+</nav>
 
-<!-- WhatsApp Float -->
-<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" title="WhatsApp" aria-label="Contact us on WhatsApp">
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🏭 工厂直供 · 10 年出口经验</div>
+    <h1>专业人造花仿真花<br>生产制造商 & 批发供应商</h1>
+    <p>Leo Faux™ 专注人造花生产制造 10 余年，2000+ 款产品远销 50+ 国家。从原料到成品，每一道工序都在我们自己的工厂完成，品质可控、价格直供。</p>
+    <div class="btn-group">
+      <a href="/shop.html" class="btn-primary">进入产品展厅 →</a>
+      <a href="#process" class="btn-secondary">了解生产工艺</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">年生产经验</div></div>
+    <div class="stat-item"><div class="stat-num">2000+</div><div class="stat-label">产品款式</div></div>
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">出口国家</div></div>
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">合作客户</div></div>
+    <div class="stat-item"><div class="stat-num">OEM</div><div class="stat-label">支持定制</div></div>
+  </div>
+</section>
+
+<!-- Production Process -->
+<section class="section" id="process">
+  <div class="section-inner">
+    <h2 class="section-title">我们的生产工艺</h2>
+    <p class="section-subtitle">从设计到成品，每一朵花都经过严格的质量把控。</p>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="step-icon">🎯</div>
+        <div class="step-num">第一步</div>
+        <h3>开模设计</h3>
+        <p>专业设计师根据真实花型制作模具，高精度开模确保花瓣形态逼真、纹理细腻。</p>
+      </div>
+      <div class="process-step">
+        <div class="step-icon">🎨</div>
+        <div class="step-num">第二步</div>
+        <h3>选材染色</h3>
+        <p>选用优质丝绸、涤纶等环保材料，每批次手工染色，确保色泽自然、不易褪色。</p>
+      </div>
+      <div class="process-step">
+        <div class="step-icon">🤲</div>
+        <div class="step-num">第三步</div>
+        <h3>手工组装</h3>
+        <p>经验丰富的工匠逐片手工组装，层叠花瓣、添加花蕊、塑造花型，力争每朵花栩栩如生。</p>
+      </div>
+      <div class="process-step">
+        <div class="step-icon">✅</div>
+        <div class="step-num">第四步</div>
+        <h3>质检包装</h3>
+        <p>严格检查花型、色差和耐久性，通过多层质检后精心包装，保障国际运输安全。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Factory Showcase -->
+<section class="section bg-light">
+  <div class="section-inner">
+    <h2 class="section-title">工厂实拍</h2>
+    <p class="section-subtitle">专业的生产车间和花艺团队，确保每一件产品的高品质。</p>
+    <div class="factory-grid">
+      <div class="factory-card">
+        <img src="/images/flower-workshop.jpg" alt="生产车间" loading="lazy">
+        <div class="factory-label">🌷 现代化生产车间</div>
+      </div>
+      <div class="factory-card">
+        <img src="/images/florist-work.jpg" alt="花艺师手工制作" loading="lazy">
+        <div class="factory-label">👩‍🎨 资深花艺师手工制作</div>
+      </div>
+      <div class="factory-card">
+        <img src="/images/flowers-arrangement.jpg" alt="产品陈列展示" loading="lazy">
+        <div class="factory-label">💐 产品陈列展示厅</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">产品分类</h2>
+    <p class="section-subtitle">工厂直供，品质保障，点击查看全系列产品。</p>
+    <div class="cat-grid">
+      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+        <div class="cat-icon">💐</div>
+        <h3>仿真花系列</h3>
+        <p>玫瑰、牡丹、绣球等数百款仿真花，逼真度高达95%</p>
+      </a>
+      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
+        <div class="cat-icon">🌹</div>
+        <h3>丝绸花系列</h3>
+        <p>高档丝绸花材，手感柔软细腻，适合高端装饰场景</p>
+      </a>
+      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">
+        <div class="cat-icon">💒</div>
+        <h3>婚庆用花</h3>
+        <p>婚礼场景整体解决方案，拱门花、桌花、手捧花等</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Why Us -->
+<section class="section bg-light">
+  <div class="section-inner">
+    <h2 class="section-title">为什么选择 Leo Faux</h2>
+    <p class="section-subtitle">不只是供应商，更是您的制造合作伙伴。</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🏭</div>
+        <h3>工厂直供价格</h3>
+        <p>没有中间商，直接工厂价。灵活起订量，小单也可承接。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌍</div>
+        <h3>全球物流配送</h3>
+        <p>海运、空运、快递均可，专业报关清关，门到门服务。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📐</div>
+        <h3>OEM/ODM 定制</h3>
+        <p>可定制颜色、尺寸、包装、品牌标签。您的设计，我们生产。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📋</div>
+        <h3>批量生产稳定</h3>
+        <p>自有工厂产能稳定，大单小单都能保证交期和品质如一。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔬</div>
+        <h3>品质严格把关</h3>
+        <p>阻燃处理、色牢度测试、耐久性检测，层层把关才发货。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💬</div>
+        <h3>专业销售支持</h3>
+        <p>24小时内响应，免费寄样、产品目录、设计方案咨询。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">客户评价</h2>
+    <p class="section-subtitle">来自全球客户的真实反馈。</p>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote">"与 Leo Faux 合作3年了，品质稳定、交期准时，团队响应非常快。是值得信赖的制造伙伴。"</div>
+        <div class="author">— 张先生 <span>婚庆公司, 上海</span></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote">"定制服务非常专业，颜色完全按照我们的要求来，小批量试单也很配合。已经在持续合作了。"</div>
+        <div class="author">— 李经理 <span>家居装饰品牌, 广东</span></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote">"作为批发商，稳定的品质是最重要的。Leo Faux 每次发货品质如一，仿真度是我见过最高的。"</div>
+        <div class="author">— Michael <span>批发经销商, 美国</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog -->
+<section class="section bg-light">
+  <div class="section-inner">
+    <h2 class="section-title">最新资讯</h2>
+    <p class="section-subtitle">婚礼布置灵感、仿真花搭配技巧、行业动态。</p>
+    <div class="blog-grid" id="blog-posts"></div>
+    <div class="text-center">
+      <a href="/en/blog/" class="btn-primary">查看全部文章 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <h2>准备好开始合作了吗？</h2>
+  <p>联系我们获取最新产品目录、批发报价或定制方案。</p>
+  <a href="/shop.html" class="btn-primary" style="background:#fff;color:#2c3e50;">进入产品展厅</a>
+  <a href="https://wa.me/8618657926791" target="_blank" class="btn-success" style="margin-left:12px;">💬 联系客服</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>Leo Faux</h4>
+      <p style="font-size:12px;line-height:1.7;">专业人造花仿真花生产制造商，工厂直供，全球发货。10年+出口经验，2000+产品款式。</p>
+    </div>
+    <div>
+      <h4>产品</h4>
+      <a href="/shop.html">仿真花系列</a>
+      <a href="/shop.html">丝绸花系列</a>
+      <a href="/shop.html">婚庆用花</a>
+    </div>
+    <div>
+      <h4>关于</h4>
+      <a href="/en/about-us.html">关于我们</a>
+      <a href="/en/blog/">博客资讯</a>
+      <a href="/en/faq.html">常见问题</a>
+    </div>
+    <div>
+      <h4>联系方式</h4>
+      <a href="https://wa.me/8618657926791" target="_blank">WhatsApp: +86 186 5792 6791</a>
+      <a href="mailto:lcf18657926791@gmail.com">邮箱: lcf18657926791@gmail.com</a>
+      <a href="https://www.instagram.com/leoflorist" target="_blank">Instagram: @leoflorist</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 Leo Faux. All rights reserved. | 专业人造花仿真花工厂
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
-<div class="wa-tooltip">Contact us on WhatsApp 💬</div>
+<div class="wa-tooltip">联系客服 💬</div>
+
+<script>
+// Blog posts for homepage
+const posts = [
+  { title: "Cinematic Wedding Decor Ideas from Mona Farm", date: "2026-06-25", slug: "cinematic-wedding-decor-mona-farm-silk-flowers", desc: "用仿真花打造电影级婚礼布置的灵感与技巧。" },
+  { title: "Sage Green Wedding Decor with Faux Florals", date: "2026-06-25", slug: "sage-green-wedding-decor-nail-designs-faux-florals", desc: "鼠尾草绿婚礼配色搭配仿真花布置方案。" },
+  { title: "Napa Wedding Chili Oil Floral Transformation", date: "2026-06-25", slug: "napa-wedding-chili-oil-floral-transformation-silk-flowers", desc: "辣椒油色调婚礼的仿真花改造方案。" },
+];
+const container = document.getElementById('blog-posts');
+posts.forEach(p => {
+  const d = document.createElement('div'); d.className = 'blog-card';
+  d.innerHTML = `<div class="blog-img">💐</div><div class="blog-body"><div class="blog-date">${p.date}</div><h3><a href="/en/blog/${p.slug}.html">${p.title}</a></h3><p>${p.desc}</p></div>`;
+  container.appendChild(d);
+});
+</script>
 
 </body>
 </html>
