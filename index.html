@@ -1,167 +1,135 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Leo Faux 人造花工厂 — 专业仿真花生产制造商 | 工厂直供</title>
-  <meta name="description" content="Leo Faux™ 专业人造花、仿真花生产制造商，10年以上出口经验。工厂直供婚礼用花、家居装饰花、商业用花。支持OEM/ODM定制，全球发货。">
+  <title>Leo Faux — Professional Artificial Flowers Manufacturer | Factory Direct Wholesale</title>
+  <meta name="description" content="Leo Faux is a professional artificial flowers manufacturer and wholesale supplier with 10+ years of experience. Factory-direct silk flowers for weddings, events & decor. OEM/ODM available.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title" content="Leo Faux — 专业人造花仿真花工厂">
-  <meta property="og:description" content="10年+人造花生产经验，2000+产品，出口50+国家。工厂直供，支持定制。">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Leo Faux — Professional Artificial Flowers Manufacturer">
+  <meta property="og:description" content="Factory-direct artificial flowers, silk flowers, and wedding flowers. Wholesale supplier with 10+ years experience.">
   <meta property="og:image" content="https://www.leofaux.com/images/hero-bouquet.jpg">
-  <meta property="og:url" content="https://www.leofaux.com/">
+  <meta property="og:url" content="https://www.leofaux.com/en/">
   <meta property="og:type" content="website">
   <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/favicon.png">
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #333; line-height: 1.6; }
-
-    /* === Top Bar === */
-    .top-bar { background: #1a1a2e; color: #aaa; padding: 6px 24px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .top-bar a { color: #aaa; text-decoration: none; margin-left: 14px; }
-    .top-bar a:hover { color: #fff; }
-    .top-bar .lang-select { padding: 2px 6px; border: 1px solid #444; border-radius: 4px; font-size: 11px; background: #1a1a2e; color: #aaa; cursor: pointer; outline: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.6; }
 
     /* === Navigation === */
-    nav.site-nav { background: #fff; padding: 12px 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    nav.site-nav { background: #fff; padding: 14px 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     nav.site-nav .logo { font-size: 20px; font-weight: 700; color: #2c3e50; text-decoration: none; display: flex; align-items: center; gap: 8px; }
     nav.site-nav .logo img { height: 32px; border-radius: 4px; }
-    nav.site-nav .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    nav.site-nav .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
     nav.site-nav .nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
     nav.site-nav .nav-links a:hover { color: #e74c3c; }
 
-    /* === Hero === */
-    .hero { position: relative; min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden; background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%); }
-    .hero-bg { position: absolute; inset: 0; background: url('/images/hero-bouquet.jpg') center/cover no-repeat; opacity: 0.15; }
-    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,42,58,0.2) 0%, rgba(26,42,58,0.7) 100%); z-index: 1; }
-    .hero-content { position: relative; z-index: 2; max-width: 850px; padding: 0 24px; }
-    .hero-content .hero-badge { display: inline-block; background: rgba(231,76,60,0.9); color: #fff; padding: 8px 22px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 24px; letter-spacing: 1px; }
-    .hero-content h1 { font-size: clamp(36px, 5.5vw, 56px); font-weight: 700; margin-bottom: 18px; letter-spacing: -0.5px; }
-    .hero-content p { font-size: clamp(16px, 2vw, 20px); opacity: 0.9; margin-bottom: 36px; line-height: 1.8; max-width: 650px; margin-left: auto; margin-right: auto; }
+    /* === Hero Section === */
+    .hero { position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden; background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%); }
+    .hero-bg { position: absolute; inset: 0; background: url('/images/hero-bouquet.jpg') center/cover no-repeat; opacity: 0.18; }
+    /* Subtle overlay gradient for readability */
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,42,58,0.3) 0%, rgba(26,42,58,0.6) 100%); z-index: 1; }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; padding: 0 24px; }
+    .hero-content h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-content p { font-size: clamp(16px, 2vw, 20px); opacity: 0.9; margin-bottom: 32px; line-height: 1.7; }
+    .hero-content .hero-badge { display: inline-block; background: rgba(231,76,60,0.9); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; letter-spacing: 0.5px; }
     .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary { display: inline-block; padding: 16px 42px; background: #e74c3c; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; transition: all 0.3s; }
-    .btn-primary:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(231,76,60,0.3); }
-    .btn-secondary { display: inline-block; padding: 16px 42px; background: transparent; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; border: 2px solid rgba(255,255,255,0.4); transition: all 0.3s; }
+    .btn-primary { display: inline-block; padding: 14px 36px; background: #e74c3c; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s, transform 0.2s; }
+    .btn-primary:hover { background: #c0392b; transform: translateY(-2px); }
+    .btn-secondary { display: inline-block; padding: 14px 36px; background: transparent; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; border: 2px solid rgba(255,255,255,0.4); transition: border 0.3s, transform 0.2s; }
     .btn-secondary:hover { border-color: #fff; transform: translateY(-2px); }
-    .btn-success { display: inline-block; padding: 14px 32px; background: #27ae60; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; transition: all 0.3s; }
-    .btn-success:hover { background: #219a52; transform: translateY(-2px); }
+    .btn-whatsapp { display: inline-block; padding: 14px 36px; background: #25D366; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s, transform 0.2s; }
+    .btn-whatsapp:hover { background: #1da851; transform: translateY(-2px); }
 
-    /* === Sections Common === */
-    .section { padding: 75px 24px; }
+    /* === Stats Bar === */
+    .stats-bar { background: #fff; padding: 40px 24px; border-bottom: 1px solid #f0f0f0; }
+    .stats-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; text-align: center; }
+    .stat-item .stat-num { font-size: 32px; font-weight: 800; color: #e74c3c; }
+    .stat-item .stat-label { font-size: 13px; color: #777; margin-top: 4px; }
+
+    /* === Section Common === */
+    .section { padding: 70px 24px; }
     .section-inner { max-width: 1100px; margin: 0 auto; }
-    .section-title { font-size: 30px; font-weight: 700; color: #2c3e50; text-align: center; margin-bottom: 10px; }
-    .section-subtitle { text-align: center; color: #888; font-size: 15px; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
-    .bg-light { background: #f8f9fa; }
+    .section-title { font-size: 28px; font-weight: 700; color: #2c3e50; text-align: center; margin-bottom: 12px; }
+    .section-subtitle { text-align: center; color: #777; font-size: 15px; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
-    /* === Stats === */
-    .stats-bar { background: #fff; padding: 50px 24px; border-bottom: 1px solid #f0f0f0; }
-    .stats-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; text-align: center; }
-    .stat-item { padding: 10px; }
-    .stat-item .stat-num { font-size: 36px; font-weight: 800; color: #e74c3c; }
-    .stat-item .stat-label { font-size: 14px; color: #777; margin-top: 4px; letter-spacing: 0.5px; }
+    /* === Production Process === */
+    .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+    .process-step { text-align: center; padding: 30px 16px; background: #f8f9fa; border-radius: 12px; transition: transform 0.2s; }
+    .process-step:hover { transform: translateY(-4px); }
+    .process-step .step-icon { width: 64px; height: 64px; background: #e74c3c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; }
+    .process-step .step-num { font-size: 12px; color: #e74c3c; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .process-step h3 { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+    .process-step p { font-size: 13px; color: #777; line-height: 1.5; }
 
-    /* === Process === */
-    .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
-    .process-step { text-align: center; padding: 32px 18px; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: transform 0.2s; border: 1px solid #f5f5f5; }
-    .process-step:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    .process-step .step-icon { width: 68px; height: 68px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 30px; }
-    .process-step .step-num { font-size: 12px; color: #e74c3c; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-    .process-step h3 { font-size: 17px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
-    .process-step p { font-size: 13px; color: #888; line-height: 1.6; }
-
-    /* === Factory Photos === */
+    /* === Factory Showcase === */
     .factory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .factory-card { border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
-    .factory-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    .factory-card img { width: 100%; height: 240px; object-fit: cover; display: block; }
-    .factory-card .factory-label { padding: 14px 16px; font-size: 14px; font-weight: 600; color: #2c3e50; text-align: center; }
-
-    /* === Category Cards === */
-    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .cat-card { display: block; padding: 48px 24px; border-radius: 14px; text-align: center; color: #fff; text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; }
-    .cat-card::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.1); transition: background 0.3s; }
-    .cat-card:hover::before { background: rgba(0,0,0,0.2); }
-    .cat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
-    .cat-card * { position: relative; z-index: 1; }
-    .cat-card .cat-icon { font-size: 52px; margin-bottom: 14px; }
-    .cat-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .cat-card p { font-size: 14px; opacity: 0.85; }
+    .factory-card { border-radius: 12px; overflow: hidden; background: #f8f9fa; }
+    .factory-card .factory-img { width: 100%; height: 220px; object-fit: cover; background: #e0e0e0; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; }
+    .factory-card .factory-label { padding: 12px 16px; font-size: 13px; font-weight: 600; color: #2c3e50; }
 
     /* === Why Us === */
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
-    .why-card { padding: 30px 22px; background: #fff; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; transition: box-shadow 0.2s; }
-    .why-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
-    .why-card .why-icon { font-size: 38px; margin-bottom: 12px; }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+    .why-card { padding: 28px 20px; border: 1px solid #f0f0f0; border-radius: 12px; text-align: center; transition: box-shadow 0.2s; }
+    .why-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .why-card .why-icon { font-size: 36px; margin-bottom: 12px; }
     .why-card h3 { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
-    .why-card p { font-size: 13px; color: #888; line-height: 1.5; }
+    .why-card p { font-size: 13px; color: #777; line-height: 1.5; }
 
-    /* === Testimonials === */
-    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
-    .testimonial-card { background: #fff; padding: 28px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
-    .testimonial-card .stars { color: #f39c12; font-size: 16px; margin-bottom: 10px; }
-    .testimonial-card .quote { font-size: 14px; color: #666; line-height: 1.7; font-style: italic; margin-bottom: 14px; }
-    .testimonial-card .author { font-size: 13px; font-weight: 600; color: #2c3e50; }
-    .testimonial-card .author span { font-weight: 400; color: #999; font-size: 12px; }
-
-    /* === Blog === */
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 24px; }
+    /* === Blog Highlights === */
+    .bg-accent { background: #f8f9fa; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
     .blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
-    .blog-card:hover { transform: translateY(-4px); }
-    .blog-card .blog-img { width: 100%; height: 180px; background: linear-gradient(135deg, #2c3e50, #e74c3c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; }
+    .blog-card:hover { transform: translateY(-3px); }
+    .blog-card .blog-img { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(135deg, #2c3e50, #e74c3c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; }
     .blog-card .blog-body { padding: 18px; }
     .blog-card .blog-date { font-size: 11px; color: #999; }
     .blog-card h3 { font-size: 15px; font-weight: 600; color: #2c3e50; margin: 6px 0; line-height: 1.4; }
     .blog-card h3 a { color: inherit; text-decoration: none; }
     .blog-card h3 a:hover { color: #e74c3c; }
-    .blog-card p { font-size: 13px; color: #888; line-height: 1.5; }
+    .blog-card p { font-size: 13px; color: #777; line-height: 1.5; }
     .text-center { text-align: center; margin-top: 32px; }
 
-    /* === CTA Banner === */
-    .cta-banner { background: linear-gradient(135deg, #2c3e50, #1a2a3a); color: #fff; text-align: center; padding: 64px 24px; }
-    .cta-banner h2 { font-size: 30px; margin-bottom: 12px; }
-    .cta-banner p { opacity: 0.8; margin-bottom: 28px; font-size: 15px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    /* === Contact CTA === */
+    .contact-cta { background: linear-gradient(135deg, #2c3e50, #1a2a3a); color: #fff; text-align: center; padding: 60px 24px; }
+    .contact-cta h2 { font-size: 28px; margin-bottom: 12px; }
+    .contact-cta p { opacity: 0.8; margin-bottom: 28px; font-size: 15px; }
 
     /* === Footer === */
-    footer { background: #1a1a2e; color: #aaa; padding: 44px 24px 24px; font-size: 13px; }
+    footer { background: #1a1a2e; color: #aaa; padding: 40px 24px 24px; font-size: 13px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
-    footer h4 { color: #fff; font-size: 14px; margin-bottom: 14px; }
-    footer a { color: #aaa; text-decoration: none; display: block; margin-bottom: 8px; }
+    footer h4 { color: #fff; font-size: 14px; margin-bottom: 12px; }
+    footer a { color: #aaa; text-decoration: none; display: block; margin-bottom: 6px; }
     footer a:hover { color: #fff; }
     .footer-bottom { max-width: 1100px; margin: 24px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 12px; }
 
-    /* === WhatsApp === */
+    @media (max-width: 640px) {
+      .hero { min-height: 70vh; }
+      .stats-bar { padding: 24px 16px; }
+      .section { padding: 40px 16px; }
+      .process-grid { grid-template-columns: 1fr; }
+    }
+
+    /* === WhatsApp Float === */
     .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; box-shadow: 0 4px 16px rgba(37,211,102,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; text-decoration: none; }
     .wa-float:hover { transform: scale(1.1); }
     .wa-float svg { width: 28px; height: 28px; fill: white; }
     .wa-tooltip { position: fixed; bottom: 88px; right: 24px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 998; animation: waPulse 2s infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
     @keyframes waPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-    @media (max-width: 640px) {
-      .hero { min-height: 75vh; }
-      .stats-bar { padding: 28px 16px; }
-      .section { padding: 44px 16px; }
-      .process-grid, .factory-grid { grid-template-columns: 1fr; }
-      nav.site-nav .nav-links { gap: 10px; }
-      .top-bar { display: none; }
-    }
+    /* === Testimonials === */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .testimonial-card { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
+    .testimonial-card .stars { color: #f39c12; font-size: 16px; margin-bottom: 8px; }
+    .testimonial-card .quote { font-size: 14px; color: #555; line-height: 1.6; font-style: italic; margin-bottom: 12px; }
+    .testimonial-card .author { font-size: 13px; font-weight: 600; color: #2c3e50; }
+    .testimonial-card .author span { font-weight: 400; color: #999; font-size: 12px; }
   </style>
 </head>
 <body>
-
-<!-- Top Bar -->
-<div class="top-bar">
-  <div>
-    📞 <a href="https://wa.me/8618657926791" target="_blank">WhatsApp: +86 186 5792 6791</a>
-    ✉️ <a href="mailto:lcf18657926791@gmail.com">lcf18657926791@gmail.com</a>
-  </div>
-  <div>
-    <select class="lang-select" onchange="window.location.href=this.value">
-      <option value="/" selected>中文</option>
-      <option value="/en/">EN</option>
-    </select>
-  </div>
-</div>
 
 <!-- Navigation -->
 <nav class="site-nav">
@@ -170,11 +138,11 @@
     Leo Faux
   </a>
   <div class="nav-links">
-    <a href="/">首页</a>
-    <a href="/shop.html">产品中心</a>
-    <a href="/en/blog/">博客</a>
-    <a href="/en/about-us.html">关于我们</a>
-    <a href="/en/faq.html">FAQ</a>
+  <a href="/">Home</a>
+  <a href="/shop.html">Products</a>
+  <a href="/en/blog/">Blog</a>
+  <a href="/en/about-us.html">About Us</a>
+  <a href="/en/faq.html">FAQ</a>
   </div>
 </nav>
 
@@ -182,12 +150,13 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <div class="hero-badge">🏭 工厂直供 · 10 年出口经验</div>
-    <h1>专业人造花仿真花<br>生产制造商 & 批发供应商</h1>
-    <p>Leo Faux™ 专注人造花生产制造 10 余年，2000+ 款产品远销 50+ 国家。从原料到成品，每一道工序都在我们自己的工厂完成，品质可控、价格直供。</p>
+    <div class="hero-badge">🏭 Factory Direct — 10+ Years of Excellence</div>
+    <h1>Professional Artificial Flowers<br>Manufacturer & Wholesale Supplier</h1>
+    <p>Leo Faux is a trusted artificial flowers factory serving wholesalers, event planners, and retailers worldwide. Premium quality silk flowers, factory pricing, global shipping.</p>
     <div class="btn-group">
-      <a href="/shop.html" class="btn-primary">进入产品展厅 →</a>
-      <a href="#process" class="btn-secondary">了解生产工艺</a>
+      <a href="#showroom" class="btn-primary">Browse Our Products →</a>
+      <a href="#process" class="btn-secondary">See Our Production</a>
+      <a href="https://wa.me/8618657926791" target="_blank" class="btn-whatsapp">💬 Get Free Quote</a>
     </div>
   </div>
 </section>
@@ -195,131 +164,145 @@
 <!-- Stats -->
 <section class="stats-bar">
   <div class="stats-grid">
-    <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">年生产经验</div></div>
-    <div class="stat-item"><div class="stat-num">2000+</div><div class="stat-label">产品款式</div></div>
-    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">出口国家</div></div>
-    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">合作客户</div></div>
-    <div class="stat-item"><div class="stat-num">OEM</div><div class="stat-label">支持定制</div></div>
+    <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Years of Experience</div></div>
+    <div class="stat-item"><div class="stat-num">2000+</div><div class="stat-label">Products</div></div>
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Export Countries</div></div>
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Happy Clients</div></div>
+    <div class="stat-item"><div class="stat-num">OEM</div><div class="stat-label">Custom Orders Welcome</div></div>
   </div>
 </section>
 
 <!-- Production Process -->
 <section class="section" id="process">
   <div class="section-inner">
-    <h2 class="section-title">我们的生产工艺</h2>
-    <p class="section-subtitle">从设计到成品，每一朵花都经过严格的质量把控。</p>
+    <h2 class="section-title">Our Production Process</h2>
+    <p class="section-subtitle">From raw materials to finished products — every step is quality-controlled in our factory.</p>
     <div class="process-grid">
       <div class="process-step">
         <div class="step-icon">🎯</div>
-        <div class="step-num">第一步</div>
-        <h3>开模设计</h3>
-        <p>专业设计师根据真实花型制作模具，高精度开模确保花瓣形态逼真、纹理细腻。</p>
+        <div class="step-num">Step 1</div>
+        <h3>Design & Molding</h3>
+        <p>Professional designers create petal molds based on real flower species. Precision molding ensures lifelike shape and texture.</p>
       </div>
       <div class="process-step">
         <div class="step-icon">🎨</div>
-        <div class="step-num">第二步</div>
-        <h3>选材染色</h3>
-        <p>选用优质丝绸、涤纶等环保材料，每批次手工染色，确保色泽自然、不易褪色。</p>
+        <div class="step-num">Step 2</div>
+        <h3>Material Selection & Dyeing</h3>
+        <p>High-grade silk, polyester, and eco-friendly materials selected. Each batch is hand-dyed to achieve natural, fade-resistant colors.</p>
       </div>
       <div class="process-step">
         <div class="step-icon">🤲</div>
-        <div class="step-num">第三步</div>
-        <h3>手工组装</h3>
-        <p>经验丰富的工匠逐片手工组装，层叠花瓣、添加花蕊、塑造花型，力争每朵花栩栩如生。</p>
+        <div class="step-num">Step 3</div>
+        <h3>Hand Assembly</h3>
+        <p>Skilled craftsmen hand-assemble each bloom — layering petals, adding stamens, and shaping every flower for a realistic finish.</p>
       </div>
       <div class="process-step">
         <div class="step-icon">✅</div>
-        <div class="step-num">第四步</div>
-        <h3>质检包装</h3>
-        <p>严格检查花型、色差和耐久性，通过多层质检后精心包装，保障国际运输安全。</p>
+        <div class="step-num">Step 4</div>
+        <h3>Quality Check & Packing</h3>
+        <p>Strict quality control on shape, color, and durability. Products are carefully packed for safe international shipping.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Factory Showcase -->
-<section class="section bg-light">
-  <div class="section-inner">
-    <h2 class="section-title">工厂实拍</h2>
-    <p class="section-subtitle">专业的生产车间和花艺团队，确保每一件产品的高品质。</p>
-    <div class="factory-grid">
-      <div class="factory-card">
-        <img src="/images/flower-workshop.jpg" alt="生产车间" loading="lazy">
-        <div class="factory-label">🌷 现代化生产车间</div>
-      </div>
-      <div class="factory-card">
-        <img src="/images/florist-work.jpg" alt="花艺师手工制作" loading="lazy">
-        <div class="factory-label">👩‍🎨 资深花艺师手工制作</div>
-      </div>
-      <div class="factory-card">
-        <img src="/images/flowers-arrangement.jpg" alt="产品陈列展示" loading="lazy">
-        <div class="factory-label">💐 产品陈列展示厅</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Categories -->
 <section class="section">
   <div class="section-inner">
-    <h2 class="section-title">产品分类</h2>
-    <p class="section-subtitle">工厂直供，品质保障，点击查看全系列产品。</p>
-    <div class="cat-grid">
-      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#667eea,#764ba2);">
-        <div class="cat-icon">💐</div>
-        <h3>仿真花系列</h3>
-        <p>玫瑰、牡丹、绣球等数百款仿真花，逼真度高达95%</p>
-      </a>
-      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
-        <div class="cat-icon">🌹</div>
-        <h3>丝绸花系列</h3>
-        <p>高档丝绸花材，手感柔软细腻，适合高端装饰场景</p>
-      </a>
-      <a href="/shop.html" class="cat-card" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">
-        <div class="cat-icon">💒</div>
-        <h3>婚庆用花</h3>
-        <p>婚礼场景整体解决方案，拱门花、桌花、手捧花等</p>
-      </a>
+    <h2 class="section-title">Our Factory & Workshop</h2>
+    <p class="section-subtitle">Professional manufacturing facility dedicated to producing premium artificial flowers.</p>
+    <div class="factory-grid">
+      <div class="factory-card">
+        <img src="/images/flower-workshop.jpg" alt="Flower workshop production" class="factory-img" style="width:100%;height:220px;object-fit:cover;">
+        <div class="factory-label">🌷 Production Workshop</div>
+      </div>
+      <div class="factory-card">
+        <img src="/images/florist-work.jpg" alt="Florist arranging flowers" class="factory-img" style="width:100%;height:220px;object-fit:cover;">
+        <div class="factory-label">👩‍🎨 Skilled Craftsmen at Work</div>
+      </div>
+      <div class="factory-card">
+        <img src="/images/flowers-arrangement.jpg" alt="Flower arrangement display" class="factory-img" style="width:100%;height:220px;object-fit:cover;">
+        <div class="factory-label">💐 Finished Product Display</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Why Us -->
-<section class="section bg-light">
+<!-- Why Choose Us -->
+<section class="section bg-accent">
   <div class="section-inner">
-    <h2 class="section-title">为什么选择 Leo Faux</h2>
-    <p class="section-subtitle">不只是供应商，更是您的制造合作伙伴。</p>
+    <h2 class="section-title">Why Choose Leo Faux</h2>
+    <p class="section-subtitle">We're more than a supplier — we're your manufacturing partner.</p>
     <div class="why-grid">
       <div class="why-card">
         <div class="why-icon">🏭</div>
-        <h3>工厂直供价格</h3>
-        <p>没有中间商，直接工厂价。灵活起订量，小单也可承接。</p>
+        <h3>Factory Direct Pricing</h3>
+        <p>No middlemen. Get competitive wholesale prices directly from the manufacturer with flexible MOQ options.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">🌍</div>
-        <h3>全球物流配送</h3>
-        <p>海运、空运、快递均可，专业报关清关，门到门服务。</p>
+        <h3>Global Shipping</h3>
+        <p>Reliable international logistics via sea, air, or express. We handle customs documentation for smooth delivery.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">📐</div>
-        <h3>OEM/ODM 定制</h3>
-        <p>可定制颜色、尺寸、包装、品牌标签。您的设计，我们生产。</p>
+        <h3>OEM / ODM Customization</h3>
+        <p>Custom colors, sizes, packaging, and branding available. Your design, our manufacturing expertise.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">📋</div>
-        <h3>批量生产稳定</h3>
-        <p>自有工厂产能稳定，大单小单都能保证交期和品质如一。</p>
+        <h3>Bulk & Wholesale Orders</h3>
+        <p>Stable production capacity for large volumes. Consistent quality across every batch, order after order.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">🔬</div>
-        <h3>品质严格把关</h3>
-        <p>阻燃处理、色牢度测试、耐久性检测，层层把关才发货。</p>
+        <h3>Quality Assurance</h3>
+        <p>Rigorous QC process — fire-resistant materials, colorfastness testing, and durability checks before shipping.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">💬</div>
-        <h3>专业销售支持</h3>
-        <p>24小时内响应，免费寄样、产品目录、设计方案咨询。</p>
+        <h3>Professional Support</h3>
+        <p>Dedicated sales team responds within 24 hours. Free samples, product catalogs, and design consultation.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Showroom Section (links to product pages) -->
+<section class="section" id="showroom">
+  <div class="section-inner">
+    <h2 class="section-title">Explore Our Product Collections</h2>
+    <p class="section-subtitle">Browse our full range of artificial flowers for weddings, events, and decoration.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:48px;margin-bottom:12px;">💐</div>
+        <h3 style="font-size:18px;margin-bottom:6px;">Artificial Flowers</h3>
+        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
+      </a>
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:48px;margin-bottom:12px;">🌹</div>
+        <h3 style="font-size:18px;margin-bottom:6px;">Silk Flowers</h3>
+        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
+      </a>
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#4facfe,#00f2fe);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:48px;margin-bottom:12px;">💒</div>
+        <h3 style="font-size:18px;margin-bottom:6px;">Wedding Flowers</h3>
+        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Highlights -->
+<section class="section bg-accent">
+  <div class="section-inner">
+    <h2 class="section-title">Latest from Our Blog</h2>
+    <p class="section-subtitle">Expert tips, wedding inspiration, and artificial flower decorating ideas.</p>
+    <div class="blog-grid" id="blog-posts">
+      <!-- populated by JS below -->
+    </div>
+    <div class="text-center">
+      <a href="/en/blog/" class="btn-primary" style="display:inline-block;">View All Articles →</a>
     </div>
   </div>
 </section>
@@ -327,46 +310,33 @@
 <!-- Testimonials -->
 <section class="section">
   <div class="section-inner">
-    <h2 class="section-title">客户评价</h2>
-    <p class="section-subtitle">来自全球客户的真实反馈。</p>
+    <h2 class="section-title">What Our Clients Say</h2>
+    <p class="section-subtitle">Trusted by wholesalers, event planners, and retailers worldwide.</p>
     <div class="testimonial-grid">
       <div class="testimonial-card">
         <div class="stars">★★★★★</div>
-        <div class="quote">"与 Leo Faux 合作3年了，品质稳定、交期准时，团队响应非常快。是值得信赖的制造伙伴。"</div>
-        <div class="author">— 张先生 <span>婚庆公司, 上海</span></div>
+        <div class="quote">"We've been sourcing from Leo Faux for 3 years. Consistent quality, reliable shipping, and the team always responds within hours. A true manufacturing partner."</div>
+        <div class="author">— Michael T. <span>Wedding Planner, UK</span></div>
       </div>
       <div class="testimonial-card">
         <div class="stars">★★★★★</div>
-        <div class="quote">"定制服务非常专业，颜色完全按照我们的要求来，小批量试单也很配合。已经在持续合作了。"</div>
-        <div class="author">— 李经理 <span>家居装饰品牌, 广东</span></div>
+        <div class="quote">"The OEM service is outstanding. They matched our custom colors perfectly and the MOQ was flexible enough for our trial order. Highly recommend."</div>
+        <div class="author">— Sarah L. <span>Home Decor Brand, Australia</span></div>
       </div>
       <div class="testimonial-card">
         <div class="stars">★★★★★</div>
-        <div class="quote">"作为批发商，稳定的品质是最重要的。Leo Faux 每次发货品质如一，仿真度是我见过最高的。"</div>
-        <div class="author">— Michael <span>批发经销商, 美国</span></div>
+        <div class="quote">"As a wholesaler, I need a supplier I can count on. Leo Faux delivers consistent quality across every batch. Their silk flowers are the most realistic I've found."</div>
+        <div class="author">— David K. <span>Wholesale Distributor, USA</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Blog -->
-<section class="section bg-light">
-  <div class="section-inner">
-    <h2 class="section-title">最新资讯</h2>
-    <p class="section-subtitle">婚礼布置灵感、仿真花搭配技巧、行业动态。</p>
-    <div class="blog-grid" id="blog-posts"></div>
-    <div class="text-center">
-      <a href="/en/blog/" class="btn-primary">查看全部文章 →</a>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-banner">
-  <h2>准备好开始合作了吗？</h2>
-  <p>联系我们获取最新产品目录、批发报价或定制方案。</p>
-  <a href="/shop.html" class="btn-primary" style="background:#fff;color:#2c3e50;">进入产品展厅</a>
-  <a href="https://wa.me/8618657926791" target="_blank" class="btn-success" style="margin-left:12px;">💬 联系客服</a>
+<!-- Contact CTA -->
+<section class="contact-cta">
+  <h2>Ready to Start Your Order?</h2>
+  <p>Get in touch with our team for wholesale pricing, product catalog, or custom orders.</p>
+  <a href="/en/about-us.html" class="btn-primary" style="background:#fff;color:#2c3e50;">Contact Us</a>
 </section>
 
 <!-- Footer -->
@@ -374,50 +344,62 @@
   <div class="footer-inner">
     <div>
       <h4>Leo Faux</h4>
-      <p style="font-size:12px;line-height:1.7;">专业人造花仿真花生产制造商，工厂直供，全球发货。10年+出口经验，2000+产品款式。</p>
+      <p style="font-size:12px;line-height:1.6;">Professional artificial flowers manufacturer and wholesale supplier since 2015. Factory-direct quality, global delivery.</p>
     </div>
     <div>
-      <h4>产品</h4>
-      <a href="/shop.html">仿真花系列</a>
-      <a href="/shop.html">丝绸花系列</a>
-      <a href="/shop.html">婚庆用花</a>
+      <h4>Products</h4>
+      <a href="/shop.html">Artificial Flowers</a>
+      <a href="/shop.html">Silk Flowers</a>
+      <a href="/shop.html">Wedding Flowers</a>
     </div>
     <div>
-      <h4>关于</h4>
-      <a href="/en/about-us.html">关于我们</a>
-      <a href="/en/blog/">博客资讯</a>
-      <a href="/en/faq.html">常见问题</a>
+      <h4>Company</h4>
+      <a href="/en/about-us.html">About Us</a>
+      <a href="/en/blog/">Blog</a>
+      <a href="/en/faq.html">FAQ</a>
     </div>
     <div>
-      <h4>联系方式</h4>
+      <h4>Contact</h4>
       <a href="https://wa.me/8618657926791" target="_blank">WhatsApp: +86 186 5792 6791</a>
-      <a href="mailto:lcf18657926791@gmail.com">邮箱: lcf18657926791@gmail.com</a>
+      <a href="mailto:lcf18657926791@gmail.com">Email: lcf18657926791@gmail.com</a>
       <a href="https://www.instagram.com/leoflorist" target="_blank">Instagram: @leoflorist</a>
     </div>
   </div>
   <div class="footer-bottom">
-    &copy; 2026 Leo Faux. All rights reserved. | 专业人造花仿真花工厂
+    &copy; 2026 Leo Faux. All rights reserved. | Artificial Flowers Manufacturer
   </div>
 </footer>
 
-<!-- WhatsApp -->
-<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" aria-label="WhatsApp">
+<!-- WhatsApp Float -->
+<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" title="WhatsApp" aria-label="Contact us on WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
-<div class="wa-tooltip">联系客服 💬</div>
+<div class="wa-tooltip">Chat with us 💬</div>
 
 <script>
-// Blog posts for homepage
-const posts = [
-  { title: "Cinematic Wedding Decor Ideas from Mona Farm", date: "2026-06-25", slug: "cinematic-wedding-decor-mona-farm-silk-flowers", desc: "用仿真花打造电影级婚礼布置的灵感与技巧。" },
-  { title: "Sage Green Wedding Decor with Faux Florals", date: "2026-06-25", slug: "sage-green-wedding-decor-nail-designs-faux-florals", desc: "鼠尾草绿婚礼配色搭配仿真花布置方案。" },
-  { title: "Napa Wedding Chili Oil Floral Transformation", date: "2026-06-25", slug: "napa-wedding-chili-oil-floral-transformation-silk-flowers", desc: "辣椒油色调婚礼的仿真花改造方案。" },
+// Blog posts data — will auto-generate links to article pages
+const blogPosts = [
+  { title: "Cinematic Wedding Decor Ideas from Mona Farm", date: "Jun 25, 2026", slug: "cinematic-wedding-decor-mona-farm-silk-flowers", desc: "Silk flowers wedding decor inspiration from a real cinematic wedding." },
+  { title: "Dramatic Floral Transformation Wedding Ideas", date: "Jun 25, 2026", slug: "dramatic-floral-transformation-wedding-ideas", desc: "Bold floral transformations using artificial flowers for stunning wedding decor." },
+  { title: "Eclectic Oregon Wedding with Faux Florals", date: "Jun 25, 2026", slug: "eclectic-oregon-wedding-faux-florals-music-venue", desc: "How faux florals brought an eclectic outdoor wedding to life." },
+  { title: "Napa Wedding Chili Oil Floral Transformation", date: "Jun 25, 2026", slug: "napa-wedding-chili-oil-floral-transformation-silk-flowers", desc: "A Napa wedding transformed with bold chili oil hues and silk flowers." },
+  { title: "Sage Green Wedding Decor with Faux Florals", date: "Jun 25, 2026", slug: "sage-green-wedding-decor-nail-designs-faux-florals", desc: "Sage green wedding inspiration paired with faux floral arrangements." },
 ];
+
+// Show latest 3
 const container = document.getElementById('blog-posts');
-posts.forEach(p => {
-  const d = document.createElement('div'); d.className = 'blog-card';
-  d.innerHTML = `<div class="blog-img">💐</div><div class="blog-body"><div class="blog-date">${p.date}</div><h3><a href="/en/blog/${p.slug}.html">${p.title}</a></h3><p>${p.desc}</p></div>`;
-  container.appendChild(d);
+blogPosts.slice(0, 3).forEach(post => {
+  const div = document.createElement('div');
+  div.className = 'blog-card';
+  div.innerHTML = `
+    <div class="blog-img">💐</div>
+    <div class="blog-body">
+      <div class="blog-date">${post.date}</div>
+      <h3><a href="/en/blog/${post.slug}.html">${post.title}</a></h3>
+      <p>${post.desc}</p>
+    </div>
+  `;
+  container.appendChild(div);
 });
 </script>
 
