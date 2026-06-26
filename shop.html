@@ -257,13 +257,12 @@
   </div>
 </div>
 
-    <div class="search-box">
+    <div class="search-box" id="search-box-container" style="display:none;">
         <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
     </div>
 
-    <div class="modal-overlay" id="login-modal" style="display: none;">
+    <div class="modal-overlay" id="login-modal" style="display: flex;">
         <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
             <h2 data-i18n="welcome_title">Welcome to Leo faux</h2>
             <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
             <div style="text-align:left;">
@@ -276,7 +275,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="product-container" style="display:none;">
         <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
         <div id="product-grid" class="product-grid"></div>
     </div>
@@ -367,17 +366,12 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let startX = 0;
 
         function init() {
-            // Show login modal after 3 seconds if not logged in
-            setTimeout(() => {
-                const savedUser = localStorage.getItem('leo_user_lc');
-                if (!savedUser) {
-                    document.getElementById('login-modal').style.display = 'flex';
-                }
-            }, 3000);
             const savedUser = localStorage.getItem('leo_user_lc');
             if (savedUser) { 
                 userInfo = JSON.parse(savedUser); 
                 document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('search-box-container').style.display = 'block';
+                document.getElementById('product-container').style.display = 'block';
                 updateUserDisplay();
             }
             updateBadge();
@@ -391,10 +385,6 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 el.innerText = userInfo.name;
                 el.style.display = 'block';
             }
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
         }
 
         async function fetchData() {
@@ -466,6 +456,8 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             userInfo = { name, contact };
             localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
             document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('search-box-container').style.display = 'block';
+            document.getElementById('product-container').style.display = 'block';
             updateUserDisplay();
         }
 
