@@ -84,7 +84,10 @@
     .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
     .blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
     .blog-card:hover { transform: translateY(-3px); }
-    .blog-card .blog-img { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(135deg, #2c3e50, #e74c3c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; }
+    .blog-card .blog-img { width: 100%; height: 180px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; }
+    .blog-card:nth-child(1) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-1.jpg') center/cover; }
+    .blog-card:nth-child(2) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-2.jpg') center/cover; }
+    .blog-card:nth-child(3) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-3.jpg') center/cover; }
     .blog-card .blog-body { padding: 18px; }
     .blog-card .blog-date { font-size: 11px; color: #999; }
     .blog-card h3 { font-size: 15px; font-weight: 600; color: #2c3e50; margin: 6px 0; line-height: 1.4; }
@@ -304,17 +307,17 @@
     <h2 class="section-title">Explore Our Product Collections</h2>
     <p class="section-subtitle">Browse our full range of artificial flowers for weddings, events, and decoration.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-artificial.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
         <div style="font-size:48px;margin-bottom:12px;">💐</div>
         <h3 style="font-size:18px;margin-bottom:6px;">Artificial Flowers</h3>
         <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
       </a>
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-silk.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
         <div style="font-size:48px;margin-bottom:12px;">🌹</div>
         <h3 style="font-size:18px;margin-bottom:6px;">Silk Flowers</h3>
         <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
       </a>
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(135deg,#4facfe,#00f2fe);border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-wedding.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
         <div style="font-size:48px;margin-bottom:12px;">💒</div>
         <h3 style="font-size:18px;margin-bottom:6px;">Wedding Flowers</h3>
         <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
