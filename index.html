@@ -107,10 +107,40 @@
     .footer-bottom { max-width: 1100px; margin: 24px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 12px; }
 
     @media (max-width: 640px) {
-      .hero { min-height: 70vh; }
+      .hero { min-height: 70vh; padding: 0 16px; }
+      .hero-content h1 { font-size: 28px; }
+      .hero-content p { font-size: 15px; }
+      .btn-group { flex-direction: column; align-items: center; gap: 10px; }
+      .btn-primary, .btn-secondary, .btn-whatsapp { width: 100%; max-width: 280px; text-align: center; padding: 14px 20px; font-size: 15px; }
       .stats-bar { padding: 24px 16px; }
-      .section { padding: 40px 16px; }
-      .process-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-item .stat-num { font-size: 26px; }
+      .section { padding: 36px 16px; }
+      .section-title { font-size: 22px; }
+      .section-subtitle { font-size: 13px; margin-bottom: 28px; }
+      .process-grid { grid-template-columns: 1fr; gap: 14px; }
+      .factory-grid { grid-template-columns: 1fr; gap: 14px; }
+      .factory-card img { height: 180px; }
+      .cat-grid { grid-template-columns: 1fr; gap: 14px; }
+      .cat-card { padding: 32px 16px; }
+      .why-grid { grid-template-columns: 1fr; gap: 14px; }
+      .testimonial-grid { grid-template-columns: 1fr; gap: 14px; }
+      .blog-grid { grid-template-columns: 1fr; gap: 14px; }
+      nav.site-nav { flex-wrap: wrap; gap: 6px; padding: 10px 14px; }
+      nav.site-nav .nav-links { width: 100%; justify-content: center; gap: 10px; font-size: 13px; overflow-x: auto; white-space: nowrap; padding: 6px 0; }
+      .cta-banner { padding: 40px 16px; }
+      .cta-banner h2 { font-size: 22px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .hero-badge { font-size: 11px; padding: 5px 14px; }
+      .wa-tooltip { display: none; }
+    }
+
+    /* Smaller phones */
+    @media (max-width: 380px) {
+      .hero-content h1 { font-size: 22px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat-item .stat-num { font-size: 22px; }
+      .footer-inner { grid-template-columns: 1fr; }
     }
 
     /* === WhatsApp Float === */
