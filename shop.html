@@ -127,6 +127,32 @@
         .wa-float svg { width: 28px; height: 28px; fill: white; }
         .wa-tooltip { position: fixed; bottom: 88px; right: 24px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 998; animation: waPulse 2s infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
         @keyframes waPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* Mobile responsive for shop */
+        @media (max-width: 640px) {
+          header { flex-wrap: wrap; padding: 8px 12px; }
+          header .site-brand { width: 100%; }
+          header nav { margin-left: 0 !important; width: 100%; justify-content: flex-start; overflow-x: auto; white-space: nowrap; padding: 4px 0; gap: 10px; font-size: 12px; }
+          h1 { font-size: 0.95rem; }
+          .brand-intro h1 { font-size: 17px; }
+          .brand-intro p { font-size: 13px; }
+          .container { padding: 0 12px; }
+          .product-grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
+          .product-img { height: 130px; }
+          .product-info { padding: 8px; }
+          .product-sku { font-size: 0.6rem; }
+          .product-title { font-size: 0.8rem; }
+          .product-details { font-size: 0.65rem; }
+          .search-input { font-size: 12px; padding: 8px 12px; }
+          .floating-bar { padding: 10px 18px; font-size: 13px; bottom: 16px; }
+          .modal-content { width: 95%; padding: 20px; }
+          .factory-section h2 { font-size: 17px; }
+          .factory-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+          .factory-stat .num { font-size: 20px; }
+          .factory-grid { grid-template-columns: 1fr; gap: 10px; }
+          .seo-links { font-size: 11px; }
+          .wa-tooltip { display: none; }
+        }
         
         /* --- 让 Logo 图片和文字强制垂直居中 --- */
         .site-brand {
