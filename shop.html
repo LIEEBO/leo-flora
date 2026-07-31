@@ -459,6 +459,39 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             document.getElementById('search-box-container').style.display = 'block';
             document.getElementById('product-container').style.display = 'block';
             updateUserDisplay();
+            // 客户注册信息同步写入后台数据库，方便老板在 leads.html 后台查看（不阻塞前台体验）
+            recordCustomerLead(name, contact);
+        }
+
+        // 把客户注册信息写入 Supabase 的 customer_leads 表
+        // 同一个联系方式重复访问时，会更新“最近访问时间”，不会产生重复记录
+        async function recordCustomerLead(name, contact) {
+            try {
+                const { error } = await supabase
+                    .from('customer_leads')
+                    .upsert(
+                        { name: name, contact: contact, last_seen_at: new Date().toISOString() },
+                        { onConflict: 'contact' }
+                    );
+                if (error) console.error('客户信息记录失败:', error);
+            } catch (err) {
+                console.error('客户信息记录异常:', err);
+            }
+        }
+
+        // 把客户导出的询盘清单写入 Supabase 的 inquiries 表
+        async function recordInquiry(items, totalQty) {
+            try {
+                const { error } = await supabase.from('inquiries').insert({
+                    customer_name: userInfo.name || '',
+                    contact: userInfo.contact || '',
+                    items: items.map(f => ({ sku: f.sku, name_zh: f.name_zh, name_en: f.name_en, qty: f.qty || 1 })),
+                    total_qty: totalQty
+                });
+                if (error) console.error('询盘记录失败:', error);
+            } catch (err) {
+                console.error('询盘记录异常:', err);
+            }
         }
 
         function toggleFav(id, event) {
@@ -690,7 +723,10 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 link.href = URL.createObjectURL(blob);
                 link.download = `LeoFlora_Order_${safeName}.xlsx`;
                 link.click();
-                
+
+                // 记录本次询盘（客户导出的清单），方便老板在 leads.html 后台查看
+                recordInquiry(favorites, totalQty);
+
                 document.getElementById('export-loading').style.display = 'none';
                 setTimeout(() => { document.getElementById('contact-guide-modal').style.display = 'flex'; }, 500);
                 
