@@ -463,6 +463,18 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             recordCustomerLead(name, contact);
         }
 
+        // 调用 /api/geo 接口，获取当前访客所在的国家/地区/城市
+        // 这个接口由 Vercel 自动根据访客真实 IP 提供，不需要额外配置
+        async function getGeoInfo() {
+            try {
+                const res = await fetch('/api/geo');
+                if (res.ok) return await res.json();
+            } catch (err) {
+                console.error('获取地区信息失败:', err);
+            }
+            return { country: null, region: null, city: null };
+        }
+
         // 把客户注册信息写入 Supabase 的 customer_leads 表
         // 先尝试直接插入；如果这个联系方式已经存在（唯一约束冲突，错误码 23505），
         // 就改成更新这条已有记录的姓名和最近访问时间。
@@ -470,16 +482,17 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         // 而我们特意没有给匿名访客开读取权限（保护客户隐私），所以要用这种方式绕开。
         async function recordCustomerLead(name, contact) {
             try {
+                const geo = await getGeoInfo();
                 const { error: insertError } = await supabase
                     .from('customer_leads')
-                    .insert({ name: name, contact: contact });
+                    .insert({ name: name, contact: contact, country: geo.country, region: geo.region, city: geo.city });
 
                 if (insertError) {
                     if (insertError.code === '23505') {
-                        // 联系方式已存在，更新一下姓名和最近访问时间
+                        // 联系方式已存在，更新一下姓名、最近访问时间和最新的地区信息
                         const { error: updateError } = await supabase
                             .from('customer_leads')
-                            .update({ name: name, last_seen_at: new Date().toISOString() })
+                            .update({ name: name, last_seen_at: new Date().toISOString(), country: geo.country, region: geo.region, city: geo.city })
                             .eq('contact', contact);
                         if (updateError) console.error('客户信息更新失败:', updateError);
                     } else {
@@ -494,11 +507,15 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         // 把客户导出的询盘清单写入 Supabase 的 inquiries 表
         async function recordInquiry(items, totalQty) {
             try {
+                const geo = await getGeoInfo();
                 const { error } = await supabase.from('inquiries').insert({
                     customer_name: userInfo.name || '',
                     contact: userInfo.contact || '',
                     items: items.map(f => ({ sku: f.sku, name_zh: f.name_zh, name_en: f.name_en, qty: f.qty || 1 })),
-                    total_qty: totalQty
+                    total_qty: totalQty,
+                    country: geo.country,
+                    region: geo.region,
+                    city: geo.city
                 });
                 if (error) console.error('询盘记录失败:', error);
             } catch (err) {

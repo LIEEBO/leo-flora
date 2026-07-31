@@ -39,6 +39,20 @@
   .items-detail { font-size: 12px; color: #666; }
   .items-detail div { margin-bottom: 2px; }
   .refresh-tip { font-size: 12px; color: #999; margin-bottom: 10px; }
+
+  /* 数据分析面板 */
+  .stats-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .stats-section h3 { margin-top: 0; font-size: 15px; color: #2c3e50; }
+  .country-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .country-name { width: 130px; font-size: 13px; flex-shrink: 0; }
+  .country-bar-bg { flex: 1; background: #f0f2f5; border-radius: 6px; height: 18px; overflow: hidden; }
+  .country-bar-fill { background: #2c3e50; height: 100%; border-radius: 6px; }
+  .country-num { width: 40px; text-align: right; font-size: 13px; font-weight: bold; color: #2c3e50; flex-shrink: 0; }
+  .country-sku-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .country-sku-card { border: 1px solid #f0f0f0; border-radius: 10px; padding: 14px; }
+  .country-sku-card h4 { margin: 0 0 8px 0; font-size: 14px; color: #2c3e50; }
+  .country-sku-card ol { margin: 0; padding-left: 18px; font-size: 12px; color: #555; }
+  .country-sku-card li { margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -74,9 +88,10 @@
     <div class="tabs">
       <button class="tab-btn active" id="tab-leads-btn" onclick="switchTab('leads')">客户注册 (<span id="leads-count">0</span>)</button>
       <button class="tab-btn" id="tab-inquiries-btn" onclick="switchTab('inquiries')">询盘记录 (<span id="inquiries-count">0</span>)</button>
+      <button class="tab-btn" id="tab-stats-btn" onclick="switchTab('stats')">📊 数据分析</button>
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar" id="toolbar">
       <input type="text" class="search-input" id="search-input" placeholder="搜索姓名 / 联系方式..." oninput="renderCurrentTab()">
       <button class="export-btn" onclick="exportCurrentTab()">📥 导出 Excel</button>
     </div>
@@ -86,6 +101,9 @@
     </div>
     <div id="inquiries-panel" style="display:none;">
       <div id="inquiries-table-wrap"></div>
+    </div>
+    <div id="stats-panel" style="display:none;">
+      <div id="stats-wrap"></div>
     </div>
   </div>
 
@@ -191,8 +209,11 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById('tab-leads-btn').classList.toggle('active', tab === 'leads');
   document.getElementById('tab-inquiries-btn').classList.toggle('active', tab === 'inquiries');
+  document.getElementById('tab-stats-btn').classList.toggle('active', tab === 'stats');
   document.getElementById('leads-panel').style.display = tab === 'leads' ? 'block' : 'none';
   document.getElementById('inquiries-panel').style.display = tab === 'inquiries' ? 'block' : 'none';
+  document.getElementById('stats-panel').style.display = tab === 'stats' ? 'block' : 'none';
+  document.getElementById('toolbar').style.display = tab === 'stats' ? 'none' : 'flex';
   document.getElementById('search-input').placeholder = tab === 'leads' ? '搜索姓名 / 联系方式...' : '搜索客户姓名 / 联系方式 / SKU...';
   renderCurrentTab();
 }
@@ -201,8 +222,10 @@ function renderCurrentTab() {
   const key = document.getElementById('search-input').value.toLowerCase().trim();
   if (currentTab === 'leads') {
     renderLeads(key);
-  } else {
+  } else if (currentTab === 'inquiries') {
     renderInquiries(key);
+  } else {
+    renderStats();
   }
 }
 
@@ -217,12 +240,13 @@ function renderLeads(key) {
   }
   wrap.innerHTML = `
     <table>
-      <thead><tr><th>姓名 / 公司</th><th>联系方式</th><th>首次注册时间</th><th>最近访问时间</th></tr></thead>
+      <thead><tr><th>姓名 / 公司</th><th>联系方式</th><th>国家 / 地区</th><th>首次注册时间</th><th>最近访问时间</th></tr></thead>
       <tbody>
         ${list.map(l => `
           <tr>
             <td>${escapeHtml(l.name || '')}</td>
             <td><span class="contact-tag">${escapeHtml(l.contact || '')}</span></td>
+            <td>${escapeHtml(formatLocation(l.country, l.region, l.city))}</td>
             <td>${formatDate(l.created_at)}</td>
             <td>${formatDate(l.last_seen_at)}</td>
           </tr>
@@ -244,12 +268,13 @@ function renderInquiries(key) {
   }
   wrap.innerHTML = `
     <table>
-      <thead><tr><th>客户</th><th>联系方式</th><th>询盘内容</th><th>总数量</th><th>时间</th></tr></thead>
+      <thead><tr><th>客户</th><th>联系方式</th><th>国家 / 地区</th><th>询盘内容</th><th>总数量</th><th>时间</th></tr></thead>
       <tbody>
         ${list.map(i => `
           <tr>
             <td>${escapeHtml(i.customer_name || '')}</td>
             <td><span class="contact-tag">${escapeHtml(i.contact || '')}</span></td>
+            <td>${escapeHtml(formatLocation(i.country, i.region, i.city))}</td>
             <td class="items-detail">${(i.items || []).map(it => `<div>${escapeHtml(it.sku || '')} × ${it.qty || 1}</div>`).join('')}</td>
             <td>${i.total_qty || ''}</td>
             <td>${formatDate(i.created_at)}</td>
@@ -266,20 +291,28 @@ function exportCurrentTab() {
     const rows = leads.map(l => ({
       '姓名/公司': l.name || '',
       '联系方式': l.contact || '',
+      '国家': l.country || '',
+      '地区': l.region || '',
+      '城市': l.city || '',
       '首次注册时间': formatDate(l.created_at),
       '最近访问时间': formatDate(l.last_seen_at)
     }));
     exportToXlsx(rows, 'Leo Flora 客户注册名单.xlsx');
-  } else {
+  } else if (currentTab === 'inquiries') {
     if (inquiries.length === 0) return alert('暂无数据');
     const rows = inquiries.map(i => ({
       '客户': i.customer_name || '',
       '联系方式': i.contact || '',
+      '国家': i.country || '',
+      '地区': i.region || '',
+      '城市': i.city || '',
       '询盘内容': (i.items || []).map(it => `${it.sku || ''}×${it.qty || 1}`).join('; '),
       '总数量': i.total_qty || '',
       '时间': formatDate(i.created_at)
     }));
     exportToXlsx(rows, 'Leo Flora 询盘记录.xlsx');
+  } else {
+    alert('数据分析页面暂不支持导出，请切换到"客户注册"或"询盘记录"标签导出。');
   }
 }
 
@@ -292,6 +325,77 @@ function exportToXlsx(rows, filename) {
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function formatLocation(country, region, city) {
+  const parts = [country, region, city].filter(Boolean);
+  return parts.length ? parts.join(' / ') : '未知';
+}
+
+function renderStats() {
+  const wrap = document.getElementById('stats-wrap');
+
+  if (leads.length === 0 && inquiries.length === 0) {
+    wrap.innerHTML = '<div class="empty-tip">暂无数据可分析</div>';
+    return;
+  }
+
+  // 1. 按国家统计注册客户数
+  const countryCounts = {};
+  leads.forEach(l => {
+    const c = l.country || '未知';
+    countryCounts[c] = (countryCounts[c] || 0) + 1;
+  });
+  const countryList = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
+  const maxCount = countryList.length ? countryList[0][1] : 1;
+
+  // 2. 按国家统计最受欢迎的产品（来自询盘记录里的 SKU 和数量）
+  const countrySkuMap = {};
+  inquiries.forEach(i => {
+    const c = i.country || '未知';
+    if (!countrySkuMap[c]) countrySkuMap[c] = {};
+    (i.items || []).forEach(it => {
+      const sku = it.sku || '未知SKU';
+      countrySkuMap[c][sku] = (countrySkuMap[c][sku] || 0) + (it.qty || 1);
+    });
+  });
+  const countrySkuTop = Object.entries(countrySkuMap).map(([country, skuMap]) => {
+    const top = Object.entries(skuMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    return { country, top };
+  }).sort((a, b) => {
+    const totalA = a.top.reduce((s, [, q]) => s + q, 0);
+    const totalB = b.top.reduce((s, [, q]) => s + q, 0);
+    return totalB - totalA;
+  });
+
+  wrap.innerHTML = `
+    <div class="stats-section">
+      <h3>🌍 各国家 / 地区注册客户数</h3>
+      ${countryList.map(([country, count]) => `
+        <div class="country-row">
+          <div class="country-name">${escapeHtml(country)}</div>
+          <div class="country-bar-bg"><div class="country-bar-fill" style="width:${Math.round(count / maxCount * 100)}%"></div></div>
+          <div class="country-num">${count}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="stats-section">
+      <h3>💐 各国家 / 地区最受欢迎的产品（按询盘数量 Top 5）</h3>
+      ${countrySkuTop.length === 0 ? '<div class="empty-tip">暂无询盘数据</div>' : `
+        <div class="country-sku-grid">
+          ${countrySkuTop.map(({ country, top }) => `
+            <div class="country-sku-card">
+              <h4>${escapeHtml(country)}</h4>
+              <ol>
+                ${top.map(([sku, qty]) => `<li>${escapeHtml(sku)} — ${qty} 件</li>`).join('')}
+              </ol>
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+  `;
 }
 
 function formatDate(iso) {
