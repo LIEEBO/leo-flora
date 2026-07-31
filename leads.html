@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leo Flora 客户后台</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: #f4f4f4; color: #2c3e50; }
+  header { background: #2c3e50; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 18px; margin: 0; }
+  #logout-btn { background: rgba(255,255,255,0.15); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; display: none; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+  /* 登录框 */
+  #login-box { max-width: 380px; margin: 80px auto; background: white; padding: 32px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+  #login-box h2 { margin-top: 0; }
+  #login-box input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+  #login-box button { width: 100%; background: #2c3e50; color: white; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; }
+  #login-error { color: #e74c3c; font-size: 13px; margin-top: 8px; display: none; }
+
+  /* 主界面 */
+  #main-box { display: none; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab-btn { padding: 10px 18px; border: none; background: #e8eaed; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; color: #555; }
+  .tab-btn.active { background: #2c3e50; color: white; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; flex-wrap: wrap; }
+  .search-input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; }
+  .export-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; white-space: nowrap; }
+
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  th, td { padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #f0f0f0; }
+  th { background: #f8f9fa; color: #666; font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .empty-tip { text-align: center; padding: 60px 20px; color: #999; }
+  .contact-tag { background: #f0f2f5; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+  .items-detail { font-size: 12px; color: #666; }
+  .items-detail div { margin-bottom: 2px; }
+  .refresh-tip { font-size: 12px; color: #999; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌷 Leo Flora 客户后台</h1>
+  <button id="logout-btn" onclick="logout()">退出登录</button>
+</header>
+
+<div class="wrap">
+
+  <!-- 登录 -->
+  <div id="login-box">
+    <h2>管理员登录</h2>
+    <p style="font-size:13px;color:#888;margin-top:-8px;">请使用你在 Supabase 后台创建的管理员账号登录</p>
+    <input type="email" id="login-email" placeholder="邮箱">
+    <input type="password" id="login-password" placeholder="密码">
+    <button onclick="login()">登录</button>
+    <div id="login-error"></div>
+  </div>
+
+  <!-- 重置密码（通过邮件里的重置链接跳转过来后显示） -->
+  <div id="reset-box" style="display:none; max-width: 380px; margin: 80px auto; background: white; padding: 32px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+    <h2 style="margin-top:0;">设置新密码</h2>
+    <p style="font-size:13px;color:#888;margin-top:-8px;">请输入你要使用的新密码（至少 6 位）</p>
+    <input type="password" id="new-password" placeholder="新密码" style="width:100%; padding:12px; margin:8px 0; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+    <button onclick="submitNewPassword()" style="width:100%; background:#27ae60; color:white; padding:13px; border:none; border-radius:8px; font-size:15px; font-weight:bold; cursor:pointer; margin-top:12px;">确定并登录</button>
+    <div id="reset-error" style="color:#e74c3c; font-size:13px; margin-top:8px; display:none;"></div>
+  </div>
+
+  <!-- 主界面 -->
+  <div id="main-box">
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-leads-btn" onclick="switchTab('leads')">客户注册 (<span id="leads-count">0</span>)</button>
+      <button class="tab-btn" id="tab-inquiries-btn" onclick="switchTab('inquiries')">询盘记录 (<span id="inquiries-count">0</span>)</button>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" class="search-input" id="search-input" placeholder="搜索姓名 / 联系方式..." oninput="renderCurrentTab()">
+      <button class="export-btn" onclick="exportCurrentTab()">📥 导出 Excel</button>
+    </div>
+
+    <div id="leads-panel">
+      <div id="leads-table-wrap"></div>
+    </div>
+    <div id="inquiries-panel" style="display:none;">
+      <div id="inquiries-table-wrap"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = "https://pdenhgnxrgngwvqtrmhk.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZW5oZ254cmduZ3d2cXRybWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNDUwODUsImV4cCI6MjA5NzYyMTA4NX0.RUPqVRCE-sLsFJT64SuiWhtLvC_bho3Po4dTDlnKrgI";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let leads = [];
+let inquiries = [];
+let currentTab = 'leads';
+
+// 监听"重置密码"链接跳转过来的特殊登录状态
+sb.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    document.getElementById('login-box').style.display = 'none';
+    document.getElementById('main-box').style.display = 'none';
+    document.getElementById('reset-box').style.display = 'block';
+  }
+});
+
+async function checkSession() {
+  // 如果是从"重置密码"邮件链接跳转过来的，交给上面的监听器处理，先不要自动进主界面
+  if (window.location.hash.includes('type=recovery')) return;
+  const { data } = await sb.auth.getSession();
+  if (data.session) {
+    showMain();
+  }
+}
+
+async function submitNewPassword() {
+  const pwd = document.getElementById('new-password').value;
+  const errEl = document.getElementById('reset-error');
+  errEl.style.display = 'none';
+  if (!pwd || pwd.length < 6) {
+    errEl.innerText = '密码至少需要 6 位';
+    errEl.style.display = 'block';
+    return;
+  }
+  const { error } = await sb.auth.updateUser({ password: pwd });
+  if (error) {
+    errEl.innerText = '设置失败：' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+  document.getElementById('reset-box').style.display = 'none';
+  history.replaceState(null, '', window.location.pathname); // 清掉网址里的 token，避免刷新后重复处理
+  showMain();
+}
+
+async function login() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!email || !password) return;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    errEl.innerText = '登录失败：' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+  showMain();
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  document.getElementById('login-box').style.display = 'block';
+  document.getElementById('main-box').style.display = 'none';
+  document.getElementById('logout-btn').style.display = 'none';
+}
+
+function showMain() {
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('main-box').style.display = 'block';
+  document.getElementById('logout-btn').style.display = 'inline-block';
+  loadData();
+}
+
+async function loadData() {
+  const { data: leadsData, error: leadsErr } = await sb
+    .from('customer_leads')
+    .select('*')
+    .order('last_seen_at', { ascending: false });
+  if (leadsErr) { console.error(leadsErr); alert('加载客户注册数据失败：' + leadsErr.message); }
+  leads = leadsData || [];
+
+  const { data: inqData, error: inqErr } = await sb
+    .from('inquiries')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (inqErr) { console.error(inqErr); alert('加载询盘数据失败：' + inqErr.message); }
+  inquiries = inqData || [];
+
+  document.getElementById('leads-count').innerText = leads.length;
+  document.getElementById('inquiries-count').innerText = inquiries.length;
+  renderCurrentTab();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-leads-btn').classList.toggle('active', tab === 'leads');
+  document.getElementById('tab-inquiries-btn').classList.toggle('active', tab === 'inquiries');
+  document.getElementById('leads-panel').style.display = tab === 'leads' ? 'block' : 'none';
+  document.getElementById('inquiries-panel').style.display = tab === 'inquiries' ? 'block' : 'none';
+  document.getElementById('search-input').placeholder = tab === 'leads' ? '搜索姓名 / 联系方式...' : '搜索客户姓名 / 联系方式 / SKU...';
+  renderCurrentTab();
+}
+
+function renderCurrentTab() {
+  const key = document.getElementById('search-input').value.toLowerCase().trim();
+  if (currentTab === 'leads') {
+    renderLeads(key);
+  } else {
+    renderInquiries(key);
+  }
+}
+
+function renderLeads(key) {
+  const list = !key ? leads : leads.filter(l =>
+    (l.name || '').toLowerCase().includes(key) || (l.contact || '').toLowerCase().includes(key)
+  );
+  const wrap = document.getElementById('leads-table-wrap');
+  if (list.length === 0) {
+    wrap.innerHTML = '<div class="empty-tip">暂无客户注册记录</div>';
+    return;
+  }
+  wrap.innerHTML = `
+    <table>
+      <thead><tr><th>姓名 / 公司</th><th>联系方式</th><th>首次注册时间</th><th>最近访问时间</th></tr></thead>
+      <tbody>
+        ${list.map(l => `
+          <tr>
+            <td>${escapeHtml(l.name || '')}</td>
+            <td><span class="contact-tag">${escapeHtml(l.contact || '')}</span></td>
+            <td>${formatDate(l.created_at)}</td>
+            <td>${formatDate(l.last_seen_at)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderInquiries(key) {
+  const list = !key ? inquiries : inquiries.filter(i => {
+    const inItems = (i.items || []).some(it => (it.sku || '').toLowerCase().includes(key));
+    return (i.customer_name || '').toLowerCase().includes(key) || (i.contact || '').toLowerCase().includes(key) || inItems;
+  });
+  const wrap = document.getElementById('inquiries-table-wrap');
+  if (list.length === 0) {
+    wrap.innerHTML = '<div class="empty-tip">暂无询盘记录</div>';
+    return;
+  }
+  wrap.innerHTML = `
+    <table>
+      <thead><tr><th>客户</th><th>联系方式</th><th>询盘内容</th><th>总数量</th><th>时间</th></tr></thead>
+      <tbody>
+        ${list.map(i => `
+          <tr>
+            <td>${escapeHtml(i.customer_name || '')}</td>
+            <td><span class="contact-tag">${escapeHtml(i.contact || '')}</span></td>
+            <td class="items-detail">${(i.items || []).map(it => `<div>${escapeHtml(it.sku || '')} × ${it.qty || 1}</div>`).join('')}</td>
+            <td>${i.total_qty || ''}</td>
+            <td>${formatDate(i.created_at)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function exportCurrentTab() {
+  if (currentTab === 'leads') {
+    if (leads.length === 0) return alert('暂无数据');
+    const rows = leads.map(l => ({
+      '姓名/公司': l.name || '',
+      '联系方式': l.contact || '',
+      '首次注册时间': formatDate(l.created_at),
+      '最近访问时间': formatDate(l.last_seen_at)
+    }));
+    exportToXlsx(rows, 'Leo Flora 客户注册名单.xlsx');
+  } else {
+    if (inquiries.length === 0) return alert('暂无数据');
+    const rows = inquiries.map(i => ({
+      '客户': i.customer_name || '',
+      '联系方式': i.contact || '',
+      '询盘内容': (i.items || []).map(it => `${it.sku || ''}×${it.qty || 1}`).join('; '),
+      '总数量': i.total_qty || '',
+      '时间': formatDate(i.created_at)
+    }));
+    exportToXlsx(rows, 'Leo Flora 询盘记录.xlsx');
+  }
+}
+
+function exportToXlsx(rows, filename) {
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, filename);
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+
+checkSession();
+</script>
+
+</body>
+</html>
