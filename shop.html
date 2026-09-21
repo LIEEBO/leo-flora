@@ -198,23 +198,26 @@
   margin: 0 auto;        /* 居中 */
 }
     </style>
+    <link rel="stylesheet" href="/assets/brand.css">
+    <link rel="stylesheet" href="/assets/shop-theme.css">
 </head>
 <body>
 
     <header>
         <div class="site-brand">
-            <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" class="header-logo" alt="Leo Faux artificial flowers manufacturer logo">
-            <a href="/" class="brand-name">Leo Faux</a>
-            <nav style="display:inline-flex;gap:14px;margin-left:20px;font-size:13px;">
-                <a href="/" style="color:#555;text-decoration:none;">首页</a>
-                <a href="/shop.html" style="color:#e74c3c;text-decoration:none;font-weight:600;">产品中心</a>
-                <a href="/en/blog/" style="color:#555;text-decoration:none;">博客</a>
-                <a href="/en/about-us.html" style="color:#555;text-decoration:none;">关于</a>
+            <img src="/favicon.png" class="header-logo" alt="Leo Faux artificial flowers manufacturer logo" width="38" height="38">
+            <a href="/" class="brand-name">LEO FAUX</a>
+            <nav class="shop-navigation" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/shop.html" aria-current="page">Products</a>
+                <a href="/en/blog/">Blog</a>
+                <a href="/en/about-us.html">About</a>
+                <a href="/#contact">Contact</a>
             </nav>
         </div>
         <div class="header-right">
             <div id="user-display" class="user-display"></div>
-            <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
+            <select class="lang-select" id="lang-select" aria-label="Product language" onchange="changeLanguage(this.value)">
                 <option value="zh">中文</option>
                 <option value="en">EN</option>
                 <option value="es">ES</option>
@@ -258,7 +261,7 @@
 </div>
 
     <div class="search-box" id="search-box-container" style="display:none;">
-        <input type="text" id="search-input" class="search-input" placeholder="Search SKU..." oninput="filterProducts()">
+        <input type="text" id="search-input" class="search-input" aria-label="Search products by item number or name" placeholder="Search SKU..." oninput="filterProducts()">
     </div>
 
     <div class="modal-overlay" id="login-modal" style="display: flex;">
@@ -266,9 +269,9 @@
             <h2 data-i18n="welcome_title">Welcome to Leo faux</h2>
             <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
             <div style="text-align:left;">
-                <label style="font-size:12px; color:#999;" data-i18n="label_name">Name / Company</label>
+                <label for="input-name" style="font-size:12px; color:#999;" data-i18n="label_name">Name / Company</label>
                 <input type="text" id="input-name" class="login-input" placeholder="Your Name">
-                <label style="font-size:12px; color:#999;" data-i18n="label_contact">Contact Method</label>
+                <label for="input-contact" style="font-size:12px; color:#999;" data-i18n="label_contact">Contact Method</label>
                 <input type="text" id="input-contact" class="login-input" placeholder="WhatsApp / WeChat / Email">
             </div>
             <button class="btn-main" onclick="saveUserInfo()" data-i18n="btn_start">Start / 开始选品</button>

@@ -1,0 +1,17 @@
+/* Shared brand tokens. Deliberately namespaced to avoid product-app collisions. */
+:root {
+  --leo-wine: #7f1d2d;
+  --leo-deep: #28181b;
+  --leo-cream: #fffaf2;
+  --leo-gold: #e3a858;
+  --leo-ink: #251f20;
+  --leo-muted: #6d6263;
+  --leo-line: #eadfd4;
+  --leo-serif: Georgia, 'Times New Roman', serif;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+:focus-visible { outline: 3px solid #b77826; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

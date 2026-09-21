@@ -9,166 +9,26 @@
   <meta property="og:title" content="Leo Faux — Professional Artificial Flowers Manufacturer">
   <meta property="og:description" content="Factory-direct artificial flowers, silk flowers, and wedding flowers. Wholesale supplier with 10+ years experience.">
   <meta property="og:image" content="https://www.leofaux.com/images/hero-bouquet.jpg">
-  <meta property="og:url" content="https://www.leofaux.com/en/">
+  <meta property="og:url" content="https://www.leofaux.com/">
   <meta property="og:type" content="website">
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="/favicon.png">
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.6; }
-
-    /* === Navigation === */
-    nav.site-nav { background: #fff; padding: 14px 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    nav.site-nav .logo { font-size: 20px; font-weight: 700; color: #2c3e50; text-decoration: none; display: flex; align-items: center; gap: 8px; }
-    nav.site-nav .logo img { height: 32px; border-radius: 4px; }
-    nav.site-nav .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
-    nav.site-nav .nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-    nav.site-nav .nav-links a:hover { color: #e74c3c; }
-
-    /* === Hero Section === */
-    .hero { position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden; background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%); }
-    .hero-bg { position: absolute; inset: 0; background: url('/images/hero-bouquet.jpg') center/cover no-repeat; opacity: 0.18; }
-    /* Subtle overlay gradient for readability */
-    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,42,58,0.3) 0%, rgba(26,42,58,0.6) 100%); z-index: 1; }
-    .hero-content { position: relative; z-index: 2; max-width: 800px; padding: 0 24px; }
-    .hero-content h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px; }
-    .hero-content p { font-size: clamp(16px, 2vw, 20px); opacity: 0.9; margin-bottom: 32px; line-height: 1.7; }
-    .hero-content .hero-badge { display: inline-block; background: rgba(231,76,60,0.9); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; letter-spacing: 0.5px; }
-    .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary { display: inline-block; padding: 14px 36px; background: #e74c3c; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s, transform 0.2s; }
-    .btn-primary:hover { background: #c0392b; transform: translateY(-2px); }
-    .btn-secondary { display: inline-block; padding: 14px 36px; background: transparent; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; border: 2px solid rgba(255,255,255,0.4); transition: border 0.3s, transform 0.2s; }
-    .btn-secondary:hover { border-color: #fff; transform: translateY(-2px); }
-    .btn-whatsapp { display: inline-block; padding: 14px 36px; background: #25D366; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s, transform 0.2s; }
-    .btn-whatsapp:hover { background: #1da851; transform: translateY(-2px); }
-
-    /* === Stats Bar === */
-    .stats-bar { background: #fff; padding: 40px 24px; border-bottom: 1px solid #f0f0f0; }
-    .stats-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; text-align: center; }
-    .stat-item .stat-num { font-size: 32px; font-weight: 800; color: #e74c3c; }
-    .stat-item .stat-label { font-size: 13px; color: #777; margin-top: 4px; }
-
-    /* === Section Common === */
-    .section { padding: 70px 24px; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-    .section-title { font-size: 28px; font-weight: 700; color: #2c3e50; text-align: center; margin-bottom: 12px; }
-    .section-subtitle { text-align: center; color: #777; font-size: 15px; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-    /* === Production Process === */
-    .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-    .process-step { text-align: center; padding: 30px 16px; background: #f8f9fa; border-radius: 12px; transition: transform 0.2s; }
-    .process-step:hover { transform: translateY(-4px); }
-    .process-step .step-icon { width: 64px; height: 64px; background: #e74c3c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; }
-    .process-step .step-num { font-size: 12px; color: #e74c3c; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .process-step h3 { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
-    .process-step p { font-size: 13px; color: #777; line-height: 1.5; }
-
-    /* === Factory Showcase === */
-    .factory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .factory-card { border-radius: 12px; overflow: hidden; background: #f8f9fa; }
-    .factory-card .factory-img { width: 100%; height: 220px; object-fit: cover; background: #e0e0e0; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; }
-    .factory-card .factory-label { padding: 12px 16px; font-size: 13px; font-weight: 600; color: #2c3e50; }
-
-    /* === Why Us === */
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
-    .why-card { padding: 28px 20px; border: 1px solid #f0f0f0; border-radius: 12px; text-align: center; transition: box-shadow 0.2s; }
-    .why-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .why-card .why-icon { font-size: 36px; margin-bottom: 12px; }
-    .why-card h3 { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
-    .why-card p { font-size: 13px; color: #777; line-height: 1.5; }
-
-    /* === Blog Highlights === */
-    .bg-accent { background: #f8f9fa; }
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .blog-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); transition: transform 0.2s; }
-    .blog-card:hover { transform: translateY(-3px); }
-    .blog-card .blog-img { width: 100%; height: 180px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; }
-    .blog-card:nth-child(1) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-1.jpg') center/cover; }
-    .blog-card:nth-child(2) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-2.jpg') center/cover; }
-    .blog-card:nth-child(3) .blog-img { background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/images/home/blog-3.jpg') center/cover; }
-    .blog-card .blog-body { padding: 18px; }
-    .blog-card .blog-date { font-size: 11px; color: #999; }
-    .blog-card h3 { font-size: 15px; font-weight: 600; color: #2c3e50; margin: 6px 0; line-height: 1.4; }
-    .blog-card h3 a { color: inherit; text-decoration: none; }
-    .blog-card h3 a:hover { color: #e74c3c; }
-    .blog-card p { font-size: 13px; color: #777; line-height: 1.5; }
-    .text-center { text-align: center; margin-top: 32px; }
-
-    /* === Contact CTA === */
-    .contact-cta { background: linear-gradient(135deg, #2c3e50, #1a2a3a); color: #fff; text-align: center; padding: 60px 24px; }
-    .contact-cta h2 { font-size: 28px; margin-bottom: 12px; }
-    .contact-cta p { opacity: 0.8; margin-bottom: 28px; font-size: 15px; }
-
-    /* === Footer === */
-    footer { background: #1a1a2e; color: #aaa; padding: 40px 24px 24px; font-size: 13px; }
-    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
-    footer h4 { color: #fff; font-size: 14px; margin-bottom: 12px; }
-    footer a { color: #aaa; text-decoration: none; display: block; margin-bottom: 6px; }
-    footer a:hover { color: #fff; }
-    .footer-bottom { max-width: 1100px; margin: 24px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 12px; }
-
-    @media (max-width: 640px) {
-      .hero { min-height: 70vh; padding: 0 16px; }
-      .hero-content h1 { font-size: 28px; }
-      .hero-content p { font-size: 15px; }
-      .btn-group { flex-direction: column; align-items: center; gap: 10px; }
-      .btn-primary, .btn-secondary, .btn-whatsapp { width: 100%; max-width: 280px; text-align: center; padding: 14px 20px; font-size: 15px; }
-      .stats-bar { padding: 24px 16px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .stat-item .stat-num { font-size: 26px; }
-      .section { padding: 36px 16px; }
-      .section-title { font-size: 22px; }
-      .section-subtitle { font-size: 13px; margin-bottom: 28px; }
-      .process-grid { grid-template-columns: 1fr; gap: 14px; }
-      .factory-grid { grid-template-columns: 1fr; gap: 14px; }
-      .factory-card img { height: 180px; }
-      .cat-grid { grid-template-columns: 1fr; gap: 14px; }
-      .cat-card { padding: 32px 16px; }
-      .why-grid { grid-template-columns: 1fr; gap: 14px; }
-      .testimonial-grid { grid-template-columns: 1fr; gap: 14px; }
-      .blog-grid { grid-template-columns: 1fr; gap: 14px; }
-      nav.site-nav { flex-wrap: wrap; gap: 6px; padding: 10px 14px; }
-      nav.site-nav .nav-links { width: 100%; justify-content: center; gap: 10px; font-size: 13px; overflow-x: auto; white-space: nowrap; padding: 6px 0; }
-      .cta-banner { padding: 40px 16px; }
-      .cta-banner h2 { font-size: 22px; }
-      .footer-inner { grid-template-columns: 1fr 1fr; gap: 20px; }
-      .hero-badge { font-size: 11px; padding: 5px 14px; }
-      .wa-tooltip { display: none; }
-    }
-
-    /* Smaller phones */
-    @media (max-width: 380px) {
-      .hero-content h1 { font-size: 22px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .stat-item .stat-num { font-size: 22px; }
-      .footer-inner { grid-template-columns: 1fr; }
-    }
-
-    /* === WhatsApp Float === */
-    .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; box-shadow: 0 4px 16px rgba(37,211,102,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; text-decoration: none; }
-    .wa-float:hover { transform: scale(1.1); }
-    .wa-float svg { width: 28px; height: 28px; fill: white; }
-    .wa-tooltip { position: fixed; bottom: 88px; right: 24px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 998; animation: waPulse 2s infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
-    @keyframes waPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-
-    /* === Testimonials === */
-    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .testimonial-card { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
-    .testimonial-card .stars { color: #f39c12; font-size: 16px; margin-bottom: 8px; }
-    .testimonial-card .quote { font-size: 14px; color: #555; line-height: 1.6; font-style: italic; margin-bottom: 12px; }
-    .testimonial-card .author { font-size: 13px; font-weight: 600; color: #2c3e50; }
-    .testimonial-card .author span { font-weight: 400; color: #999; font-size: 12px; }
-  </style>
+  <link rel="stylesheet" href="/assets/brand.css">
+  <link rel="stylesheet" href="/assets/home.css">
+  <link rel="canonical" href="https://www.leofaux.com/">
+  <script defer src="/assets/home.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div class="announcement">LEO FAUX · Wholesale artificial flowers from Yiwu, China</div>
 
 <!-- Navigation -->
-<nav class="site-nav">
+<nav class="site-nav" aria-label="Main navigation">
   <a href="/" class="logo">
-    <img src="https://img.leofaux.com/products/_cgi-bin_mmwebwx-bin_webwxgetmsgimg__%26MsgID%3D7313558579301065918%26skey%3D%40crypt_4155f2e_c7027c9d62208a662c81c64ac7bc9ff6%26mmweb_appid%3Dwx_webfilehelper.jpeg" alt="Leo Faux logo">
-    Leo Faux
+    <img src="/favicon.png" alt="" width="38" height="38">
+    <span>LEO FAUX</span>
   </a>
   <div class="nav-links">
   <a href="/">Home</a>
@@ -176,21 +36,26 @@
   <a href="/en/blog/">Blog</a>
   <a href="/en/about-us.html">About Us</a>
   <a href="/en/faq.html">FAQ</a>
+  <a href="#contact">Contact</a>
   </div>
 </nav>
 
 <!-- Hero -->
-<section class="hero">
-  <div class="hero-bg"></div>
+<main id="main-content">
+<section class="hero" aria-labelledby="hero-title">
   <div class="hero-content">
-    <div class="hero-badge">🏭 Factory Direct — 10+ Years of Excellence</div>
-    <h1>Professional Artificial Flowers<br>Manufacturer & Wholesale Supplier</h1>
-    <p>Leo Faux is a trusted artificial flowers factory serving wholesalers, event planners, and retailers worldwide. Premium quality silk flowers, factory pricing, global shipping.</p>
+    <div class="hero-badge">YIWU · ARTIFICIAL FLOWER WHOLESALE</div>
+    <h1 id="hero-title">Nature’s beauty,<br><em>made to last.</em></h1>
+    <p>Wholesale artificial flowers, faux plants and statement trees for importers, retailers and event professionals. Meet LEO FAUX in Yiwu and find the right collection for your market.</p>
     <div class="btn-group">
-      <a href="#showroom" class="btn-primary">Browse Our Products →</a>
-      <a href="#process" class="btn-secondary">See Our Production</a>
-      <a href="https://wa.me/8618657926791" target="_blank" class="btn-whatsapp">💬 Get Free Quote</a>
+      <a href="/shop.html" class="btn-primary">Browse Products <span aria-hidden="true">→</span></a>
+      <a href="#contact" class="btn-secondary">Request a Quote</a>
     </div>
+    <a class="production-link" href="#process">Discover our production process <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="hero-media">
+    <img src="/images/hero-bouquet.jpg" alt="Soft pink blooms from the Leo Faux website collection" width="1368" height="1824" fetchpriority="high">
+    <a class="hero-showroom" href="#contact"><strong>Visit us in Yiwu</strong><span>Global Digital Trade Center<br>T6 · 1F · Shop 1088</span></a>
   </div>
 </section>
 
@@ -202,6 +67,18 @@
     <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Export Countries</div></div>
     <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Happy Clients</div></div>
     <div class="stat-item"><div class="stat-num">OEM</div><div class="stat-label">Custom Orders Welcome</div></div>
+  </div>
+</section>
+
+<!-- Showroom Section (links to the existing product catalogue) -->
+<section class="section collections" id="showroom">
+  <div class="section-inner">
+    <div class="section-heading"><div><p class="section-kicker">OUR COLLECTIONS</p><h2 class="section-title">Made for every space.</h2></div><p class="section-subtitle">Explore product photos and item numbers, save your favourites and export an enquiry list in our product centre.</p></div>
+    <div class="collection-grid">
+      <a class="collection-card" href="/shop.html"><img src="/images/home/cat-artificial.jpg" alt="Artificial flower collection" loading="lazy" width="600" height="400"><div><span>01 · COLLECTION</span><h3>Artificial Flowers</h3><p>Stems and bouquets for every occasion.</p><span class="collection-link">Browse catalogue <span aria-hidden="true">↗</span></span></div></a>
+      <a class="collection-card" href="/shop.html"><img src="/images/home/cat-silk.jpg" alt="Silk flower collection" loading="lazy" width="600" height="400"><div><span>02 · COLLECTION</span><h3>Silk Flowers</h3><p>Soft textures and a natural-looking finish.</p><span class="collection-link">Browse catalogue <span aria-hidden="true">↗</span></span></div></a>
+      <a class="collection-card" href="/shop.html"><img src="/images/home/cat-wedding.jpg" alt="Wedding flower collection" loading="lazy" width="600" height="400"><div><span>03 · COLLECTION</span><h3>Wedding Flowers</h3><p>Floral details for celebrations and events.</p><span class="collection-link">Browse catalogue <span aria-hidden="true">↗</span></span></div></a>
+    </div>
   </div>
 </section>
 
@@ -301,35 +178,23 @@
   </div>
 </section>
 
-<!-- Showroom Section (links to product pages) -->
-<section class="section" id="showroom">
+<!-- Wholesale ordering -->
+<section class="section ordering" id="how-to-order">
   <div class="section-inner">
-    <h2 class="section-title">Explore Our Product Collections</h2>
-    <p class="section-subtitle">Browse our full range of artificial flowers for weddings, events, and decoration.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-artificial.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-        <div style="font-size:48px;margin-bottom:12px;">💐</div>
-        <h3 style="font-size:18px;margin-bottom:6px;">Artificial Flowers</h3>
-        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
-      </a>
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-silk.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-        <div style="font-size:48px;margin-bottom:12px;">🌹</div>
-        <h3 style="font-size:18px;margin-bottom:6px;">Silk Flowers</h3>
-        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
-      </a>
-      <a href="/?lang=en#products" style="display:block;padding:40px 20px;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),url('/images/home/cat-wedding.jpg') center/cover;border-radius:12px;text-align:center;color:#fff;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-        <div style="font-size:48px;margin-bottom:12px;">💒</div>
-        <h3 style="font-size:18px;margin-bottom:6px;">Wedding Flowers</h3>
-        <p style="font-size:13px;opacity:0.8;">Browse all products with photos →</p>
-      </a>
-    </div>
+    <div class="section-heading"><div><p class="section-kicker">HOW TO ORDER</p><h2 class="section-title">From enquiry to delivery.</h2></div><p class="section-subtitle">Choose your products online or visit our Yiwu showroom. We will help confirm the details for your order.</p></div>
+    <ol class="order-steps">
+      <li><span aria-hidden="true">01</span><h3>Choose your products</h3><p>Browse the catalogue, save favourites and export your selection as an Excel list.</p></li>
+      <li><span aria-hidden="true">02</span><h3>Confirm the quotation</h3><p>Send your list or product photos. Confirm quantities, colours, packing and lead time with us.</p></li>
+      <li><span aria-hidden="true">03</span><h3>Arrange your order</h3><p>Agree on the order details and deposit before production begins.</p></li>
+      <li><span aria-hidden="true">04</span><h3>Delivery to your agent</h3><p>We coordinate production and delivery to your nominated forwarding warehouse.</p></li>
+    </ol>
   </div>
 </section>
 
 <!-- Blog Highlights -->
 <section class="section bg-accent">
   <div class="section-inner">
-    <h2 class="section-title">Latest from Our Blog</h2>
+    <h2 class="section-title">Ideas & inspiration</h2>
     <p class="section-subtitle">Expert tips, wedding inspiration, and artificial flower decorating ideas.</p>
     <div class="blog-grid" id="blog-posts">
       <!-- populated by JS below -->
@@ -365,12 +230,34 @@
   </div>
 </section>
 
-<!-- Contact CTA -->
-<section class="contact-cta">
-  <h2>Ready to Start Your Order?</h2>
-  <p>Get in touch with our team for wholesale pricing, product catalog, or custom orders.</p>
-  <a href="/en/about-us.html" class="btn-primary" style="background:#fff;color:#2c3e50;">Contact Us</a>
+<!-- Contact and WhatsApp enquiry; no new database or registration flow -->
+<section class="section contact-section" id="contact">
+  <div class="section-inner contact-box">
+    <div class="contact-copy">
+      <p class="section-kicker">LET’S TALK FLOWERS</p>
+      <h2>Find the right flowers<br>for your market.</h2>
+      <p>Share what you are looking for, or visit our showroom to see the collections in person.</p>
+      <dl class="contact-details">
+        <div><dt>Showroom</dt><dd>Shop 1088, 1F, T6 Office Building,<br>Global Digital Trade Center (District 6),<br>Yiwu, Zhejiang, China</dd></div>
+        <div><dt>WhatsApp</dt><dd><a href="https://wa.me/8618657926791" target="_blank" rel="noopener noreferrer">+86 186 5792 6791</a></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:yiwuleofaux@gmail.com">yiwuleofaux@gmail.com</a></dd></div>
+      </dl>
+      <a class="contact-catalogue" href="/shop.html">Already know what you need? Browse products <span aria-hidden="true">→</span></a>
+    </div>
+    <form class="enquiry-form" id="enquiry-form" action="https://wa.me/8618657926791" method="get" target="_blank" rel="noopener noreferrer">
+      <h3>Wholesale enquiry</h3>
+      <div><label for="enquiry-name">Name / Company <span aria-hidden="true">*</span></label><input id="enquiry-name" autocomplete="name" maxlength="120" required placeholder="Your name or company"></div>
+      <div><label for="enquiry-market">Country / Region</label><input id="enquiry-market" autocomplete="country-name" maxlength="100" placeholder="Where do you sell?"></div>
+      <div><label for="enquiry-category">Interested in</label><select id="enquiry-category"><option>Artificial flowers</option><option>Faux plants</option><option>Artificial trees</option><option>Mixed products</option></select></div>
+      <div><label for="enquiry-message">Your requirements</label><textarea id="enquiry-message" maxlength="1600" rows="3" placeholder="Item numbers, quantities, colours or target price"></textarea></div>
+      <input type="hidden" name="text" id="enquiry-text" value="Hello LEO FAUX, I would like to enquire about your wholesale products.">
+      <button class="btn-primary" type="submit">Continue to WhatsApp <span aria-hidden="true">→</span></button>
+      <p class="form-note">Opens a prepared message in WhatsApp. Review it there before sending.</p>
+      <noscript><p>JavaScript is off. Please include your requirements in the WhatsApp conversation.</p></noscript>
+    </form>
+  </div>
 </section>
+</main>
 
 <!-- Footer -->
 <footer>
@@ -393,9 +280,9 @@
     </div>
     <div>
       <h4>Contact</h4>
-      <a href="https://wa.me/8618657926791" target="_blank">WhatsApp: +86 186 5792 6791</a>
+      <a href="https://wa.me/8618657926791" target="_blank" rel="noopener noreferrer">WhatsApp: +86 186 5792 6791</a>
       <a href="mailto:yiwuleofaux@gmail.com">Email: yiwuleofaux@gmail.com</a>
-      <a href="https://www.instagram.com/leoflorist" target="_blank">Instagram: @leoflorist</a>
+      <a href="https://www.instagram.com/leoflorist" target="_blank" rel="noopener noreferrer">Instagram: @leoflorist</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -404,7 +291,7 @@
 </footer>
 
 <!-- WhatsApp Float -->
-<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" title="WhatsApp" aria-label="Contact us on WhatsApp">
+<a class="wa-float" href="https://wa.me/8618657926791" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="Contact us on WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 <div class="wa-tooltip">Chat with us 💬</div>

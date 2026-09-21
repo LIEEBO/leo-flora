@@ -1,0 +1,55 @@
+/* Visual integration only: product data, registration, favourites and export stay in shop.html. */
+:root { --primary-color: var(--leo-wine); --accent-color: var(--leo-wine); --bg-color: var(--leo-cream); }
+body { color: var(--leo-ink); }
+header { background: var(--leo-cream); box-shadow: none; border-bottom: 1px solid var(--leo-line); padding: 16px 24px; }
+.site-brand { gap: 10px; flex-wrap: wrap; min-width: 0; }
+.header-logo { width: 38px; height: 38px; object-fit: contain; }
+.brand-name { color: var(--leo-ink); letter-spacing: .1em; margin-left: 0; }
+.shop-navigation { display: flex; gap: 18px; margin-left: 20px; font-size: .9375rem; }
+.shop-navigation a { color: var(--leo-muted); text-decoration: none; }
+.shop-navigation a[aria-current=page] { color: var(--leo-wine); font-weight: 700; }
+.lang-select { min-height: 40px; font-size: .875rem; border-radius: 8px; }
+.user-display { font-size: .875rem; color: var(--leo-wine); background: #f1e8dc; }
+.brand-intro { max-width: 780px; margin: 44px auto 32px; }
+.brand-intro h1 { color: var(--leo-ink); font-family: var(--leo-serif); font-size: clamp(1.85rem, 3.4vw, 2.75rem); font-weight: 400; white-space: normal; line-height: 1.2; }
+.brand-intro p { font-size: 1rem; color: var(--leo-muted); }
+.factory-stat { background: #f1e8dc; }
+.factory-stat .num { color: var(--leo-wine); }
+.factory-stat .label, .factory-card .factory-label { font-size: .875rem; }
+.factory-section h2 { color: var(--leo-ink); }
+.search-input, .login-input { font-size: 1rem; border-color: #d2c0b7; min-height: 46px; }
+.product-card { box-shadow: none; border-color: var(--leo-line); border-radius: 16px; }
+.product-sku { font-size: .8125rem; color: var(--leo-muted); background: #f1e8dc; }
+.product-title { font-size: 1rem; }
+.product-details { font-size: .875rem; }
+.fav-btn { min-width: 40px; min-height: 40px; }
+.modal-content { background: var(--leo-cream); }
+.modal-content h2 { font-family: var(--leo-serif); font-weight: 400; color: var(--leo-ink); font-size: 1.75rem; }
+.modal-content label { font-size: .875rem !important; color: var(--leo-muted) !important; }
+.modal-content .btn-main { border-radius: 999px; }
+.qty-btn { min-width: 32px; min-height: 32px; }
+.qty-input { font-size: 1rem; }
+.seo-links { font-size: .875rem; }
+.wa-tooltip { display: none; }
+.wa-float { z-index: 250; }
+@media (max-width: 840px) {
+  header { flex-wrap: wrap; position: relative; }
+  .site-brand { width: 100%; }
+  .shop-navigation { margin-left: auto; flex-wrap: wrap; }
+}
+@media (max-width: 640px) {
+  header { padding: 14px 16px; }
+  header .shop-navigation { margin-left: 0; width: 100%; padding-top: 10px; font-size: .875rem; }
+  .header-right { width: 100%; justify-content: flex-end; }
+  .brand-intro { padding: 0 20px; }
+  .brand-intro p { font-size: 1rem; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-info { padding: 12px 10px; }
+  .product-title { font-size: .9375rem; overflow-wrap: anywhere; }
+  .product-sku { font-size: .75rem; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; }
+  .product-details { font-size: .8125rem; }
+  .wa-float { bottom: 94px; right: 14px; width: 48px; height: 48px; }
+  .back-to-top { bottom: 154px; right: 16px; }
+  .floating-bar { max-width: calc(100% - 28px); box-sizing: border-box; font-size: .875rem; white-space: normal; }
+  .modal-content { max-height: 88dvh; }
+}
