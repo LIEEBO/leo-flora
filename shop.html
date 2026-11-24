@@ -263,15 +263,14 @@
     <div class="search-box" id="search-box-container" style="display:none;">
         <input type="text" id="search-input" class="search-input" aria-label="Search products by item number or name" placeholder="Search SKU or flower name (e.g. H001379, Rose, Orchid, Peony)..." oninput="filterProducts()">
         <div class="cat-bar" id="cat-bar">
-            <button class="cat-pill active" data-cat="all" onclick="selectCategory('all')">All (3,300+)</button>
-            <button class="cat-pill" data-cat="roses" onclick="selectCategory('roses')">Roses &amp; Peonies</button>
-            <button class="cat-pill" data-cat="orchids" onclick="selectCategory('orchids')">Orchids</button>
-            <button class="cat-pill" data-cat="hydrangeas" onclick="selectCategory('hydrangeas')">Hydrangeas &amp; Lilies</button>
-            <button class="cat-pill" data-cat="daisies" onclick="selectCategory('daisies')">Sunflowers &amp; Daisies</button>
-            <button class="cat-pill" data-cat="trees" onclick="selectCategory('trees')">Trees &amp; Greenery</button>
-            <button class="cat-pill" data-cat="wedding" onclick="selectCategory('wedding')">Garlands &amp; Walls</button>
+            <button class="cat-pill active" data-cat="all" onclick="selectCategory('all')">All</button>
+            <button class="cat-pill" data-cat="single" onclick="selectCategory('single')">Single Stems</button>
             <button class="cat-pill" data-cat="bouquets" onclick="selectCategory('bouquets')">Bouquets &amp; Bunches</button>
-            <button class="cat-pill" data-cat="seasonal" onclick="selectCategory('seasonal')">Holiday &amp; Memorial</button>
+            <button class="cat-pill" data-cat="greenery" onclick="selectCategory('greenery')">Greenery &amp; Leaves</button>
+            <button class="cat-pill" data-cat="walls" onclick="selectCategory('walls')">Flower &amp; Plant Walls</button>
+            <button class="cat-pill" data-cat="trees" onclick="selectCategory('trees')">Artificial Trees</button>
+            <button class="cat-pill" data-cat="vines" onclick="selectCategory('vines')">Garlands &amp; Vines</button>
+            <button class="cat-pill" data-cat="orchids" onclick="selectCategory('orchids')">Phalaenopsis &amp; Orchids</button>
         </div>
         <div class="results-meta"><span id="results-count">Loading catalog...</span></div>
     </div>
@@ -409,7 +408,7 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function loadVisionCategories() {
             try {
-                const res = await fetch('/assets/product-categories.json?v=1');
+                const res = await fetch('/assets/product-categories.json?v=2');
                 if (res.ok) VISION_CATS = await res.json();
             } catch (e) {
                 console.warn('Vision categories fallback:', e);
@@ -462,17 +461,24 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         }
 
+        const CAT_LABELS = {
+            zh: { all: '全部产品', single: '单枝花', bouquets: '把束花', greenery: '绿植绿叶', walls: '花墙植物墙', trees: '仿真树', vines: '花藤花条', orchids: '蝴蝶兰花' },
+            en: { all: 'All Products', single: 'Single Stems', bouquets: 'Bouquets & Bunches', greenery: 'Greenery & Leaves', walls: 'Flower & Plant Walls', trees: 'Artificial Trees', vines: 'Garlands & Vines', orchids: 'Phalaenopsis & Orchids' },
+            es: { all: 'Todos', single: 'Tallos Sueltos', bouquets: 'Ramos y Flores', greenery: 'Hojas y Follaje', walls: 'Muros Florales', trees: 'Árboles Artificiales', vines: 'Guirnaldas y Enredaderas', orchids: 'Orquídeas Mariposa' },
+            ar: { all: 'الكل', single: 'زهور مفردة', bouquets: 'باقات زهور', greenery: 'أوراق ونباتات خضراء', walls: 'جدران الزهور', trees: 'أشجار صناعية', vines: 'أكاليل ومتسلقات', orchids: 'أوركيد فالاينوبسيس' }
+        };
+
         function updateCategoryCounts() {
             const counts = { all: products.length };
             products.forEach(p => {
                 (p.cats || []).forEach(c => { counts[c] = (counts[c] || 0) + 1; });
             });
+            const langMap = CAT_LABELS[currentLang] || CAT_LABELS.en;
             document.querySelectorAll('.cat-pill').forEach(btn => {
                 const c = btn.dataset.cat;
-                const base = btn.dataset.label || btn.textContent.replace(/\s*\([^)]*\)\s*$/, '');
-                btn.dataset.label = base;
+                const label = langMap[c] || c;
                 const n = counts[c] || 0;
-                btn.textContent = `${base} (${n.toLocaleString()})`;
+                btn.textContent = `${label} (${n.toLocaleString()})`;
             });
         }
 
@@ -482,14 +488,13 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const CAT_KEYWORDS = {
             all: [],
-            roses: ['rose', '玫瑰', '玫', 'peony', '牡丹', '奥斯汀', 'austin', '绒布', 'velvet'],
-            orchids: ['orchid', '兰', '蝴蝶兰', 'phalaenopsis', '蕙兰', '泰国兰', 'cymbidium'],
-            hydrangeas: ['hydrangea', '绣球', 'lily', '百合', '马蹄莲', 'calla', '红掌', 'anthurium', '玉兰', 'magnolia', 'tulip', '郁金香'],
-            daisies: ['sunflower', '向日葵', '太阳', 'daisy', '雏菊', '菊', 'chrysanthemum', 'gerbera', '刺球', '球菊', 'dahlia', '大丽花'],
-            trees: ['tree', '树', 'leaf', 'leaves', '叶', 'eucalyptus', '尤加利', '桉', 'potted', '盆栽', 'plant', '绿', '天堂鸟', 'reed', '芦苇', '枝', 'grass', '草', 'bamboo', '竹', '橄榄', 'olive'],
-            wedding: ['wall', '墙', 'garland', '藤', 'wisteria', '紫藤', 'wreath', '花环', '花圈', 'arch', '拱门', 'baby', '满天星', '飞燕草', 'delphinium', '铃兰', '紫罗兰'],
-            bouquets: ['bouquet', '把', '束', 'bunch', 'centerpiece', '花头', 'head'],
-            seasonal: ['christmas', '圣诞', 'cherry', '樱花', 'peach', '桃花', 'memorial', '拜山', '果枝', 'berry', '枯枝', '黄菊', 'poinsettia']
+            single: ['单支', 'single', 'stem', 'rose', '玫瑰', '牡丹', '绣球', '百合', '郁金香', '向日葵'],
+            bouquets: ['把', '束', 'bouquet', 'bunch', '花头'],
+            greenery: ['叶', '草', '尤加利', '绿', '芦苇', '枯枝', 'leaf', 'leaves', 'eucalyptus', 'grass'],
+            walls: ['墙', 'wall', 'backdrop', '花排'],
+            trees: ['树', '盆栽', 'tree', 'potted', '竹', '芭蕉', '蕨'],
+            vines: ['藤', '条', '花环', '花圈', 'vine', 'garland', 'wreath', 'wisteria', '紫藤'],
+            orchids: ['蝴蝶兰', '兰花', '泰国兰', '蕙兰', 'phalaenopsis', 'orchid']
         };
 
         function selectCategory(cat) {
@@ -740,6 +745,7 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             });
             const searchPlaceholders = { zh: "🔍 搜索货号 / 品名...", en: "🔍 Search SKU / Name...", es: "🔍 Buscar SKU / Nombre...", ar: "🔍 البحث عن SKU / الاسم..." };
             document.getElementById('search-input').placeholder = searchPlaceholders[lang] || searchPlaceholders.en;
+            updateCategoryCounts();
             filterProducts();
         }
 
