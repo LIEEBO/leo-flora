@@ -405,9 +405,21 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         }
 
+        let VISION_CATS = {};
+
+        async function loadVisionCategories() {
+            try {
+                const res = await fetch('/assets/product-categories.json?v=1');
+                if (res.ok) VISION_CATS = await res.json();
+            } catch (e) {
+                console.warn('Vision categories fallback:', e);
+            }
+        }
+
         async function fetchData() {
             const loadingTip = document.getElementById('loading-tip');
             try {
+                await loadVisionCategories();
                 let allData = [];
                 let from = 0;
                 const pageSize = 1000;
@@ -432,8 +444,10 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     name_en: p.name_en,
                     name_es: p.name_es,
                     name_ar: p.name_ar,
-                    size: p.desc
+                    size: p.desc,
+                    cats: VISION_CATS[(p.sku || '').toUpperCase()] || []
                 }));
+                updateCategoryCounts();
                 filteredProducts = [...products];
                 loadingTip.style.display = 'none';
                 const urlCat = new URLSearchParams(window.location.search).get('cat');
@@ -446,6 +460,20 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.error('加载产品失败:', err);
                 loadingTip.innerText = '加载失败，请刷新页面重试 / Failed to load products.';
             }
+        }
+
+        function updateCategoryCounts() {
+            const counts = { all: products.length };
+            products.forEach(p => {
+                (p.cats || []).forEach(c => { counts[c] = (counts[c] || 0) + 1; });
+            });
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                const c = btn.dataset.cat;
+                const base = btn.dataset.label || btn.textContent.replace(/\s*\([^)]*\)\s*$/, '');
+                btn.dataset.label = base;
+                const n = counts[c] || 0;
+                btn.textContent = `${base} (${n.toLocaleString()})`;
+            });
         }
 
         let currentCategory = 'all';
@@ -475,12 +503,21 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         function applyFilters() {
             const key = document.getElementById('search-input').value.toLowerCase().trim();
             const keywords = key ? key.split(/\s+/) : [];
-            const catKws = CAT_KEYWORDS[currentCategory] || [];
 
             filteredProducts = products.filter(p => {
-                const haystack = `${p.sku || ''} ${p.name_zh || ''} ${p.name_en || ''} ${p.name_es || ''} ${p.name_ar || ''}`.toLowerCase();
-                if (catKws.length > 0 && !catKws.some(ck => haystack.includes(ck))) return false;
-                if (keywords.length > 0 && !keywords.every(kw => haystack.includes(kw))) return false;
+                if (currentCategory !== 'all') {
+                    if (p.cats && p.cats.length > 0) {
+                        if (!p.cats.includes(currentCategory)) return false;
+                    } else {
+                        const catKws = CAT_KEYWORDS[currentCategory] || [];
+                        const h = `${p.name_zh || ''} ${p.name_en || ''}`.toLowerCase();
+                        if (catKws.length > 0 && !catKws.some(ck => h.includes(ck))) return false;
+                    }
+                }
+                if (keywords.length > 0) {
+                    const haystack = `${p.sku || ''} ${p.name_zh || ''} ${p.name_en || ''} ${p.name_es || ''} ${p.name_ar || ''}`.toLowerCase();
+                    if (!keywords.every(kw => haystack.includes(kw))) return false;
+                }
                 return true;
             });
             renderProducts(filteredProducts, true);
