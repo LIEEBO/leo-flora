@@ -32,6 +32,14 @@ header { background: var(--leo-cream); box-shadow: none; border-bottom: 1px soli
 .seo-links { font-size: .875rem; }
 .wa-tooltip { display: none; }
 .wa-float { z-index: 250; }
+.cat-bar { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px auto 0; max-width: 1200px; padding: 0 20px; align-items: center; }
+.cat-pill { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--leo-line); background: #fff; color: var(--leo-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: all .18s; }
+.cat-pill:hover { border-color: var(--leo-wine); color: var(--leo-wine); }
+.cat-pill.active { background: var(--leo-wine); color: #fff; border-color: var(--leo-wine); }
+.results-meta { max-width: 1200px; margin: 10px auto 4px; padding: 0 20px; font-size: 13px; color: var(--leo-muted); display: flex; justify-content: space-between; align-items: center; }
+.load-more-wrap { text-align: center; margin: 28px 0 12px; }
+.btn-load-more { background: var(--leo-wine); color: #fff; border: none; padding: 12px 32px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+.btn-load-more:hover { opacity: .88; }
 @media (max-width: 840px) {
   header { flex-wrap: wrap; position: relative; }
   .site-brand { width: 100%; }

@@ -237,31 +237,43 @@
 
 <!-- Factory Showcase -->
 <div class="factory-section">
-  <h2>🏭 工厂实力展示 / Factory Showcase</h2>
+  <h2>Factory &amp; Yiwu Showroom</h2>
   <div class="factory-stats">
-    <div class="factory-stat"><div class="num">10+</div><div class="label">年经验 Years</div></div>
-    <div class="factory-stat"><div class="num">2000+</div><div class="label">产品 Products</div></div>
-    <div class="factory-stat"><div class="num">50+</div><div class="label">出口国 Countries</div></div>
-    <div class="factory-stat"><div class="num">OEM</div><div class="label">定制 Custom</div></div>
+    <div class="factory-stat"><div class="num">10+</div><div class="label">Years Experience</div></div>
+    <div class="factory-stat"><div class="num">3,300+</div><div class="label">Wholesale SKUs</div></div>
+    <div class="factory-stat"><div class="num">50+</div><div class="label">Export Countries</div></div>
+    <div class="factory-stat"><div class="num">OEM</div><div class="label">Custom Orders</div></div>
   </div>
   <div class="factory-grid">
     <div class="factory-card">
-      <img src="/images/home/workshop.jpg" alt="生产车间" loading="lazy">
-      <div class="factory-label">🌷 生产车间 Production Workshop</div>
+      <img src="/images/home/workshop.jpg" alt="Production Workshop" loading="lazy">
+      <div class="factory-label">Production Workshop</div>
     </div>
     <div class="factory-card">
-      <img src="/images/home/craftsmen.jpg" alt="手工制作" loading="lazy">
-      <div class="factory-label">👩‍🎨 手工制作 Skilled Craftsmen</div>
+      <img src="/images/home/craftsmen.jpg" alt="Skilled Craftsmen" loading="lazy">
+      <div class="factory-label">Skilled Craftsmen</div>
     </div>
     <div class="factory-card">
-      <img src="/images/home/display.jpg" alt="产品展示" loading="lazy">
-      <div class="factory-label">💐 成品展示 Product Display</div>
+      <img src="/images/home/display.jpg" alt="Yiwu Showroom Display" loading="lazy">
+      <div class="factory-label">Yiwu Showroom · T6 1F Shop 1088</div>
     </div>
   </div>
 </div>
 
     <div class="search-box" id="search-box-container" style="display:none;">
-        <input type="text" id="search-input" class="search-input" aria-label="Search products by item number or name" placeholder="Search SKU..." oninput="filterProducts()">
+        <input type="text" id="search-input" class="search-input" aria-label="Search products by item number or name" placeholder="Search SKU or flower name (e.g. H001379, Rose, Orchid, Peony)..." oninput="filterProducts()">
+        <div class="cat-bar" id="cat-bar">
+            <button class="cat-pill active" data-cat="all" onclick="selectCategory('all')">All (3,300+)</button>
+            <button class="cat-pill" data-cat="roses" onclick="selectCategory('roses')">Roses &amp; Peonies</button>
+            <button class="cat-pill" data-cat="orchids" onclick="selectCategory('orchids')">Orchids</button>
+            <button class="cat-pill" data-cat="hydrangeas" onclick="selectCategory('hydrangeas')">Hydrangeas &amp; Lilies</button>
+            <button class="cat-pill" data-cat="daisies" onclick="selectCategory('daisies')">Sunflowers &amp; Daisies</button>
+            <button class="cat-pill" data-cat="trees" onclick="selectCategory('trees')">Trees &amp; Greenery</button>
+            <button class="cat-pill" data-cat="wedding" onclick="selectCategory('wedding')">Garlands &amp; Walls</button>
+            <button class="cat-pill" data-cat="bouquets" onclick="selectCategory('bouquets')">Bouquets &amp; Bunches</button>
+            <button class="cat-pill" data-cat="seasonal" onclick="selectCategory('seasonal')">Holiday &amp; Memorial</button>
+        </div>
+        <div class="results-meta"><span id="results-count">Loading catalog...</span></div>
     </div>
 
     <div class="modal-overlay" id="login-modal" style="display: flex;">
@@ -281,6 +293,9 @@
     <div class="container" id="product-container" style="display:none;">
         <div id="loading-tip" style="text-align:center; padding:100px; color:#999;">Loading Exhibit...</div>
         <div id="product-grid" class="product-grid"></div>
+        <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+            <button class="btn-load-more" id="btn-load-more" onclick="loadMoreProducts()">Load More Products</button>
+        </div>
     </div>
     
     <div id="back-to-top" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
@@ -313,7 +328,7 @@
             <button class="contact-link btn-wechat" onclick="copyText('Leo92-02')">微信 / WeChat: Leo92-02 (点击复制)</button>
             <a href="https://wa.me/8618657926791" target="_blank" class="contact-link btn-whatsapp">WhatsApp: +86 186 5792 6791</a>
             <a href="mailto:yiwuleofaux@gmail.com" class="contact-link btn-email">Email: yiwuleofaux@gmail.com</a>
-            <a href="https://www.instagram.com/leoflorist" target="_blank" class="contact-link btn-ins">Instagram: @leoflorist</a>
+            <a href="https://www.instagram.com/leo.flower_" target="_blank" class="contact-link btn-ins">Instagram: @leo.flower_</a>
         </div>
     </div>
 
@@ -421,31 +436,87 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 }));
                 filteredProducts = [...products];
                 loadingTip.style.display = 'none';
-                renderProducts(filteredProducts);
+                const urlCat = new URLSearchParams(window.location.search).get('cat');
+                if (urlCat && CAT_KEYWORDS[urlCat]) {
+                    selectCategory(urlCat);
+                } else {
+                    renderProducts(filteredProducts, true);
+                }
             } catch (err) {
                 console.error('加载产品失败:', err);
                 loadingTip.innerText = '加载失败，请刷新页面重试 / Failed to load products.';
             }
         }
 
-        function renderProducts(list) {
+        let currentCategory = 'all';
+        let visibleCount = 48;
+        const PAGE_BATCH = 48;
+
+        const CAT_KEYWORDS = {
+            all: [],
+            roses: ['rose', '玫瑰', '玫', 'peony', '牡丹', '奥斯汀', 'austin', '绒布', 'velvet'],
+            orchids: ['orchid', '兰', '蝴蝶兰', 'phalaenopsis', '蕙兰', '泰国兰', 'cymbidium'],
+            hydrangeas: ['hydrangea', '绣球', 'lily', '百合', '马蹄莲', 'calla', '红掌', 'anthurium', '玉兰', 'magnolia', 'tulip', '郁金香'],
+            daisies: ['sunflower', '向日葵', '太阳', 'daisy', '雏菊', '菊', 'chrysanthemum', 'gerbera', '刺球', '球菊', 'dahlia', '大丽花'],
+            trees: ['tree', '树', 'leaf', 'leaves', '叶', 'eucalyptus', '尤加利', '桉', 'potted', '盆栽', 'plant', '绿', '天堂鸟', 'reed', '芦苇', '枝', 'grass', '草', 'bamboo', '竹', '橄榄', 'olive'],
+            wedding: ['wall', '墙', 'garland', '藤', 'wisteria', '紫藤', 'wreath', '花环', '花圈', 'arch', '拱门', 'baby', '满天星', '飞燕草', 'delphinium', '铃兰', '紫罗兰'],
+            bouquets: ['bouquet', '把', '束', 'bunch', 'centerpiece', '花头', 'head'],
+            seasonal: ['christmas', '圣诞', 'cherry', '樱花', 'peach', '桃花', 'memorial', '拜山', '果枝', 'berry', '枯枝', '黄菊', 'poinsettia']
+        };
+
+        function selectCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cat === cat);
+            });
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const key = document.getElementById('search-input').value.toLowerCase().trim();
+            const keywords = key ? key.split(/\s+/) : [];
+            const catKws = CAT_KEYWORDS[currentCategory] || [];
+
+            filteredProducts = products.filter(p => {
+                const haystack = `${p.sku || ''} ${p.name_zh || ''} ${p.name_en || ''} ${p.name_es || ''} ${p.name_ar || ''}`.toLowerCase();
+                if (catKws.length > 0 && !catKws.some(ck => haystack.includes(ck))) return false;
+                if (keywords.length > 0 && !keywords.every(kw => haystack.includes(kw))) return false;
+                return true;
+            });
+            renderProducts(filteredProducts, true);
+        }
+
+        function loadMoreProducts() {
+            visibleCount += PAGE_BATCH;
+            renderProducts(filteredProducts, false);
+        }
+
+        function renderProducts(list, resetPage = true) {
+            if (resetPage) visibleCount = PAGE_BATCH;
             const grid = document.getElementById('product-grid');
             const key = document.getElementById('search-input').value.toLowerCase().trim();
             const keywords = key ? key.split(/\s+/) : [];
-            
-            grid.innerHTML = list.map((p, index) => {
+            const slice = list.slice(0, visibleCount);
+
+            const countEl = document.getElementById('results-count');
+            if (countEl) {
+                countEl.textContent = `Showing ${slice.length} of ${list.length.toLocaleString()} wholesale items`;
+            }
+
+            grid.innerHTML = slice.map((p, index) => {
                 const isFav = favorites.find(f => f.id === p.id);
                 let displayName = p['name_' + currentLang] || p.name_en || p.name_zh || p.name_es || p.name_ar || 'Flower Item';
                 let displaySku = p.sku;
 
                 if (keywords.length > 0) {
                     keywords.forEach(kw => {
-                        const regex = new RegExp(`(${kw})`, 'gi');
+                        const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const regex = new RegExp(`(${escaped})`, 'gi');
                         displayName = displayName.replace(regex, '<span class="highlight">$1</span>');
                         displaySku = displaySku.replace(regex, '<span class="highlight">$1</span>');
                     });
                 }
-                
+
                 return `
                 <div class="product-card" id="prod-${p.id}">
                     <img src="${p.img}" class="product-img" loading="lazy" onclick="openViewer(${index})">
@@ -459,6 +530,17 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     </div>
                 </div>`;
             }).join('');
+
+            const wrap = document.getElementById('load-more-wrap');
+            const btn = document.getElementById('btn-load-more');
+            if (wrap && btn) {
+                if (visibleCount < list.length) {
+                    wrap.style.display = 'block';
+                    btn.textContent = `Load More (${list.length - visibleCount} remaining)`;
+                } else {
+                    wrap.style.display = 'none';
+                }
+            }
         }
 
         function saveUserInfo() {
@@ -805,23 +887,8 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         function filterProducts() {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => {
-                const key = document.getElementById('search-input').value.toLowerCase().trim();
-                if (!key) {
-                    filteredProducts = [...products];
-                } else {
-                    const keywords = key.split(/\s+/);
-                    filteredProducts = products.filter(p => {
-                        return keywords.every(kw => 
-                            p.sku.toLowerCase().includes(kw) || 
-                            (p.name_zh && p.name_zh.toLowerCase().includes(kw)) ||
-                            (p.name_en && p.name_en.toLowerCase().includes(kw)) ||
-                            (p.name_es && p.name_es.toLowerCase().includes(kw)) ||
-                            (p.name_ar && p.name_ar.toLowerCase().includes(kw))
-                        );
-                    });
-                }
-                renderProducts(filteredProducts);
-            }, 300);
+                applyFilters();
+            }, 250);
         }
 
         // 预览系统逻辑
