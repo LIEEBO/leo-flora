@@ -3,110 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leo Flora 客户后台</title>
+<title>Leo Faux 客户 CRM 后台</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: #f4f4f4; color: #2c3e50; }
-  header { background: #2c3e50; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-  header h1 { font-size: 18px; margin: 0; }
-  #logout-btn { background: rgba(255,255,255,0.15); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; display: none; }
-  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; margin: 0; background: #f1f5f9; color: #1e293b; }
+  header { background: #1e293b; color: white; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 20; }
+  header h1 { font-size: 17px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .header-actions { display: flex; gap: 10px; align-items: center; }
+  .header-btn { background: rgba(255,255,255,0.14); color: white; border: none; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-size: 13px; display: none; }
+  .header-btn:hover { background: rgba(255,255,255,0.24); }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 20px; }
 
   /* 登录框 */
-  #login-box { max-width: 380px; margin: 80px auto; background: white; padding: 32px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-  #login-box h2 { margin-top: 0; }
-  #login-box input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-  #login-box button { width: 100%; background: #2c3e50; color: white; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; }
-  #login-error { color: #e74c3c; font-size: 13px; margin-top: 8px; display: none; }
+  #login-box, #reset-box { max-width: 390px; margin: 80px auto; background: white; padding: 32px; border-radius: 14px; box-shadow: 0 8px 30px rgba(15,23,42,0.08); }
+  #login-box h2, #reset-box h2 { margin-top: 0; }
+  #login-box input, #reset-box input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
+  #login-box button, #reset-box button { width: 100%; background: #1e293b; color: white; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; }
+  #login-error, #reset-error { color: #dc2626; font-size: 13px; margin-top: 8px; display: none; }
 
   /* 主界面 */
   #main-box { display: none; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-  .tab-btn { padding: 10px 18px; border: none; background: #e8eaed; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; color: #555; }
-  .tab-btn.active { background: #2c3e50; color: white; }
-  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; flex-wrap: wrap; }
-  .search-input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; }
-  .export-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; white-space: nowrap; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab-btn { padding: 9px 16px; border: none; background: #e2e8f0; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; color: #475569; }
+  .tab-btn.active { background: #1e293b; color: white; }
 
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-  th, td { padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #f0f0f0; }
-  th { background: #f8f9fa; color: #666; font-weight: 600; }
+  /* 状态筛选条 */
+  .status-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .status-pill { border: 1px solid #cbd5e1; background: white; color: #334155; padding: 6px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .status-pill.active { background: #0f172a; color: white; border-color: #0f172a; }
+  .status-pill .pill-num { background: rgba(148,163,184,0.22); padding: 1px 7px; border-radius: 10px; font-size: 11.5px; }
+  .status-pill.active .pill-num { background: rgba(255,255,255,0.22); }
+
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; flex-wrap: wrap; }
+  .search-input { flex: 1; min-width: 240px; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13.5px; background: white; }
+  .export-btn { background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .export-btn:hover { background: #059669; }
+
+  .table-card { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 2px 12px rgba(15,23,42,0.05); }
+  table { width: 100%; border-collapse: collapse; min-width: 980px; }
+  th, td { padding: 11px 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  th { background: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
+  tr:hover td { background: #f8fafc; }
   tr:last-child td { border-bottom: none; }
-  .empty-tip { text-align: center; padding: 60px 20px; color: #999; }
-  .contact-tag { background: #f0f2f5; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-  .items-detail { font-size: 12px; color: #666; }
-  .items-detail div { margin-bottom: 2px; }
-  .refresh-tip { font-size: 12px; color: #999; margin-bottom: 10px; }
+  .empty-tip { text-align: center; padding: 60px 20px; color: #94a3b8; }
+
+  /* 状态标签 */
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .badge-new { background: #fef2f2; color: #dc2626; }
+  .badge-ai_following { background: #eff6ff; color: #2563eb; }
+  .badge-replied { background: #ecfdf5; color: #059669; }
+  .badge-qualified { background: #fff7ed; color: #ea580c; }
+  .badge-won { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+  .badge-invalid { background: #f1f5f9; color: #64748b; }
+
+  .status-select { border: 1px solid #e2e8f0; border-radius: 6px; padding: 3px 6px; font-size: 12px; background: white; cursor: pointer; }
+  .contact-line { font-size: 12.5px; margin-bottom: 3px; word-break: break-all; }
+  .contact-tag { background: #f1f5f9; padding: 2px 7px; border-radius: 4px; font-size: 12px; display: inline-block; }
+  .wa-link { color: #059669; text-decoration: none; font-weight: 600; font-size: 12px; }
+  .wa-link:hover { text-decoration: underline; }
+  .interest-tag { display: inline-block; background: #eef2ff; color: #4338ca; padding: 2px 7px; border-radius: 10px; font-size: 11px; margin: 0 4px 4px 0; }
+  .msg-preview { font-size: 12px; color: #475569; max-width: 240px; white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 3px; }
+  .reply-btn { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .reply-btn:hover { background: #1d4ed8; }
+  .meta-sub { font-size: 11.5px; color: #94a3b8; margin-top: 3px; }
+
+  /* 详情与回复抽屉 */
+  .drawer-mask { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.45); z-index: 100; justify-content: flex-end; }
+  .drawer-mask.open { display: flex; }
+  .drawer { width: 540px; max-width: 100vw; background: white; height: 100%; display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(15,23,42,0.18); }
+  .drawer-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+  .drawer-header h3 { margin: 0; font-size: 16px; }
+  .drawer-close { background: none; border: none; font-size: 22px; color: #64748b; cursor: pointer; line-height: 1; }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 18px 20px; }
+
+  .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px; font-size: 13px; }
+  .info-row { display: flex; margin-bottom: 7px; gap: 8px; }
+  .info-label { width: 78px; color: #64748b; flex-shrink: 0; }
+  .info-val { flex: 1; color: #0f172a; word-break: break-word; }
+
+  .section-title { font-size: 13.5px; font-weight: 700; color: #1e293b; margin: 16px 0 8px; display: flex; justify-content: space-between; align-items: center; }
+  .reply-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .reply-tab { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: #475569; }
+  .reply-tab.active { background: #1e293b; color: white; border-color: #1e293b; }
+
+  .tpl-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tpl-btn { font-size: 11.5px; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; border-radius: 14px; padding: 4px 10px; cursor: pointer; }
+  .tpl-btn:hover { background: #e0e7ff; }
+
+  .field-input, .field-textarea { width: 100%; padding: 9px 11px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; margin-bottom: 10px; }
+  .field-textarea { min-height: 115px; resize: vertical; }
+  .send-btn { width: 100%; padding: 11px; border: none; border-radius: 8px; background: #2563eb; color: white; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .send-btn.wa { background: #10b981; }
+  .send-btn.note { background: #475569; }
+  .reply-feedback { font-size: 12.5px; margin-top: 8px; padding: 8px 10px; border-radius: 6px; display: none; }
+  .reply-feedback.ok { background: #ecfdf5; color: #047857; display: block; }
+  .reply-feedback.err { background: #fef2f2; color: #dc2626; display: block; }
+
+  .timeline { display: flex; flex-direction: column; gap: 10px; }
+  .tl-item { border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; background: white; font-size: 12.5px; }
+  .tl-item.ai { border-left: 3px solid #2563eb; background: #f8fafc; }
+  .tl-item.admin { border-left: 3px solid #10b981; }
+  .tl-item.note { border-left: 3px solid #94a3b8; background: #fafafa; }
+  .tl-head { display: flex; justify-content: space-between; color: #64748b; font-size: 11.5px; margin-bottom: 5px; }
+  .tl-subj { font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+  .tl-body { white-space: pre-wrap; color: #334155; line-height: 1.5; }
 
   /* 数据分析面板 */
   .stats-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-  .stats-section h3 { margin-top: 0; font-size: 15px; color: #2c3e50; }
+  .stats-section h3 { margin-top: 0; font-size: 15px; color: #1e293b; }
   .country-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
   .country-name { width: 130px; font-size: 13px; flex-shrink: 0; }
-  .country-bar-bg { flex: 1; background: #f0f2f5; border-radius: 6px; height: 18px; overflow: hidden; }
-  .country-bar-fill { background: #2c3e50; height: 100%; border-radius: 6px; }
-  .country-num { width: 40px; text-align: right; font-size: 13px; font-weight: bold; color: #2c3e50; flex-shrink: 0; }
+  .country-bar-bg { flex: 1; background: #f1f5f9; border-radius: 6px; height: 18px; overflow: hidden; }
+  .country-bar-fill { background: #1e293b; height: 100%; border-radius: 6px; }
+  .country-num { width: 40px; text-align: right; font-size: 13px; font-weight: bold; color: #1e293b; flex-shrink: 0; }
   .country-sku-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-  .country-sku-card { border: 1px solid #f0f0f0; border-radius: 10px; padding: 14px; }
-  .country-sku-card h4 { margin: 0 0 8px 0; font-size: 14px; color: #2c3e50; }
-  .country-sku-card ol { margin: 0; padding-left: 18px; font-size: 12px; color: #555; }
-  .country-sku-card li { margin-bottom: 4px; }
+  .country-sku-card { border: 1px solid #f1f5f9; border-radius: 10px; padding: 14px; }
+  .country-sku-card h4 { margin: 0 0 8px 0; font-size: 14px; color: #1e293b; }
+  .country-sku-card ol { margin: 0; padding-left: 18px; font-size: 12px; color: #475569; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🌷 Leo Flora 客户后台</h1>
-  <button id="logout-btn" onclick="logout()">退出登录</button>
+  <h1>🌷 Leo Faux 客户 CRM 后台</h1>
+  <div class="header-actions">
+    <button id="refresh-btn" class="header-btn" onclick="loadData()">🔄 刷新数据</button>
+    <button id="logout-btn" class="header-btn" onclick="logout()">退出登录</button>
+  </div>
 </header>
 
 <div class="wrap">
-
   <!-- 登录 -->
   <div id="login-box">
     <h2>管理员登录</h2>
-    <p style="font-size:13px;color:#888;margin-top:-8px;">请使用你在 Supabase 后台创建的管理员账号登录</p>
+    <p style="font-size:13px;color:#64748b;margin-top:-8px;">请使用 Supabase 管理员账号登录</p>
     <input type="email" id="login-email" placeholder="邮箱">
-    <input type="password" id="login-password" placeholder="密码">
+    <input type="password" id="login-password" placeholder="密码" onkeydown="if(event.key==='Enter')login()">
     <button onclick="login()">登录</button>
     <div id="login-error"></div>
   </div>
 
-  <!-- 重置密码（通过邮件里的重置链接跳转过来后显示） -->
-  <div id="reset-box" style="display:none; max-width: 380px; margin: 80px auto; background: white; padding: 32px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
-    <h2 style="margin-top:0;">设置新密码</h2>
-    <p style="font-size:13px;color:#888;margin-top:-8px;">请输入你要使用的新密码（至少 6 位）</p>
-    <input type="password" id="new-password" placeholder="新密码" style="width:100%; padding:12px; margin:8px 0; border:1px solid #ddd; border-radius:8px; font-size:14px;">
-    <button onclick="submitNewPassword()" style="width:100%; background:#27ae60; color:white; padding:13px; border:none; border-radius:8px; font-size:15px; font-weight:bold; cursor:pointer; margin-top:12px;">确定并登录</button>
-    <div id="reset-error" style="color:#e74c3c; font-size:13px; margin-top:8px; display:none;"></div>
+  <!-- 重置密码 -->
+  <div id="reset-box" style="display:none;">
+    <h2>设置新密码</h2>
+    <p style="font-size:13px;color:#64748b;margin-top:-8px;">请输入新密码（至少 6 位）</p>
+    <input type="password" id="new-password" placeholder="新密码">
+    <button onclick="submitNewPassword()" style="background:#10b981;">确定并登录</button>
+    <div id="reset-error"></div>
   </div>
 
   <!-- 主界面 -->
   <div id="main-box">
     <div class="tabs">
-      <button class="tab-btn active" id="tab-leads-btn" onclick="switchTab('leads')">客户注册 (<span id="leads-count">0</span>)</button>
+      <button class="tab-btn active" id="tab-leads-btn" onclick="switchTab('leads')">客户管理 (<span id="leads-count">0</span>)</button>
       <button class="tab-btn" id="tab-inquiries-btn" onclick="switchTab('inquiries')">询盘记录 (<span id="inquiries-count">0</span>)</button>
       <button class="tab-btn" id="tab-stats-btn" onclick="switchTab('stats')">📊 数据分析</button>
     </div>
 
+    <div id="status-pills" class="status-pills"></div>
+
     <div class="toolbar" id="toolbar">
-      <input type="text" class="search-input" id="search-input" placeholder="搜索姓名 / 联系方式..." oninput="renderCurrentTab()">
+      <input type="text" class="search-input" id="search-input" placeholder="搜索姓名 / 邮箱 / 手机 / 国家 / 产品意向 / 留言..." oninput="renderCurrentTab()">
       <button class="export-btn" onclick="exportCurrentTab()">📥 导出 Excel</button>
     </div>
 
-    <div id="leads-panel">
-      <div id="leads-table-wrap"></div>
-    </div>
-    <div id="inquiries-panel" style="display:none;">
-      <div id="inquiries-table-wrap"></div>
-    </div>
-    <div id="stats-panel" style="display:none;">
-      <div id="stats-wrap"></div>
-    </div>
+    <div id="leads-panel"><div id="leads-table-wrap"></div></div>
+    <div id="inquiries-panel" style="display:none;"><div id="inquiries-table-wrap"></div></div>
+    <div id="stats-panel" style="display:none;"><div id="stats-wrap"></div></div>
   </div>
+</div>
 
+<!-- 客户详情 & 回复抽屉 -->
+<div class="drawer-mask" id="drawer-mask" onclick="if(event.target===this)closeDrawer()">
+  <div class="drawer">
+    <div class="drawer-header">
+      <h3 id="drawer-title">客户详情与回复</h3>
+      <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </div>
 </div>
 
 <script>
@@ -114,12 +192,25 @@ const SUPABASE_URL = "https://pdenhgnxrgngwvqtrmhk.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZW5oZ254cmduZ3d2cXRybWhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNDUwODUsImV4cCI6MjA5NzYyMTA4NX0.RUPqVRCE-sLsFJT64SuiWhtLvC_bho3Po4dTDlnKrgI";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const STATUS_META = {
+  new:          { label: '未回复',     icon: '🔴' },
+  ai_following: { label: 'AI跟进中',   icon: '🤖' },
+  replied:      { label: '已回复',     icon: '✅' },
+  qualified:    { label: '高意向待接手', icon: '🔥' },
+  won:          { label: '已成交',     icon: '🏆' },
+  invalid:      { label: '无效',       icon: '⚪' }
+};
+
 let leads = [];
 let inquiries = [];
 let currentTab = 'leads';
+let statusFilter = 'all';
+let activeLeadId = null;
+let activeReplyChannel = 'email';
+let activeSessionToken = null;
 
-// 监听"重置密码"链接跳转过来的特殊登录状态
-sb.auth.onAuthStateChange((event) => {
+sb.auth.onAuthStateChange((event, session) => {
+  if (session && session.access_token) activeSessionToken = session.access_token;
   if (event === 'PASSWORD_RECOVERY') {
     document.getElementById('login-box').style.display = 'none';
     document.getElementById('main-box').style.display = 'none';
@@ -128,12 +219,18 @@ sb.auth.onAuthStateChange((event) => {
 });
 
 async function checkSession() {
-  // 如果是从"重置密码"邮件链接跳转过来的，交给上面的监听器处理，先不要自动进主界面
   if (window.location.hash.includes('type=recovery')) return;
   const { data } = await sb.auth.getSession();
   if (data.session) {
+    activeSessionToken = data.session.access_token;
     showMain();
   }
+}
+
+async function getAccessToken() {
+  const { data } = await sb.auth.getSession();
+  activeSessionToken = data.session ? data.session.access_token : null;
+  return activeSessionToken;
 }
 
 async function submitNewPassword() {
@@ -152,7 +249,7 @@ async function submitNewPassword() {
     return;
   }
   document.getElementById('reset-box').style.display = 'none';
-  history.replaceState(null, '', window.location.pathname); // 清掉网址里的 token，避免刷新后重复处理
+  history.replaceState(null, '', window.location.pathname);
   showMain();
 }
 
@@ -162,26 +259,30 @@ async function login() {
   const errEl = document.getElementById('login-error');
   errEl.style.display = 'none';
   if (!email || !password) return;
-  const { error } = await sb.auth.signInWithPassword({ email, password });
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
   if (error) {
     errEl.innerText = '登录失败：' + error.message;
     errEl.style.display = 'block';
     return;
   }
+  activeSessionToken = data.session ? data.session.access_token : null;
   showMain();
 }
 
 async function logout() {
   await sb.auth.signOut();
+  activeSessionToken = null;
   document.getElementById('login-box').style.display = 'block';
   document.getElementById('main-box').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'none';
+  document.getElementById('refresh-btn').style.display = 'none';
 }
 
 function showMain() {
   document.getElementById('login-box').style.display = 'none';
   document.getElementById('main-box').style.display = 'block';
   document.getElementById('logout-btn').style.display = 'inline-block';
+  document.getElementById('refresh-btn').style.display = 'inline-block';
   loadData();
 }
 
@@ -189,9 +290,9 @@ async function loadData() {
   const { data: leadsData, error: leadsErr } = await sb
     .from('customer_leads')
     .select('*')
-    .order('last_seen_at', { ascending: false });
-  if (leadsErr) { console.error(leadsErr); alert('加载客户注册数据失败：' + leadsErr.message); }
-  leads = leadsData || [];
+    .order('created_at', { ascending: false });
+  if (leadsErr) { console.error(leadsErr); alert('加载客户数据失败：' + leadsErr.message); }
+  leads = (leadsData || []).map(l => ({ ...l, status: l.status || 'new' }));
 
   const { data: inqData, error: inqErr } = await sb
     .from('inquiries')
@@ -202,6 +303,31 @@ async function loadData() {
 
   document.getElementById('leads-count').innerText = leads.length;
   document.getElementById('inquiries-count').innerText = inquiries.length;
+  renderStatusPills();
+  renderCurrentTab();
+}
+
+function renderStatusPills() {
+  const counts = { all: leads.length };
+  Object.keys(STATUS_META).forEach(k => counts[k] = 0);
+  leads.forEach(l => {
+    const s = l.status || 'new';
+    counts[s] = (counts[s] || 0) + 1;
+  });
+
+  const pillsEl = document.getElementById('status-pills');
+  pillsEl.style.display = currentTab === 'leads' ? 'flex' : 'none';
+  pillsEl.innerHTML = [
+    `<button class="status-pill ${statusFilter === 'all' ? 'active' : ''}" onclick="setStatusFilter('all')">全部 <span class="pill-num">${counts.all}</span></button>`,
+    ...Object.entries(STATUS_META).map(([k, m]) =>
+      `<button class="status-pill ${statusFilter === k ? 'active' : ''}" onclick="setStatusFilter('${k}')">${m.icon} ${m.label} <span class="pill-num">${counts[k] || 0}</span></button>`
+    )
+  ].join('');
+}
+
+function setStatusFilter(st) {
+  statusFilter = st;
+  renderStatusPills();
   renderCurrentTab();
 }
 
@@ -214,46 +340,355 @@ function switchTab(tab) {
   document.getElementById('inquiries-panel').style.display = tab === 'inquiries' ? 'block' : 'none';
   document.getElementById('stats-panel').style.display = tab === 'stats' ? 'block' : 'none';
   document.getElementById('toolbar').style.display = tab === 'stats' ? 'none' : 'flex';
-  document.getElementById('search-input').placeholder = tab === 'leads' ? '搜索姓名 / 联系方式...' : '搜索客户姓名 / 联系方式 / SKU...';
+  document.getElementById('status-pills').style.display = tab === 'leads' ? 'flex' : 'none';
   renderCurrentTab();
 }
 
 function renderCurrentTab() {
   const key = document.getElementById('search-input').value.toLowerCase().trim();
-  if (currentTab === 'leads') {
-    renderLeads(key);
-  } else if (currentTab === 'inquiries') {
-    renderInquiries(key);
-  } else {
-    renderStats();
-  }
+  if (currentTab === 'leads') renderLeads(key);
+  else if (currentTab === 'inquiries') renderInquiries(key);
+  else renderStats();
+}
+
+function extractEmail(l) {
+  if (l.email) return l.email;
+  if (l.contact && l.contact.includes('@')) return l.contact.split('|')[0].trim();
+  return '';
+}
+
+function extractPhone(l) {
+  if (l.phone) return l.phone;
+  if (l.contact && !l.contact.includes('@') && /[0-9]{7,}/.test(l.contact)) return l.contact.trim();
+  return '';
 }
 
 function renderLeads(key) {
-  const list = !key ? leads : leads.filter(l =>
-    (l.name || '').toLowerCase().includes(key) || (l.contact || '').toLowerCase().includes(key)
-  );
+  let list = leads;
+  if (statusFilter !== 'all') {
+    list = list.filter(l => (l.status || 'new') === statusFilter);
+  }
+  if (key) {
+    list = list.filter(l => {
+      const hay = [
+        l.name, l.email, l.phone, l.contact, l.country, l.region, l.city,
+        (l.product_interest || []).join(' '), l.message, l.notes
+      ].join(' ').toLowerCase();
+      return hay.includes(key);
+    });
+  }
+
   const wrap = document.getElementById('leads-table-wrap');
   if (list.length === 0) {
-    wrap.innerHTML = '<div class="empty-tip">暂无客户注册记录</div>';
+    wrap.innerHTML = '<div class="table-card"><div class="empty-tip">当前筛选下暂无客户记录</div></div>';
     return;
   }
+
   wrap.innerHTML = `
-    <table>
-      <thead><tr><th>姓名 / 公司</th><th>联系方式</th><th>国家 / 地区</th><th>首次注册时间</th><th>最近访问时间</th></tr></thead>
-      <tbody>
-        ${list.map(l => `
+    <div class="table-card">
+      <table>
+        <thead>
           <tr>
-            <td>${escapeHtml(l.name || '')}</td>
-            <td><span class="contact-tag">${escapeHtml(l.contact || '')}</span></td>
-            <td>${escapeHtml(formatLocation(l.country, l.region, l.city))}</td>
-            <td>${formatDate(l.created_at)}</td>
-            <td>${formatDate(l.last_seen_at)}</td>
+            <th>状态</th>
+            <th>客户 / 地区</th>
+            <th>邮箱 &amp; WhatsApp</th>
+            <th>产品意向 &amp; 留言</th>
+            <th>跟进记录</th>
+            <th>注册时间</th>
+            <th>操作</th>
           </tr>
-        `).join('')}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          ${list.map(l => {
+            const st = l.status || 'new';
+            const meta = STATUS_META[st] || STATUS_META.new;
+            const email = extractEmail(l);
+            const phone = extractPhone(l);
+            const waDigits = phone.replace(/\D/g, '');
+            const interests = Array.isArray(l.product_interest) ? l.product_interest : [];
+            return `
+              <tr>
+                <td>
+                  <span class="badge badge-${st}">${meta.icon} ${meta.label}</span>
+                  <div style="margin-top:5px;">
+                    <select class="status-select" onchange="quickUpdateStatus('${l.id}', this.value)">
+                      ${Object.entries(STATUS_META).map(([k, m]) => `<option value="${k}" ${k===st?'selected':''}>${m.label}</option>`).join('')}
+                    </select>
+                  </div>
+                </td>
+                <td>
+                  <div style="font-weight:700;color:#0f172a;">${escapeHtml(l.name || '(未填)')}</div>
+                  <div class="meta-sub">🌍 ${escapeHtml(formatLocation(l.country, l.region, l.city))}</div>
+                </td>
+                <td>
+                  ${email ? `<div class="contact-line">📧 ${escapeHtml(email)}</div>` : ''}
+                  ${phone ? `<div class="contact-line">📱 ${escapeHtml(phone)} ${waDigits.length>=7 ? `<a class="wa-link" href="https://wa.me/${waDigits}" target="_blank">WhatsApp↗</a>` : ''}</div>` : ''}
+                  ${(!email && !phone) ? `<span class="contact-tag">${escapeHtml(l.contact || '')}</span>` : ''}
+                </td>
+                <td>
+                  <div>${interests.map(t => `<span class="interest-tag">${escapeHtml(t)}</span>`).join('')}</div>
+                  ${l.message ? `<div class="msg-preview" title="${escapeHtml(l.message)}">💬 ${escapeHtml(l.message)}</div>` : '<span class="meta-sub">无留言</span>'}
+                  ${l.notes ? `<div class="meta-sub" style="color:#b45309;">📝 备注：${escapeHtml(l.notes)}</div>` : ''}
+                </td>
+                <td>
+                  <div>${l.reply_count ? `已回复 <b>${l.reply_count}</b> 次` : '<span style="color:#94a3b8;">尚未回复</span>'}</div>
+                  ${l.last_reply_at ? `<div class="meta-sub">${l.last_reply_by === 'ai' ? '🤖 AI' : '👤 人工'} · ${formatDate(l.last_reply_at)}</div>` : ''}
+                </td>
+                <td>
+                  <div>${formatDate(l.created_at)}</div>
+                  <div class="meta-sub">最近: ${formatDate(l.last_seen_at)}</div>
+                </td>
+                <td>
+                  <button class="reply-btn" onclick="openDrawer('${l.id}')">回复 / 详情</button>
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
   `;
+}
+
+async function quickUpdateStatus(leadId, newStatus) {
+  const token = await getAccessToken();
+  const res = await fetch('/api/leads', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ lead_id: leadId, status: newStatus })
+  });
+  const data = await res.json();
+  if (!res.ok || !data.ok) {
+    alert('更新状态失败：' + (data.error || '请确认已执行 Supabase 升级 SQL'));
+    return;
+  }
+  const idx = leads.findIndex(x => x.id === leadId);
+  if (idx >= 0) leads[idx].status = newStatus;
+  renderStatusPills();
+  renderCurrentTab();
+}
+
+async function openDrawer(leadId) {
+  activeLeadId = leadId;
+  activeReplyChannel = 'email';
+  const lead = leads.find(l => l.id === leadId);
+  if (!lead) return;
+
+  document.getElementById('drawer-title').innerText = `客户详情 · ${lead.name || ''}`;
+  document.getElementById('drawer-mask').classList.add('open');
+  document.getElementById('drawer-body').innerHTML = '<div class="empty-tip">正在加载客户跟进记录...</div>';
+
+  // 拉取该客户历史回复
+  let replies = [];
+  try {
+    const token = await getAccessToken();
+    const res = await fetch(`/api/leads?lead_id=${encodeURIComponent(leadId)}&include_replies=1`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.ok && data.leads && data.leads[0]) {
+      replies = data.leads[0].replies || [];
+    }
+  } catch (e) { console.error(e); }
+
+  renderDrawerContent(lead, replies);
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-mask').classList.remove('open');
+  activeLeadId = null;
+}
+
+function renderDrawerContent(lead, replies) {
+  const email = extractEmail(lead);
+  const phone = extractPhone(lead);
+  const waDigits = phone.replace(/\D/g, '');
+  const interests = Array.isArray(lead.product_interest) ? lead.product_interest : [];
+  const st = lead.status || 'new';
+
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="info-card">
+      <div class="info-row"><div class="info-label">姓名/公司</div><div class="info-val"><b>${escapeHtml(lead.name || '')}</b></div></div>
+      <div class="info-row"><div class="info-label">邮箱</div><div class="info-val">${email ? escapeHtml(email) : '<span style="color:#94a3b8;">未提供</span>'}</div></div>
+      <div class="info-row"><div class="info-label">手机/WA</div><div class="info-val">${phone ? `${escapeHtml(phone)} ${waDigits.length>=7 ? `<a class="wa-link" href="https://wa.me/${waDigits}" target="_blank">打开WhatsApp↗</a>` : ''}` : '<span style="color:#94a3b8;">未提供</span>'}</div></div>
+      <div class="info-row"><div class="info-label">国家/地区</div><div class="info-val">${escapeHtml(formatLocation(lead.country, lead.region, lead.city))}</div></div>
+      <div class="info-row"><div class="info-label">产品意向</div><div class="info-val">${interests.length ? interests.map(t => `<span class="interest-tag">${escapeHtml(t)}</span>`).join('') : '<span style="color:#94a3b8;">未选择</span>'}</div></div>
+      <div class="info-row"><div class="info-label">客户留言</div><div class="info-val" style="white-space:pre-wrap;">${lead.message ? escapeHtml(lead.message) : '<span style="color:#94a3b8;">无留言</span>'}</div></div>
+      <div class="info-row" style="align-items:center; margin-top:8px;">
+        <div class="info-label">跟进状态</div>
+        <div class="info-val">
+          <select id="drawer-status" class="status-select" onchange="quickUpdateStatus('${lead.id}', this.value)">
+            ${Object.entries(STATUS_META).map(([k, m]) => `<option value="${k}" ${k===st?'selected':''}>${m.icon} ${m.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="info-row" style="margin-top:8px;">
+        <div class="info-label">内部备注</div>
+        <div class="info-val" style="display:flex; gap:6px;">
+          <input id="drawer-notes" class="field-input" style="margin:0;" value="${escapeHtml(lead.notes || '')}" placeholder="输入跟进备注后点击保存...">
+          <button class="reply-btn" style="background:#475569;" onclick="saveLeadNotes('${lead.id}')">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">✉️ 快捷回复客户</div>
+    <div class="reply-tabs">
+      <button class="reply-tab ${activeReplyChannel==='email'?'active':''}" onclick="switchReplyChannel('email')">📧 直接发邮件</button>
+      <button class="reply-tab ${activeReplyChannel==='whatsapp'?'active':''}" onclick="switchReplyChannel('whatsapp')">💬 WhatsApp跟进</button>
+      <button class="reply-tab ${activeReplyChannel==='note'?'active':''}" onclick="switchReplyChannel('note')">📝 仅记日志</button>
+    </div>
+
+    <div class="tpl-bar">
+      <button class="tpl-btn" onclick="applyTemplate('welcome')">模板1: 初次问候+图册</button>
+      <button class="tpl-btn" onclick="applyTemplate('quote')">模板2: 询问意向与报价</button>
+      <button class="tpl-btn" onclick="applyTemplate('sample')">模板3: 样品与MOQ说明</button>
+    </div>
+
+    <div id="reply-subject-wrap" style="display:${activeReplyChannel==='email'?'block':'none'};">
+      <input id="reply-subject" class="field-input" placeholder="邮件主题" value="Hello ${escapeHtml(lead.name || 'Friend')} — Leo Faux Wholesale Catalog & Quote">
+    </div>
+    <textarea id="reply-content" class="field-textarea" placeholder="请输入回复内容..."></textarea>
+    <button id="btn-send-reply" class="send-btn ${activeReplyChannel==='whatsapp'?'wa':(activeReplyChannel==='note'?'note':'')}" onclick="submitReply('${lead.id}')">
+      ${activeReplyChannel==='email' ? '📧 立即发送邮件给客户' : (activeReplyChannel==='whatsapp' ? '💬 打开 WhatsApp 并记入回复记录' : '📝 保存为跟进日志')}
+    </button>
+    <div id="reply-feedback" class="reply-feedback"></div>
+
+    <div class="section-title">🕒 历史回复与跟进记录 (${replies.length})</div>
+    <div class="timeline">
+      ${replies.length === 0 ? '<div style="color:#94a3b8;font-size:12.5px;">暂无历史回复记录</div>' : replies.map(r => `
+        <div class="tl-item ${r.channel==='note'?'note':(r.sender==='ai'?'ai':'admin')}">
+          <div class="tl-head">
+            <span>${r.sender==='ai'?'🤖 AI自动跟进':'👤 管理员'} · ${channelLabel(r.channel)} (${r.delivery_status === 'sent' ? '已发送' : '已记录'})</span>
+            <span>${formatDate(r.created_at)}</span>
+          </div>
+          ${r.subject ? `<div class="tl-subj">${escapeHtml(r.subject)}</div>` : ''}
+          <div class="tl-body">${escapeHtml(r.content)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function channelLabel(ch) {
+  return { email: '邮件', ai_email: 'AI邮件', whatsapp: 'WhatsApp', note: '内部备注' }[ch] || ch;
+}
+
+function switchReplyChannel(ch) {
+  activeReplyChannel = ch;
+  const lead = leads.find(l => l.id === activeLeadId);
+  if (!lead) return;
+  document.querySelectorAll('.reply-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', (i===0 && ch==='email') || (i===1 && ch==='whatsapp') || (i===2 && ch==='note'));
+  });
+  document.getElementById('reply-subject-wrap').style.display = ch === 'email' ? 'block' : 'none';
+  const btn = document.getElementById('btn-send-reply');
+  btn.className = 'send-btn ' + (ch === 'whatsapp' ? 'wa' : (ch === 'note' ? 'note' : ''));
+  btn.innerText = ch === 'email' ? '📧 立即发送邮件给客户' : (ch === 'whatsapp' ? '💬 打开 WhatsApp 并记入回复记录' : '📝 保存为跟进日志');
+}
+
+function applyTemplate(type) {
+  const lead = leads.find(l => l.id === activeLeadId) || {};
+  const name = lead.name || 'Friend';
+  const interestText = (lead.product_interest && lead.product_interest.length)
+    ? ` (especially ${lead.product_interest.join(', ')})`
+    : '';
+  const templates = {
+    welcome: {
+      subject: `Welcome to Leo Faux, ${name}! Factory Wholesale Catalog`,
+      body: `Hi ${name},\n\nThank you for registering on Leo Faux (www.leofaux.com)! We are a direct artificial flowers manufacturer in Yiwu, China with 3,300+ wholesale SKUs.\n\nWe noticed your interest in our floral collection${interestText}. Could you let us know which styles or quantity you are looking for? We'd be happy to send you our latest factory price list and best-selling photos.\n\nLooking forward to your reply!\n\nBest regards,\nLeo Faux Sales Team`
+    },
+    quote: {
+      subject: `Wholesale Quote Follow-up — Leo Faux`,
+      body: `Hi ${name},\n\nFollowing up on your visit to our wholesale catalog${interestText}. If you have specific SKU numbers, target colors, or an upcoming event/project date, please share them with us and we will prepare a detailed FOB/DDP quotation within 24 hours.\n\nFeel free to reply directly to this email or message us on WhatsApp: +86 186 5792 6791.\n\nBest regards,\nLeo Faux Team`
+    },
+    sample: {
+      subject: `Sample & MOQ Details — Leo Faux Artificial Flowers`,
+      body: `Hi ${name},\n\nThank you for your interest in Leo Faux! We support mixed-style wholesale orders with flexible MOQ and can also arrange sample boxes shipped via DHL/FedEx to your address.\n\nLet us know your preferred categories or destination country so we can calculate shipping for you.\n\nBest regards,\nLeo Faux Team`
+    }
+  };
+  const tpl = templates[type];
+  if (!tpl) return;
+  const subjEl = document.getElementById('reply-subject');
+  const contentEl = document.getElementById('reply-content');
+  if (subjEl) subjEl.value = tpl.subject;
+  if (contentEl) contentEl.value = tpl.body;
+}
+
+async function saveLeadNotes(leadId) {
+  const notes = document.getElementById('drawer-notes').value;
+  const token = await getAccessToken();
+  const res = await fetch('/api/leads', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ lead_id: leadId, notes })
+  });
+  const data = await res.json();
+  if (res.ok && data.ok) {
+    const idx = leads.findIndex(x => x.id === leadId);
+    if (idx >= 0) leads[idx].notes = notes;
+    renderCurrentTab();
+    alert('备注已保存');
+  } else {
+    alert('保存备注失败：' + (data.error || '未知错误'));
+  }
+}
+
+async function submitReply(leadId) {
+  const lead = leads.find(l => l.id === leadId);
+  const content = (document.getElementById('reply-content').value || '').trim();
+  const subject = (document.getElementById('reply-subject').value || '').trim();
+  const fb = document.getElementById('reply-feedback');
+  fb.className = 'reply-feedback';
+
+  if (!content) {
+    fb.className = 'reply-feedback err';
+    fb.innerText = '请先输入回复内容';
+    return;
+  }
+
+  if (activeReplyChannel === 'whatsapp') {
+    const phone = extractPhone(lead);
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length >= 7) {
+      window.open(`https://wa.me/${digits}?text=${encodeURIComponent(content)}`, '_blank');
+    }
+  }
+
+  const btn = document.getElementById('btn-send-reply');
+  btn.disabled = true;
+  const orig = btn.innerText;
+  btn.innerText = '正在处理...';
+
+  try {
+    const token = await getAccessToken();
+    const res = await fetch('/api/leads-reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        lead_id: leadId,
+        channel: activeReplyChannel,
+        subject,
+        content
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      fb.className = 'reply-feedback err';
+      fb.innerText = '发送失败：' + (data.error || '请检查 Vercel 环境变量 GMAIL_APP_PASSWORD 是否已配置');
+      return;
+    }
+
+    fb.className = 'reply-feedback ok';
+    fb.innerText = activeReplyChannel === 'email' ? '✅ 邮件已成功发送，状态已自动更新！' : '✅ 已记录到客户跟进历史！';
+    await loadData();
+    await openDrawer(leadId);
+  } catch (err) {
+    fb.className = 'reply-feedback err';
+    fb.innerText = '请求异常：' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerText = orig;
+  }
 }
 
 function renderInquiries(key) {
@@ -263,25 +698,27 @@ function renderInquiries(key) {
   });
   const wrap = document.getElementById('inquiries-table-wrap');
   if (list.length === 0) {
-    wrap.innerHTML = '<div class="empty-tip">暂无询盘记录</div>';
+    wrap.innerHTML = '<div class="table-card"><div class="empty-tip">暂无询盘记录</div></div>';
     return;
   }
   wrap.innerHTML = `
-    <table>
-      <thead><tr><th>客户</th><th>联系方式</th><th>国家 / 地区</th><th>询盘内容</th><th>总数量</th><th>时间</th></tr></thead>
-      <tbody>
-        ${list.map(i => `
-          <tr>
-            <td>${escapeHtml(i.customer_name || '')}</td>
-            <td><span class="contact-tag">${escapeHtml(i.contact || '')}</span></td>
-            <td>${escapeHtml(formatLocation(i.country, i.region, i.city))}</td>
-            <td class="items-detail">${(i.items || []).map(it => `<div>${escapeHtml(it.sku || '')} × ${it.qty || 1}</div>`).join('')}</td>
-            <td>${i.total_qty || ''}</td>
-            <td>${formatDate(i.created_at)}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>客户</th><th>联系方式</th><th>国家 / 地区</th><th>询盘内容</th><th>总数量</th><th>时间</th></tr></thead>
+        <tbody>
+          ${list.map(i => `
+            <tr>
+              <td><b>${escapeHtml(i.customer_name || '')}</b></td>
+              <td><span class="contact-tag">${escapeHtml(i.contact || '')}</span></td>
+              <td>${escapeHtml(formatLocation(i.country, i.region, i.city))}</td>
+              <td style="font-size:12px;color:#475569;">${(i.items || []).map(it => `<div>${escapeHtml(it.sku || '')} × ${it.qty || 1}</div>`).join('')}</td>
+              <td>${i.total_qty || ''}</td>
+              <td>${formatDate(i.created_at)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
   `;
 }
 
@@ -289,15 +726,22 @@ function exportCurrentTab() {
   if (currentTab === 'leads') {
     if (leads.length === 0) return alert('暂无数据');
     const rows = leads.map(l => ({
+      '状态': (STATUS_META[l.status || 'new'] || STATUS_META.new).label,
       '姓名/公司': l.name || '',
-      '联系方式': l.contact || '',
+      '邮箱': extractEmail(l),
+      '手机/WhatsApp': extractPhone(l),
+      '原联系方式': l.contact || '',
       '国家': l.country || '',
       '地区': l.region || '',
       '城市': l.city || '',
+      '产品意向': (l.product_interest || []).join(', '),
+      '客户留言': l.message || '',
+      '内部备注': l.notes || '',
+      '回复次数': l.reply_count || 0,
       '首次注册时间': formatDate(l.created_at),
       '最近访问时间': formatDate(l.last_seen_at)
     }));
-    exportToXlsx(rows, 'Leo Flora 客户注册名单.xlsx');
+    exportToXlsx(rows, 'Leo_Faux_CRM客户名单.xlsx');
   } else if (currentTab === 'inquiries') {
     if (inquiries.length === 0) return alert('暂无数据');
     const rows = inquiries.map(i => ({
@@ -310,9 +754,7 @@ function exportCurrentTab() {
       '总数量': i.total_qty || '',
       '时间': formatDate(i.created_at)
     }));
-    exportToXlsx(rows, 'Leo Flora 询盘记录.xlsx');
-  } else {
-    alert('数据分析页面暂不支持导出，请切换到"客户注册"或"询盘记录"标签导出。');
+    exportToXlsx(rows, 'Leo_Faux_询盘记录.xlsx');
   }
 }
 
@@ -323,24 +765,12 @@ function exportToXlsx(rows, filename) {
   XLSX.writeFile(wb, filename);
 }
 
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
-
-function formatLocation(country, region, city) {
-  const parts = [country, region, city].filter(Boolean);
-  return parts.length ? parts.join(' / ') : '未知';
-}
-
 function renderStats() {
   const wrap = document.getElementById('stats-wrap');
-
   if (leads.length === 0 && inquiries.length === 0) {
     wrap.innerHTML = '<div class="empty-tip">暂无数据可分析</div>';
     return;
   }
-
-  // 1. 按国家统计注册客户数
   const countryCounts = {};
   leads.forEach(l => {
     const c = l.country || '未知';
@@ -349,7 +779,6 @@ function renderStats() {
   const countryList = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
   const maxCount = countryList.length ? countryList[0][1] : 1;
 
-  // 2. 按国家统计最受欢迎的产品（来自询盘记录里的 SKU 和数量）
   const countrySkuMap = {};
   inquiries.forEach(i => {
     const c = i.country || '未知';
@@ -362,11 +791,7 @@ function renderStats() {
   const countrySkuTop = Object.entries(countrySkuMap).map(([country, skuMap]) => {
     const top = Object.entries(skuMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
     return { country, top };
-  }).sort((a, b) => {
-    const totalA = a.top.reduce((s, [, q]) => s + q, 0);
-    const totalB = b.top.reduce((s, [, q]) => s + q, 0);
-    return totalB - totalA;
-  });
+  }).sort((a, b) => b.top.reduce((s, [, q]) => s + q, 0) - a.top.reduce((s, [, q]) => s + q, 0));
 
   wrap.innerHTML = `
     <div class="stats-section">
@@ -379,7 +804,6 @@ function renderStats() {
         </div>
       `).join('')}
     </div>
-
     <div class="stats-section">
       <h3>💐 各国家 / 地区最受欢迎的产品（按询盘数量 Top 5）</h3>
       ${countrySkuTop.length === 0 ? '<div class="empty-tip">暂无询盘数据</div>' : `
@@ -387,15 +811,22 @@ function renderStats() {
           ${countrySkuTop.map(({ country, top }) => `
             <div class="country-sku-card">
               <h4>${escapeHtml(country)}</h4>
-              <ol>
-                ${top.map(([sku, qty]) => `<li>${escapeHtml(sku)} — ${qty} 件</li>`).join('')}
-              </ol>
+              <ol>${top.map(([sku, qty]) => `<li>${escapeHtml(sku)} — ${qty} 件</li>`).join('')}</ol>
             </div>
           `).join('')}
         </div>
       `}
     </div>
   `;
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function formatLocation(country, region, city) {
+  const parts = [country, region, city].filter(Boolean);
+  return parts.length ? parts.join(' / ') : '未知';
 }
 
 function formatDate(iso) {
@@ -406,6 +837,5 @@ function formatDate(iso) {
 
 checkSession();
 </script>
-
 </body>
 </html>

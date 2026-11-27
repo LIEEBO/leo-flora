@@ -6,5 +6,8 @@
     "build-sitemap": "node generate-sitemap.js",
     "build-blog": "node convert-blog.js",
     "build": "node convert-blog.js && node generate-sitemap.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.16"
   }
 }

@@ -276,16 +276,37 @@
     </div>
 
     <div class="modal-overlay" id="login-modal" style="display: flex;">
-        <div class="modal-content" style="text-align:center;">
-            <h2 data-i18n="welcome_title">Welcome to Leo faux</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:25px;" data-i18n="welcome_desc">Please fill in your info to begin.</p>
+        <div class="modal-content" style="text-align:left; max-width:460px; max-height:90vh; overflow-y:auto;">
+            <h2 style="text-align:center; margin-bottom:6px;" data-i18n="welcome_title">Welcome to Leo Faux</h2>
+            <p style="color:#666; font-size:13px; text-align:center; margin-top:0; margin-bottom:18px;" data-i18n="welcome_desc">Enter your real business contact to unlock 3,300+ wholesale SKUs.</p>
             <div style="text-align:left;">
-                <label for="input-name" style="font-size:12px; color:#999;" data-i18n="label_name">Name / Company</label>
-                <input type="text" id="input-name" class="login-input" placeholder="Your Name">
-                <label for="input-contact" style="font-size:12px; color:#999;" data-i18n="label_contact">Contact Method</label>
-                <input type="text" id="input-contact" class="login-input" placeholder="WhatsApp / WeChat / Email">
+                <label for="input-name" style="font-size:12px; color:#555; font-weight:600; display:block; margin-bottom:4px;" data-i18n="label_name">Name / Company *</label>
+                <input type="text" id="input-name" class="login-input" placeholder="e.g. Sarah / Bloom Events LLC" style="margin-top:0; margin-bottom:12px;">
+
+                <label for="input-email" style="font-size:12px; color:#555; font-weight:600; display:block; margin-bottom:4px;">Business / Personal Email *</label>
+                <input type="email" id="input-email" class="login-input" placeholder="e.g. buyer@company.com" style="margin-top:0; margin-bottom:12px;">
+
+                <label for="input-phone" style="font-size:12px; color:#555; font-weight:600; display:block; margin-bottom:4px;">WhatsApp / Phone (with Country Code) *</label>
+                <input type="tel" id="input-phone" class="login-input" placeholder="e.g. +1 323 963 6250" style="margin-top:0; margin-bottom:12px;">
+
+                <label style="font-size:12px; color:#555; font-weight:600; display:block; margin-bottom:6px;">Interested Categories (Optional)</label>
+                <div id="interest-chips" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Single Stems" style="margin-right:4px;">Single Stems</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Bouquets" style="margin-right:4px;">Bouquets</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Greenery" style="margin-right:4px;">Greenery</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Flower Walls" style="margin-right:4px;">Flower Walls</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Artificial Trees" style="margin-right:4px;">Artificial Trees</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Garlands & Vines" style="margin-right:4px;">Garlands &amp; Vines</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Orchids" style="margin-right:4px;">Orchids</label>
+                    <label style="font-size:12px; background:#f3f4f6; padding:5px 10px; border-radius:16px; cursor:pointer; user-select:none;"><input type="checkbox" value="Wedding / Event Project" style="margin-right:4px;">Wedding / Events</label>
+                </div>
+
+                <label for="input-message" style="font-size:12px; color:#555; font-weight:600; display:block; margin-bottom:4px;">Message / Requirements (Optional)</label>
+                <textarea id="input-message" class="login-input" rows="2" placeholder="Target quantity, event date, or specific flowers you are looking for..." style="margin-top:0; margin-bottom:10px; resize:vertical; font-family:inherit;"></textarea>
+
+                <div id="register-error" style="display:none; background:#fef2f2; color:#dc2626; border:1px solid #fecaca; border-radius:8px; padding:8px 10px; font-size:12px; margin-bottom:10px;"></div>
             </div>
-            <button class="btn-main" onclick="saveUserInfo()" data-i18n="btn_start">Start / 开始选品</button>
+            <button id="btn-register-submit" class="btn-main" onclick="saveUserInfo()" data-i18n="btn_start">Start / 开始选品</button>
         </div>
     </div>
 
@@ -585,22 +606,84 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         }
 
-        function saveUserInfo() {
+        function showRegisterError(msg, focusId) {
+            const errEl = document.getElementById('register-error');
+            if (errEl) {
+                errEl.textContent = msg;
+                errEl.style.display = 'block';
+            } else {
+                alert(msg);
+            }
+            if (focusId) {
+                const el = document.getElementById(focusId);
+                if (el) el.focus();
+            }
+        }
+
+        async function saveUserInfo() {
+            const errEl = document.getElementById('register-error');
+            if (errEl) errEl.style.display = 'none';
+
             const name = document.getElementById('input-name').value.trim();
-            const contact = document.getElementById('input-contact').value.trim();
-            if(!name || !contact) return alert("Please fill in your name and contact info.");
-            userInfo = { name, contact };
-            localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
-            document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('search-box-container').style.display = 'block';
-            document.getElementById('product-container').style.display = 'block';
-            updateUserDisplay();
-            // 客户注册信息同步写入后台数据库，方便老板在 leads.html 后台查看（不阻塞前台体验）
-            recordCustomerLead(name, contact);
+            const email = document.getElementById('input-email').value.trim().toLowerCase();
+            const phone = document.getElementById('input-phone').value.trim();
+            const message = (document.getElementById('input-message').value || '').trim();
+            const product_interest = Array.from(document.querySelectorAll('#interest-chips input:checked')).map(cb => cb.value);
+
+            if (name.length < 2) {
+                return showRegisterError('Please enter your real name or company name (at least 2 characters).', 'input-name');
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                return showRegisterError('Please enter a valid email address (e.g. buyer@company.com).', 'input-email');
+            }
+            const phoneDigits = phone.replace(/\D/g, '');
+            if (phoneDigits.length < 8 || phoneDigits.length > 15 || /^(\d)\1+$/.test(phoneDigits)) {
+                return showRegisterError('Please enter a valid WhatsApp / Phone number with country code (8–15 digits).', 'input-phone');
+            }
+
+            const btn = document.getElementById('btn-register-submit');
+            const origText = btn ? btn.textContent : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Verifying...';
+            }
+
+            try {
+                const res = await fetch('/api/register-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, product_interest, message })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.ok) {
+                    const fieldMap = { name: 'input-name', email: 'input-email', phone: 'input-phone' };
+                    return showRegisterError(data.error || 'Registration validation failed. Please check your info.', fieldMap[data.field]);
+                }
+
+                userInfo = {
+                    id: data.lead && data.lead.id,
+                    name: data.lead ? data.lead.name : name,
+                    email: data.lead ? data.lead.email : email,
+                    phone: data.lead ? data.lead.phone : phone,
+                    contact: data.lead ? data.lead.contact : `${email} | ${phone}`
+                };
+                localStorage.setItem('leo_user_lc', JSON.stringify(userInfo));
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('search-box-container').style.display = 'block';
+                document.getElementById('product-container').style.display = 'block';
+                updateUserDisplay();
+            } catch (err) {
+                console.error('Register API error:', err);
+                showRegisterError('Network error while verifying your info. Please try again.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = origText;
+                }
+            }
         }
 
         // 调用 /api/geo 接口，获取当前访客所在的国家/地区/城市
-        // 这个接口由 Vercel 自动根据访客真实 IP 提供，不需要额外配置
         async function getGeoInfo() {
             try {
                 const res = await fetch('/api/geo');
@@ -609,35 +692,6 @@ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.error('获取地区信息失败:', err);
             }
             return { country: null, region: null, city: null };
-        }
-
-        // 把客户注册信息写入 Supabase 的 customer_leads 表
-        // 先尝试直接插入；如果这个联系方式已经存在（唯一约束冲突，错误码 23505），
-        // 就改成更新这条已有记录的姓名和最近访问时间。
-        // 之所以不用 upsert，是因为 upsert 在数据库层面需要额外的"读取权限"来判断是否冲突，
-        // 而我们特意没有给匿名访客开读取权限（保护客户隐私），所以要用这种方式绕开。
-        async function recordCustomerLead(name, contact) {
-            try {
-                const geo = await getGeoInfo();
-                const { error: insertError } = await supabase
-                    .from('customer_leads')
-                    .insert({ name: name, contact: contact, country: geo.country, region: geo.region, city: geo.city });
-
-                if (insertError) {
-                    if (insertError.code === '23505') {
-                        // 联系方式已存在，更新一下姓名、最近访问时间和最新的地区信息
-                        const { error: updateError } = await supabase
-                            .from('customer_leads')
-                            .update({ name: name, last_seen_at: new Date().toISOString(), country: geo.country, region: geo.region, city: geo.city })
-                            .eq('contact', contact);
-                        if (updateError) console.error('客户信息更新失败:', updateError);
-                    } else {
-                        console.error('客户信息记录失败:', insertError);
-                    }
-                }
-            } catch (err) {
-                console.error('客户信息记录异常:', err);
-            }
         }
 
         // 把客户导出的询盘清单写入 Supabase 的 inquiries 表
