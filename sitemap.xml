@@ -131,6 +131,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.leofaux.com/en/oem-custom.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.leofaux.com/en/silk-flowers.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
