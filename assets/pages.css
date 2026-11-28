@@ -1,11 +1,12 @@
 /* Shared luxury editorial design system for Leo Faux inner pages & blog */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--leo-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
   background: var(--leo-cream, #fffaf2);
   color: var(--leo-ink, #251f20);
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 a { color: var(--leo-wine, #7f1d2d); text-decoration: none; transition: color .2s, opacity .2s; }
 a:hover { opacity: .85; }
